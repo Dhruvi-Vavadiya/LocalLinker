@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalLinker", "LocalLinker.csproj", "{DB0C4407-DF4B-4852-9CD8-15ABC735168B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB0C4407-DF4B-4852-9CD8-15ABC735168B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB0C4407-DF4B-4852-9CD8-15ABC735168B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB0C4407-DF4B-4852-9CD8-15ABC735168B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB0C4407-DF4B-4852-9CD8-15ABC735168B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

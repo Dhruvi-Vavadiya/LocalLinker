@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+<form method="post">
+    <div>
+        <label for="email">Email:</label><br />
+        <input type="text" name="email" id="email" placeholder="Enter your email" required />
+    </div>
+
+    <div>
+        <label for="password">Password:</label><br />
+        <input type="password" name="password" id="password" placeholder="Enter your password" required />
+    </div>
+
+    <div style="margin-top:10px;">
+        <button type="submit">Login</button>
+    </div>
+
+    <div style="color:red; margin-top:10px;">
+        @ViewBag.ErrorMessage
+    </div>
+</form>
