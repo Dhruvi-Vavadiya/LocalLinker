@@ -1,0 +1,51 @@
+﻿@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h2 class="mb-4">Booking Status Report</h2>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-table me-1"></i> Report Table</h5>
+        </div>
+        <div class="card-body p-4">
+            <table class="table table-bordered table-hover align-middle text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th>Status</th>
+                        <th>Total Bookings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var r in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="badge
+                                        @(r.Status == "Pending" ? "bg-warning text-dark" :
+                                          r.Status == "Confirmed" ? "bg-success" :
+                                          r.Status == "Completed" ? "bg-primary" :
+                                          r.Status == "Cancelled" ? "bg-danger" : "bg-secondary")">
+                                        @r.Status
+                                    </span>
+                                </td>
+                                <td>@r.Count</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" class="text-muted">No report data available.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4">
+                    <h3 class="text-center mb-4">User Login</h3>
+
+                    <form method="post">
+                        <div class="form-group mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required />
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <div class="alert alert-danger mt-3">
+                                @ViewBag.ErrorMessage
+                            </div>
+                        }
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <small>Don't have an account? <a href="@Url.Action("Register", "Customer")">Register here</a></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

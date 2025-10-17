@@ -1,0 +1,673 @@
+﻿@* <!DOCTYPE html> *@
+@* <html> *@
+@* <head> *@
+@*     <meta charset="utf-8" /> *@
+@*     <meta name="viewport" content="width=device-width, initial-scale=1.0"> *@
+@*     <title>@ViewData["Title"] - Provider Panel</title> *@
+@*     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" /> *@
+@*     <link rel="stylesheet" href="~/css/site.css" /> *@
+@* </head> *@
+@* <body> *@
+@*     <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> *@
+@*         <div class="container-fluid"> *@
+@*             <a class="navbar-brand" href="#">Provider Panel</a> *@
+@*             <div class="collapse navbar-collapse"> *@
+@*                 <ul class="navbar-nav ms-auto"> *@
+@*                     <li class="nav-item"> *@
+@*                         <a class="nav-link" href="@Url.Action("Dashboard", "Provider")">Dashboard</a> *@
+@*                     </li> *@
+@*                     <li class="nav-item"> *@
+@*                         <a class="nav-link" href="@Url.Action("AssignedBookings", "Provider", new { providerId = 1 })">Bookings</a> *@
+@*                     </li> *@
+@*                     <li class="nav-item"> *@
+@*                         <a class="nav-link" href="@Url.Action("Logout", "Provider")">Logout</a> *@
+@*                     </li> *@
+@*                 </ul> *@
+@*             </div> *@
+@*         </div> *@
+@*     </nav> *@
+
+@*     <div class="container mt-4"> *@
+@*         @RenderBody() *@
+@*     </div> *@
+
+@*     <footer class="bg-dark text-white text-center py-3 mt-5 fixed-bottom"> *@
+@*         <small>© 2025 LocalLinker - Provider Panel</small> *@
+@*     </footer> *@
+@* </body> *@
+@* </html> *@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Provider Panel - LocalLinker</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #8d99ae;
+            --danger: #e63946;
+            --warning: #fca311;
+            --info: #4cc9f0;
+            --sidebar-width: 260px;
+            --header-height: 50px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fb;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            height: var(--header-height);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            transition: all 0.3s;
+        }
+
+            .header.collapsed {
+                left: 70px;
+            }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            z-index: 101;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .sidebar.collapsed {
+                width: 70px;
+            }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: var(--header-height);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+
+        .logo-text {
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed .logo-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .toggle-btn:hover {
+                color: var(--primary);
+            }
+
+        .sidebar.collapsed .toggle-btn {
+            transform: rotate(180deg);
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.2s;
+            margin: 5px 10px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+            .menu-item:hover {
+                background: rgba(67, 97, 238, 0.1);
+                color: var(--primary);
+            }
+
+            .menu-item.active {
+                background: var(--primary);
+                color: white;
+            }
+
+        .menu-icon {
+            font-size: 1.2rem;
+            width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-text {
+            margin-left: 10px;
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed .menu-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            padding: 25px;
+            transition: all 0.3s;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+            .main-content.collapsed {
+                margin-left: 70px;
+            }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .breadcrumb {
+            background: none;
+            padding: 0;
+            margin-bottom: 0;
+        }
+
+        .breadcrumb-item a {
+            color: var(--gray);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--primary);
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            }
+
+        .card-header {
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 15px 20px;
+            border-radius: 12px 12px 0 0 !important;
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0;
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+        }
+
+            .stats-icon.primary {
+                background: rgba(67, 97, 238, 0.1);
+                color: var(--primary);
+            }
+
+            .stats-icon.success {
+                background: rgba(76, 201, 240, 0.1);
+                color: var(--success);
+            }
+
+            .stats-icon.warning {
+                background: rgba(252, 163, 17, 0.1);
+                color: var(--warning);
+            }
+
+            .stats-icon.danger {
+                background: rgba(230, 57, 70, 0.1);
+                color: var(--danger);
+            }
+
+        .stats-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stats-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+            .btn-primary:hover {
+                background: var(--secondary);
+            }
+
+        .btn-outline-primary {
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+            .btn-outline-primary:hover {
+                background: var(--primary);
+                color: white;
+            }
+
+        /* Footer */
+        footer {
+            background: white;
+            color: var(--gray);
+            text-align: center;
+            padding: 15px;
+            margin-left: var(--sidebar-width);
+            transition: all 0.3s;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+            footer.collapsed {
+                margin-left: 70px;
+            }
+
+
+
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .badge-primary {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(252, 163, 17, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(230, 57, 70, 0.1);
+            color: var(--danger);
+        }
+
+        /* Table */
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            color: var(--dark);
+            padding: 15px;
+        }
+
+        .table td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #a8a8a8;
+            }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-handshake logo-icon"></i>
+                <span class="logo-text">LocalLinker</span>
+            </div>
+            <button class="toggle-btn" id="toggleSidebar">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="@Url.Action("Dashboard", "Provider")" class="menu-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
+                <i class="fas fa-tachometer-alt menu-icon"></i>
+                <span class="menu-text">Dashboard</span>
+            </a>
+
+
+
+            <a href="#" class="menu-item">
+                <i class="fas fa-wallet menu-icon"></i>
+                <span class="menu-text">Earnings</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fas fa-star menu-icon"></i>
+                <span class="menu-text">Reviews</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fas fa-cog menu-icon"></i>
+                <span class="menu-text">Settings</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fas fa-question-circle menu-icon"></i>
+                <span class="menu-text">Help & Support</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="@Url.Action("Logout", "Provider")" class="menu-item">
+                <i class="fas fa-sign-out-alt menu-icon"></i>
+                <span class="menu-text">Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header" id="header">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="header-right">
+            <div class="notification-icon">
+                <i class="fas fa-bell"></i>
+                <span class="badge badge-danger">3</span>
+            </div>
+
+            <div class="user-profile">
+                <div class="user-avatar">
+                    JP
+                </div>
+                <div class="user-info">
+                    <div class="user-name">John Provider</div>
+                    <div class="user-role">Service Provider</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        
+
+        <!-- Recent Bookings -->
+        @* <div class="row"> *@
+        @*     <div class="col-12"> *@
+        @*         <div class="card"> *@
+        @*             <div class="card-header"> *@
+        @*                 <h5 class="card-title">Recent Bookings</h5> *@
+        @*             </div> *@
+        @*             <div class="card-body"> *@
+        @*                 <div class="table-responsive"> *@
+        @*                     <table class="table table-hover"> *@
+        @*                         <thead> *@
+        @*                             <tr> *@
+        @*                                 <th>Customer</th> *@
+        @*                                 <th>Service</th> *@
+        @*                                 <th>Date</th> *@
+        @*                                 <th>Time</th> *@
+        @*                                 <th>Status</th> *@
+        @*                                 <th>Action</th> *@
+        @*                             </tr> *@
+        @*                         </thead> *@
+        @*                         <tbody> *@
+        @*                             <tr> *@
+        @*                                 <td> *@
+        @*                                     <div class="d-flex align-items-center"> *@
+        @*                                         <div class="user-avatar me-2" style="width: 35px; height: 35px; font-size: 0.8rem;">RS</div> *@
+        @*                                         <div>Robert Smith</div> *@
+        @*                                     </div> *@
+        @*                                 </td> *@
+        @*                                 <td>Plumbing Repair</td> *@
+        @*                                 <td>Nov 15, 2023</td> *@
+        @*                                 <td>10:00 AM</td> *@
+        @*                                 <td><span class="badge badge-success">Completed</span></td> *@
+        @*                                 <td> *@
+        @*                                     <button class="btn btn-outline-primary btn-sm">View</button> *@
+        @*                                 </td> *@
+        @*                             </tr> *@
+        @*                             <tr> *@
+        @*                                 <td> *@
+        @*                                     <div class="d-flex align-items-center"> *@
+        @*                                         <div class="user-avatar me-2" style="width: 35px; height: 35px; font-size: 0.8rem; background: var(--warning);">MJ</div> *@
+        @*                                         <div>Mary Johnson</div> *@
+        @*                                     </div> *@
+        @*                                 </td> *@
+        @*                                 <td>Electrical Installation</td> *@
+        @*                                 <td>Nov 16, 2023</td> *@
+        @*                                 <td>2:30 PM</td> *@
+        @*                                 <td><span class="badge badge-warning">Pending</span></td> *@
+        @*                                 <td> *@
+        @*                                     <button class="btn btn-outline-primary btn-sm">View</button> *@
+        @*                                 </td> *@
+        @*                             </tr> *@
+        @*                             <tr> *@
+        @*                                 <td> *@
+        @*                                     <div class="d-flex align-items-center"> *@
+        @*                                         <div class="user-avatar me-2" style="width: 35px; height: 35px; font-size: 0.8rem; background: var(--danger);">DW</div> *@
+        @*                                         <div>David Wilson</div> *@
+        @*                                     </div> *@
+        @*                                 </td> *@
+        @*                                 <td>AC Repair</td> *@
+        @*                                 <td>Nov 17, 2023</td> *@
+        @*                                 <td>11:00 AM</td> *@
+        @*                                 <td><span class="badge badge-primary">Scheduled</span></td> *@
+        @*                                 <td> *@
+        @*                                     <button class="btn btn-outline-primary btn-sm">View</button> *@
+        @*                                 </td> *@
+        @*                             </tr> *@
+        @*                         </tbody> *@
+        @*                     </table> *@
+        @*                 </div> *@
+        @*             </div> *@
+        @*         </div> *@
+        @*     </div> *@
+        @* </div> *@
+
+        <!-- Render Body for dynamic content -->
+        @RenderBody()
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer">
+        &copy; @DateTime.Now.Year LocalLinker — Provider Panel
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Toggle sidebar
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('mainContent').classList.toggle('collapsed');
+            document.getElementById('header').classList.toggle('collapsed');
+            document.getElementById('footer').classList.toggle('collapsed');
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('mobile-open');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+            if (window.innerWidth <= 992 &&
+                !sidebar.contains(event.target) &&
+                !mobileMenuBtn.contains(event.target) &&
+                sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+            }
+        });
+    </script>
+</body>
+</html>

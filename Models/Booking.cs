@@ -10,7 +10,7 @@ namespace LocalLinker.Models
         public int BookingId { get; set; }
 
         [StringLength(50)]
-        public string? Service_Request_Id { get; set; }
+        public int? Service_Request_Id { get; set; }
 
         public int? ProviderId { get; set; }
 
@@ -19,6 +19,6 @@ namespace LocalLinker.Models
 
         public DateTime? Created_At { get; set; }
 
-        public DateTime? Modify_Date { get; set; }
+        public DateTime? Modifiy_Date { get; set; }
     }
 }

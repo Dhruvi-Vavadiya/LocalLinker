@@ -1,7 +1,10 @@
-﻿namespace LocalLinker.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LocalLinker.Models
 {
     public class ServiceRequest
     {
+        [Key]
         public int Request_id { get; set; }
         public int? Customer_id { get; set; }
         public int? Service_id { get; set; }

@@ -1,0 +1,18 @@
+﻿@model LocalLinker.Models.Service
+@{
+    ViewData["Title"] = "Add Service";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Add New Service</h2>
+
+<form asp-action="CreateService" method="post" class="mt-3">
+    <div class="mb-3">
+        <label asp-for="Service_name" class="form-label"></label>
+        <input asp-for="Service_name" class="form-control" />
+        <span asp-validation-for="Service_name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Services" class="btn btn-secondary">Cancel</a>
+</form>

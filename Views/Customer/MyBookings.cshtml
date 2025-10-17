@@ -1,0 +1,55 @@
+﻿@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "My Bookings";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<h2 class="text-center mb-4">My Bookings</h2>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Booking ID</th>
+            <th>Provider</th>
+            <th>Service</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var b in Model)
+            {
+                <tr>
+                    <td>@b.BookingId</td>
+                    <td>@b.ProviderName</td>
+                    <td>@b.ServiceName</td>
+                    <td>
+                        <span class="badge @(b.Status == "Pending" ? "bg-warning" :
+                                            b.Status == "Confirmed" ? "bg-success" :
+                                            b.Status == "Completed" ? "bg-info" : "bg-secondary")">
+                            @b.Status
+                        </span>
+                    </td>
+                    <td>@b.Created_At?.ToString("dd-MMM-yyyy")</td>
+                    <td>
+                        <a asp-action="AddReview" asp-route-bookingId="@b.BookingId" class="btn btn-sm btn-outline-primary">Add Review</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center text-muted">No bookings found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["msg"]</div>
+}

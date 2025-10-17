@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Provider Dashboard";
+    Layout = "~/Views/Shared/_ProviderLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Dashboard</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                </ol>
+            </nav>
+        </div>
+       
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card stats-card">
+                <div class="stats-icon primary">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3 class="stats-number">@ViewBag.TotalBookings</h3>
+                <p class="stats-label">Total Bookings</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card">
+                <div class="stats-icon success">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="stats-number">@ViewBag.Completed</h3>
+                <p class="stats-label">Completed</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card">
+                <div class="stats-icon warning">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="stats-number">@ViewBag.Pending</h3>
+                <p class="stats-label">Pending</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card">
+                <div class="stats-icon danger">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <h3 class="stats-number">$1,240</h3>
+                <p class="stats-label">Earnings</p>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Provider Home";
+    Layout = "~/Views/Shared/_ProviderLayout.cshtml";
+}
+
+<div class="container mt-5 text-center">
+    <h2>Welcome, Service Provider!</h2>
+    <p class="lead">Access your dashboard and manage your bookings efficiently.</p>
+
+    <a href="@Url.Action("Dashboard", "Provider", new { providerId = 1 })" class="btn btn-primary">
+        Go to Dashboard
+    </a>
+</div>

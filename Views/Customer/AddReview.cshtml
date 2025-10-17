@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "AddReview";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<h3>Rate Your Service</h3>
+
+<form method="post">
+    <input type="hidden" name="service_request_id" value="@ViewBag.BookingId" />
+
+    <div class="form-group">
+        <label>Rating (1–5 stars)</label>
+        <select name="rating" class="form-control">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <option value="@i">@i ★</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Review</label>
+        <textarea name="review_text" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit Review</button>
+</form>

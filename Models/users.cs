@@ -14,8 +14,11 @@ namespace LocalLinker.Models
         [MaxLength(50)]
         public string Email { get; set; }
 
-        [MaxLength(50)]
+        //[MaxLength(50)]
         public string Password { get; set; }
+
+        [NotMapped]
+        public string ConfirmPassword { get; set; }
 
         [MaxLength(50)]
         public string Phone { get; set; }
@@ -23,6 +26,7 @@ namespace LocalLinker.Models
         [MaxLength(50)]
         public string UserType { get; set; }  
 
+        public bool Is_Active { get; set; } = true;
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
     }
 }

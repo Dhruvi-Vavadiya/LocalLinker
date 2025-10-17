@@ -1,0 +1,56 @@
+﻿@model IEnumerable<LocalLinker.Models.Booking>
+
+@{
+    ViewData["Title"] = "Assigned Bookings";
+    Layout = "~/Views/Shared/_ProviderLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Assigned Bookings</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Service Request ID</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Modify Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var booking in Model)
+            {
+                <tr>
+                    <td>@booking.BookingId</td>
+                    <td>@booking.Service_Request_Id</td>
+                    <td>@booking.Status</td>
+                    <td>@booking.Created_At?.ToString("dd-MM-yyyy")</td>
+                    <td>@booking.Modifiy_Date?.ToString("dd-MM-yyyy")</td>
+                    <td>
+                        <form asp-action="UpdateStatus" asp-controller="Provider" method="post">
+                            <input type="hidden" name="bookingId" value="@booking.BookingId" />
+                            <select name="status" class="form-select form-select-sm d-inline w-auto">
+									<option value="" disabled>Select Status</option>
+                                    <option value="Pending" selected="@(booking.Status == "Pending")">Pending</option>
+                                    <option value="Confirmed" selected="@(booking.Status == "Confirmed")">Confirmed</option>
+                                    <option value="Completed" selected="@(booking.Status == "Completed")">Completed</option>
+                                    <option value="Cancelled" selected="@(booking.Status == "Cancelled")">Cancelled</option>
+
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary ms-2">Update</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-center text-muted">No bookings assigned yet.</p>
+    }
+</div>

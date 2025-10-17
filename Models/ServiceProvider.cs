@@ -1,7 +1,10 @@
-﻿namespace LocalLinker.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LocalLinker.Models
 {
     public class ServiceProvider
     {
+        [Key]
         public int Provider_id { get; set; }
         public int? User_id { get; set; }
         public int? Service_id { get; set; }

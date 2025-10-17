@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Book a Service";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-calendar-plus me-2"></i>Book a Service</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-concierge-bell me-2"></i>Select Service</label>
+                            <select name="service_request_id" class="form-select" required>
+                                <option value="">-- Choose a Service --</option>
+                                @foreach (var s in ViewBag.Services)
+                                {
+                                    <option value="@s.Service_id">@s.Service_name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-user-cog me-2"></i>Select Provider</label>
+                            <select name="ProviderId" class="form-select" required>
+                                <option value="">-- Choose a Provider --</option>
+                                @foreach (var p in ViewBag.Providers)
+                                {
+                                    <option value="@p.User_id">@p.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-clock me-2"></i>Choose Time</label>
+                            <input type="datetime-local" name="BookingTime" class="form-control" required />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check-circle me-1"></i> Book Now
+                            </button>
+                        </div>
+                    </form>
+
+                    @if (TempData["msg"] != null)
+                    {
+                        <div class="alert alert-success mt-3">
+                            <i class="fas fa-check-circle me-2"></i> @TempData["msg"]
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

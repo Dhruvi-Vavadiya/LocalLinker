@@ -1,0 +1,838 @@
+﻿
+
+@model LocalLinker.Models.users
+@{
+    ViewData["Title"] = "Provider Dashboard";
+    Layout = "";
+    var services = ViewBag.Services as List<LocalLinker.Models.Service>;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - LocalLinker</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --success: #38b000;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .register-header {
+            background: var(--primary);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .register-header::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+                transform: rotate(45deg);
+                animation: shine 3s infinite;
+            }
+
+       
+
+        .register-logo {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .register-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .register-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .register-body {
+            padding: 40px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+            .form-section.active {
+                display: block;
+                animation: fadeIn 0.5s ease;
+            }
+
+        
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--danger);
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+            .form-control:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+            }
+
+        .input-group-text {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .password-strength {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-weak {
+            background: #dc3545;
+            width: 25%;
+        }
+
+        .strength-fair {
+            background: #fd7e14;
+            width: 50%;
+        }
+
+        .strength-good {
+            background: #ffc107;
+            width: 75%;
+        }
+
+        .strength-strong {
+            background: #198754;
+            width: 100%;
+        }
+
+        .password-requirements {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+
+            .requirement i {
+                font-size: 0.7rem;
+                margin-right: 5px;
+            }
+
+            .requirement.met {
+                color: var(--success);
+            }
+
+            .requirement.unmet {
+                color: var(--gray);
+            }
+
+        .btn-register {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+            .btn-register:hover {
+                background: var(--secondary);
+                transform: translateY(-2px);
+            }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+            .btn-outline-primary:hover {
+                background: var(--primary);
+                color: white;
+            }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            padding: 12px 15px;
+        }
+
+        .service-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .category-card {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+            .category-card:hover {
+                border-color: var(--primary-light);
+                transform: translateY(-2px);
+            }
+
+            .category-card.selected {
+                border-color: var(--primary);
+                background: rgba(67, 97, 238, 0.05);
+            }
+
+        .category-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--gray);
+        }
+
+            .login-link a {
+                color: var(--primary);
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+                .login-link a:hover {
+                    text-decoration: underline;
+                }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-circle {
+            background: var(--primary);
+            color: white;
+        }
+
+        .step.completed .step-circle {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-text {
+            font-size: 0.8rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .step.active .step-text {
+            color: var(--primary);
+        }
+
+        .terms-check {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <div class="register-logo">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <h1 class="register-title">Join LocalLinker</h1>
+            <p class="register-subtitle">Start your journey as a service provider</p>
+        </div>
+
+        <div class="register-body">
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-text">Personal Info</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-text">Service Details</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-text">Account Setup</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <div class="step-text">Review</div>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(TempData["ErrorMessage"]?.ToString()))
+            {
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            <form method="post" asp-action="Register" asp-controller="Provider" id="registrationForm">
+                @Html.AntiForgeryToken()
+
+                <!-- Step 1: Personal Information -->
+                <div class="form-section active" id="step1">
+                    <h3 class="section-title">Personal Information</h3>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required" asp-for="Name">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" class="form-control" asp-for="Name" placeholder="Enter your full name">
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required" asp-for="Phone">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-phone"></i>
+                                    </span>
+                                    <input type="tel" class="form-control" asp-for="Phone" placeholder="Enter your phone number">
+                                </div>
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required" asp-for="Email">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control" asp-for="Email" placeholder="Enter your email address">
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="navigation-buttons">
+                        <div></div> <!-- Empty div for spacing -->
+                        <button type="button" class="btn btn-register" onclick="nextStep()">
+                            Next <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Service Details -->
+                <div class="form-section" id="step2">
+                    <h3 class="section-title">Service Details</h3>
+
+                    <div class="form-group">
+                        <label class="form-label required">Select Your Service Category</label>
+
+                        <div class="service-categories">
+                            @if (services != null && services.Count > 0)
+                            {
+                                foreach (var s in services)
+                                {
+                                    <div class="category-card" data-category="@s.Service_name">
+                                        <div class="category-icon">
+                                       
+                                        </div>
+                                        <div class="category-name">@s.Service_name</div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p>No services found.</p>
+                            }
+                        </div>
+
+                        <input type="hidden" id="selectedCategory" name="UserType" />
+                    </div>
+
+                    <div class="navigation-buttons">
+                        <button type="button" class="btn btn-outline-primary" onclick="prevStep()">
+                            <i class="fas fa-arrow-left me-2"></i>Back
+                        </button>
+                        <button type="button" class="btn btn-register" onclick="nextStep()">
+                            Next <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Account Setup -->
+                <div class="form-section" id="step3">
+                    <h3 class="section-title">Account Setup</h3>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required" asp-for="Password">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="password" asp-for="Password" placeholder="Create a password">
+                                    <span class="input-group-text password-toggle" onclick="togglePassword('password')">
+                                        <i class="fas fa-eye" id="passwordIcon"></i>
+                                    </span>
+                                </div>
+                                <div class="password-strength">
+                                    <div class="strength-fill" id="passwordStrength"></div>
+                                </div>
+                                <div class="password-requirements">
+                                    <div class="requirement unmet" id="lengthReq">
+                                        <i class="fas fa-circle"></i> At least 8 characters
+                                    </div>
+                                    <div class="requirement unmet" id="upperReq">
+                                        <i class="fas fa-circle"></i> One uppercase letter
+                                    </div>
+                                    <div class="requirement unmet" id="lowerReq">
+                                        <i class="fas fa-circle"></i> One lowercase letter
+                                    </div>
+                                    <div class="requirement unmet" id="numberReq">
+                                        <i class="fas fa-circle"></i> One number
+                                    </div>
+                                </div>
+                                <span asp-validation-for="Password" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required" asp-for="ConfirmPassword">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="confirmPassword" asp-for="ConfirmPassword" placeholder="Confirm your password">
+                                    <span class="input-group-text password-toggle" onclick="togglePassword('confirmPassword')">
+                                        <i class="fas fa-eye" id="confirmPasswordIcon"></i>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terms-check">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                            <label class="form-check-label" for="termsCheck">
+                                I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="navigation-buttons">
+                        <button type="button" class="btn btn-outline-primary" onclick="prevStep()">
+                            <i class="fas fa-arrow-left me-2"></i>Back
+                        </button>
+                        <button type="button" class="btn btn-register" onclick="nextStep()">
+                            Next <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Review & Submit -->
+                <div class="form-section" id="step4">
+                    <h3 class="section-title">Review Your Information</h3>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-sm-4 text-muted">Full Name:</div>
+                                <div class="col-sm-8" id="reviewName">-</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4 text-muted">Email:</div>
+                                <div class="col-sm-8" id="reviewEmail">-</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4 text-muted">Phone:</div>
+                                <div class="col-sm-8" id="reviewPhone">-</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4 text-muted">Service Category:</div>
+                                <div class="col-sm-8" id="reviewCategory">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="navigation-buttons">
+                        <button type="button" class="btn btn-outline-primary" onclick="prevStep()">
+                            <i class="fas fa-arrow-left me-2"></i>Back
+                        </button>
+                        <input type="submit" class="btn btn-register" name="name" value="Complete Registration" />
+                        @* <button type="submit"> *@
+                        @*     <i class="fas fa-user-plus me-2"></i>Complete Registration *@
+                        @* </button> *@
+                    </div>
+                </div>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a href="@Url.Action("Login", "Account")">Sign in here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((step, index) => {
+                const stepNumber = index + 1;
+                if (stepNumber < currentStep) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (stepNumber === currentStep) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            });
+        }
+
+        function showStep(stepNumber) {
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+            currentStep = stepNumber;
+            updateProgress();
+
+            if (stepNumber === 4) {
+                updateReviewSection();
+            }
+        }
+
+        function nextStep() {
+            if (validateStep(currentStep)) {
+                if (currentStep < totalSteps) {
+                    showStep(currentStep + 1);
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        }
+
+        function validateStep(step) {
+            switch (step) {
+                case 1:
+                    const name = document.querySelector('#Name').value.trim();
+                    const email = document.querySelector('#Email').value.trim();
+                    const phone = document.querySelector('#Phone').value.trim();
+
+                    if (!name || !email || !phone) {
+                        alert('Please fill in all required fields');
+                        return false;
+                    }
+                    return true;
+
+                case 2:
+                    const category = document.querySelector('#selectedCategory').value;
+                    if (!category) {
+                        alert('Please select a service category');
+                        return false;
+                    }
+                    return true;
+
+                case 3:
+                    const password = document.querySelector('#password').value;
+                    const confirmPassword = document.querySelector('#confirmPassword').value;
+                    const terms = document.querySelector('#termsCheck').checked;
+
+                    if (!password || !confirmPassword) {
+                        alert('Please fill in both password fields');
+                        return false;
+                    }
+
+                    if (password !== confirmPassword) {
+                        alert('Passwords do not match');
+                        return false;
+                    }
+
+                    if (!terms) {
+                        alert('Please agree to the terms and conditions');
+                        return false;
+                    }
+                    return true;
+
+                default:
+                    return true;
+            }
+        }
+
+        function updateReviewSection() {
+            document.getElementById('reviewName').textContent = document.querySelector('#Name').value;
+            document.getElementById('reviewEmail').textContent = document.querySelector('#Email').value;
+            document.getElementById('reviewPhone').textContent = document.querySelector('#Phone').value;
+            document.getElementById('reviewCategory').textContent = document.querySelector('#selectedCategory').value;
+        }
+
+        // Service category selection
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.category-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                document.getElementById('selectedCategory').value = this.getAttribute('data-category');
+            });
+        });
+
+        // Password strength checker
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            checkPasswordStrength(password);
+        });
+
+        function checkPasswordStrength(password) {
+            const strengthBar = document.getElementById('passwordStrength');
+            const requirements = {
+                length: password.length >= 8,
+                upper: /[A-Z]/.test(password),
+                lower: /[a-z]/.test(password),
+                number: /[0-9]/.test(password)
+            };
+
+            let strength = 0;
+            Object.values(requirements).forEach(req => {
+                if (req) strength++;
+            });
+
+            // Update strength bar
+            strengthBar.className = 'strength-fill';
+            if (strength === 0) {
+                strengthBar.style.width = '0%';
+            } else if (strength === 1) {
+                strengthBar.classList.add('strength-weak');
+            } else if (strength === 2) {
+                strengthBar.classList.add('strength-fair');
+            } else if (strength === 3) {
+                strengthBar.classList.add('strength-good');
+            } else {
+                strengthBar.classList.add('strength-strong');
+            }
+
+            // Update requirement indicators
+            document.getElementById('lengthReq').className = requirements.length ? 'requirement met' : 'requirement unmet';
+            document.getElementById('upperReq').className = requirements.upper ? 'requirement met' : 'requirement unmet';
+            document.getElementById('lowerReq').className = requirements.lower ? 'requirement met' : 'requirement unmet';
+            document.getElementById('numberReq').className = requirements.number ? 'requirement met' : 'requirement unmet';
+        }
+
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = document.getElementById(fieldId + 'Icon');
+
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Initialize progress bar
+        updateProgress();
+
+        // Form submission handler
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            if (!validateStep(4)) {
+                e.preventDefault();
+                alert('Please complete all steps before submitting.');
+            }
+        });
+    </script>
+</body>
+</html>
