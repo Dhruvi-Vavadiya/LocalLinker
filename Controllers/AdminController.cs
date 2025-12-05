@@ -25,16 +25,27 @@ namespace LocalLinker.Controllers
         }
         public IActionResult Dashboard()
         {
-            ViewBag.TotalUsers = _context.Users.Count();
-            ViewBag.TotalProviders = _context.Users.Count(u => u.UserType == "Provider");
-            ViewBag.TotalBookings = _context.Booking.Count();
-            ViewBag.PendingBookings = _context.Booking.Count(b => b.Status == "Pending");
-            return View();
+            if (HttpContext.Session.GetString("UserType") == "Admin")
+            {
+                ViewBag.TotalUsers = _context.Users.Count();
+                ViewBag.TotalProviders = _context.Users.Count(u => u.UserType == "Provider");
+                ViewBag.TotalBookings = _context.Booking.Count();
+                ViewBag.PendingBookings = _context.Booking.Count(b => b.Status == "Pending");
+                return View();
+            }
+            else
+            {
+                TempData["ToastMessage"] = "First you login with valid usertype Admin";
+                TempData["ToastType"] = "warning"; // success | error | warning | info
+                //return RedirectToAction("Login", "Customer");
+                return View();
+            }
+            
         }
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("Login", "Dashboard");
+            return RedirectToAction("Login", "Admin");
         }
 
         // List All Bookings

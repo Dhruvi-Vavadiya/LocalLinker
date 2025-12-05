@@ -23,6 +23,9 @@ namespace LocalLinker.Models
         [MaxLength(50)]
         public string Phone { get; set; }
 
+        [MaxLength(255)]
+        public string Image { get; set; }
+
         [MaxLength(50)]
         public string UserType { get; set; }  
 

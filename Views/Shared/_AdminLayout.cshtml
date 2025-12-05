@@ -65,6 +65,38 @@
             color: #6c757d;
             box-shadow: 0 -1px 3px rgba(0,0,0,0.1);
         }
+
+        .toast {
+            min-width: 280px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .toast-progress {
+            height: 4px;
+            width: 100%;
+            background-color: #0d6efd;
+            animation: progressLine 2s linear forwards;
+        }
+
+
+
+        .text-bg-success .toast-progress {
+            background-color: #28a745;
+        }
+
+        .text-bg-danger .toast-progress {
+            background-color: #dc3545;
+        }
+
+        .text-bg-warning .toast-progress {
+            background-color: #ffc107;
+        }
+
+        .text-bg-info .toast-progress {
+            background-color: #0dcaf0;
+        }
     </style>
 </head>
 <body>
@@ -103,6 +135,15 @@
     <!-- Content + Sticky Footer -->
     <div class="content-wrapper">
         <main>
+            <div class="toast-container position-fixed top-0 end-0 p-3">
+                <div id="liveToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body" id="toastMessageBody"></div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-progress"></div>
+                </div>
+            </div>
             @RenderBody()
         </main>
 
@@ -115,3 +156,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var message = '@TempData["ToastMessage"]';
+        var type = '@TempData["ToastType"]' || 'info';
+
+        if (message && message.trim() !== '') {
+            var toastEl = document.getElementById('liveToast');
+            var toastBody = document.getElementById('toastMessageBody');
+            var progressBar = toastEl.querySelector('.toast-progress');
+
+            toastBody.innerText = message;
+            toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+
+            // Reset progress animation for each toast
+            progressBar.style.animation = 'none';
+            progressBar.offsetHeight; // trigger reflow
+            progressBar.style.animation = null;
+
+            // Show toast
+            var toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+            toast.show();
+        }
+    });
+</script>

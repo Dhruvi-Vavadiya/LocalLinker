@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using LocalLinker.App_Data;
-using Microsoft.Data.SqlClient;
+
 using MySql.Data.MySqlClient;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 
@@ -40,5 +40,15 @@ namespace LocalLinker.Models
             _connection.Close();
 
         }
+       
+
+        //void IDataLog.ShowNotification(string message, string type)
+        //{
+        //    HttpContext.Session.SetInt32("UserId", message);
+        //    TempData["dfcdfv"] = "sdfdsf";
+        //    TempData["Notification"] = message;
+        //    TempData["NotificationType"] = type;
+        //    throw new NotImplementedException();
+        //}
     }
 }

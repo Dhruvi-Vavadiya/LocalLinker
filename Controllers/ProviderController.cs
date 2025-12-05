@@ -146,7 +146,9 @@ namespace LocalLinker.Controllers
                         Name = dr["name"].ToString(),
                         Email = dr["email"].ToString(),
                         UserType = dr["UserType"].ToString(),
-                        is_Active = dr["Is_Active"].ToString()
+                        is_Active = dr["Is_Active"].ToString(),
+                        Phone = dr["Phone"].ToString(),
+                        Image = dr["Image"].ToString()
                     };
                     if (provider.is_Active == "No")
                     {
@@ -157,6 +159,9 @@ namespace LocalLinker.Controllers
                     HttpContext.Session.SetString("UserEmail", provider.Email);
                     HttpContext.Session.SetString("UserName", provider.Name);
                     HttpContext.Session.SetString("UserRole", provider.UserType);
+                    HttpContext.Session.SetString("UserPhone", provider.Phone);
+                    HttpContext.Session.SetString("UserImage", provider.Image);
+
 
 
                     _conn.Close();
@@ -241,6 +246,59 @@ namespace LocalLinker.Controllers
 
             //return View(services);
         }
+
+        [HttpGet]
+        public ActionResult UpdateProfile()
+        {
+            // 1️⃣ Get UserId from Session
+            int? userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+                return RedirectToAction("Login");
+
+            // 2️⃣ Find Provider using UserId
+            var provider = _context.ServiceProviders
+                .FirstOrDefault(p => p.User_id == userId);
+
+            if (provider == null)
+                return NotFound("Provider not found");
+
+            // 3️⃣ Load all services (for dropdown)
+            var services = _context.Services
+                .Select(s => new { s.Service_id, s.Service_name })
+                .ToList();
+
+            ViewBag.Services = services;
+
+            // 4️⃣ Send selected service to view
+            ViewBag.SelectedService = provider.Service_id;
+
+            return View(provider);
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateProfile(Models.ServiceProvider model)
+        {
+            var sql = @"UPDATE ServiceProviders 
+                SET Service_id = @serviceId, 
+                    experience_years = @experience, 
+                    location_id = @locationId,
+                    description = @description
+                WHERE Provider_id = @providerId";
+
+            _context.Database.ExecuteSqlRaw(sql,
+                new MySqlParameter("@serviceId", model.Service_id ?? (object)DBNull.Value),
+                new MySqlParameter("@experience", model.Experience_years ?? (object)DBNull.Value),
+                new MySqlParameter("@locationId", model.Location_id ?? (object)DBNull.Value),
+                new MySqlParameter("@description",model.Description ?? (object)DBNull.Value),
+                new MySqlParameter("@providerId", model.Provider_id));
+
+            return RedirectToAction("Dashboard", new { providerId = model.Provider_id });
+        }
+
 
         // POST: /Account/Register
         [HttpPost]

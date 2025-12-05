@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalLinker.Models
 {
@@ -13,8 +14,13 @@ namespace LocalLinker.Models
         public string? Description { get; set; }
         public bool? IsVerified { get; set; }
 
+        [ForeignKey("User_id")]
         public users? User { get; set; }
+
+        [ForeignKey("Service_id")]
         public Service? Service { get; set; }
+
+        [ForeignKey("Location_id")]
         public Location? Location { get; set; }
     }
 }

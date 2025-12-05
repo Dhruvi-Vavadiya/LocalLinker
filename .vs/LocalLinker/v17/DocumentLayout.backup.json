@@ -3,60 +3,72 @@
   "WorkspaceRootPath": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\models\\servicerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:models\\servicerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\customer\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\customer\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\shared\\_providerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\shared\\_providerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\controllers\\customercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:controllers\\customercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\controllers\\providercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:controllers\\providercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\models\\serviceprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:models\\serviceprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\models\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:models\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\provider\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\provider\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\shared\\_templatelayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\shared\\_templatelayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\models\\errorlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:models\\errorlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\template\\about.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\template\\about.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\models\\idatalog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:models\\idatalog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\template\\blogsingle.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\template\\blogsingle.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\provider\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\provider\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\template\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\template\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\provider\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\provider\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\template\\contact.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\template\\contact.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\template\\blog.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\template\\blog.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\template\\pricing.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\template\\pricing.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\template\\portfolio.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\template\\portfolio.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\template\\services.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\template\\services.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\template\\main.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\template\\main.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\provider\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\provider\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -66,189 +78,223 @@
       "DocumentGroups": [
         {
           "DockedWidth": 1161,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ServiceProvider.cs",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\ServiceProvider.cs",
-              "RelativeDocumentMoniker": "Models\\ServiceProvider.cs",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\ServiceProvider.cs",
-              "RelativeToolTip": "Models\\ServiceProvider.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-07T15:48:45.074Z",
+              "Title": "_ProviderLayout.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_ProviderLayout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_ProviderLayout.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_ProviderLayout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_ProviderLayout.cshtml",
+              "ViewState": "AgIAACMCAACANDMzMzMrwDECAABpAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-14T05:08:21.659Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ServiceRequest.cs",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\ServiceRequest.cs",
-              "RelativeDocumentMoniker": "Models\\ServiceRequest.cs",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\ServiceRequest.cs",
-              "RelativeToolTip": "Models\\ServiceRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "ProviderController.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\ProviderController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProviderController.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\ProviderController.cs",
+              "RelativeToolTip": "Controllers\\ProviderController.cs",
+              "ViewState": "AgIAABYBAAAAAAAAAAAEwCMBAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-07T15:48:37.3Z",
+              "WhenOpened": "2025-10-14T03:03:30.719Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Service.cs",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\Service.cs",
-              "RelativeDocumentMoniker": "Models\\Service.cs",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\Service.cs",
-              "RelativeToolTip": "Models\\Service.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABEAAACAMzMzMzMbwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-07T15:48:04.454Z",
+              "WhenOpened": "2025-12-05T05:55:16.457Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "users.cs",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\users.cs",
-              "RelativeDocumentMoniker": "Models\\users.cs",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\users.cs",
-              "RelativeToolTip": "Models\\users.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAgwBkAAABAAAAAAAAAAA==",
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Controllers\\AdminController.cs",
+              "ViewState": "AgIAAA0AAABA/f////8uwCUAAABSAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-07T15:46:50.395Z",
+              "WhenOpened": "2025-10-16T13:40:07.177Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CustomerController.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\CustomerController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CustomerController.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\CustomerController.cs",
+              "RelativeToolTip": "Controllers\\CustomerController.cs",
+              "ViewState": "AgIAAMMAAAAAAAAAAAAvwO8AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T11:36:28.463Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\Login.cshtml",
+              "RelativeDocumentMoniker": "Views\\Customer\\Login.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\Login.cshtml",
+              "RelativeToolTip": "Views\\Customer\\Login.cshtml",
+              "ViewState": "AgIAABEAAADAMzMzMzMbwB8AAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-01T13:23:13.794Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "_AdminLayout.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_AdminLayout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_AdminLayout.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_AdminLayout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_AdminLayout.cshtml",
+              "ViewState": "AgIAAE8AAACAMzMzMzMrwGEAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-04T17:05:08.842Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Template\\Index.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\Index.cshtml",
-              "RelativeToolTip": "Views\\Template\\Index.cshtml",
-              "ViewState": "AgIAADACAAAAAAAAAAArwEACAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-06T11:17:46.439Z"
+              "Title": "ServiceProvider.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\ServiceProvider.cs",
+              "RelativeDocumentMoniker": "Models\\ServiceProvider.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\ServiceProvider.cs",
+              "RelativeToolTip": "Models\\ServiceProvider.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T06:09:51.793Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "contact.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\contact.cshtml",
-              "RelativeDocumentMoniker": "Views\\Template\\contact.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\contact.cshtml",
-              "RelativeToolTip": "Views\\Template\\contact.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAVAAAAAAAAAA==",
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\Provider\\Dashboard.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\Dashboard.cshtml",
+              "RelativeToolTip": "Views\\Provider\\Dashboard.cshtml",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAmwDwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-06T11:17:44.676Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "blogsingle.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\blogsingle.cshtml",
-              "RelativeDocumentMoniker": "Views\\Template\\blogsingle.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\blogsingle.cshtml",
-              "RelativeToolTip": "Views\\Template\\blogsingle.cshtml",
-              "ViewState": "AgIAAC0AAAAAAAAAAAArwD0AAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-06T11:17:43.214Z"
+              "WhenOpened": "2025-10-15T09:38:18.334Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "blog.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\blog.cshtml",
-              "RelativeDocumentMoniker": "Views\\Template\\blog.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\blog.cshtml",
-              "RelativeToolTip": "Views\\Template\\blog.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAZAAAAAAAAAA==",
+              "Title": "_CustomerLayout.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_CustomerLayout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_CustomerLayout.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_CustomerLayout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_CustomerLayout.cshtml",
+              "ViewState": "AgIAAMQAAAAAAAAAAAAswMwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-06T11:17:41.59Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "about.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\about.cshtml",
-              "RelativeDocumentMoniker": "Views\\Template\\about.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\about.cshtml",
-              "RelativeToolTip": "Views\\Template\\about.cshtml",
-              "ViewState": "AgIAAFoAAAAAzszMzMwawGAAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-06T11:17:39.629Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "services.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\services.cshtml",
-              "RelativeDocumentMoniker": "Views\\Template\\services.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\services.cshtml",
-              "RelativeToolTip": "Views\\Template\\services.cshtml",
-              "ViewState": "AgIAAFkAAAAAAAAAAAArwGkAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-06T11:17:53.933Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "_TemplateLayout.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_TemplateLayout.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_TemplateLayout.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_TemplateLayout.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_TemplateLayout.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-06T11:17:38.041Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-17T18:31:22.542Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "portfolio.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\portfolio.cshtml",
-              "RelativeDocumentMoniker": "Views\\Template\\portfolio.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\portfolio.cshtml",
-              "RelativeToolTip": "Views\\Template\\portfolio.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-06T11:17:50.846Z"
+              "Title": "IDataLog.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\IDataLog.cs",
+              "RelativeDocumentMoniker": "Models\\IDataLog.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\IDataLog.cs",
+              "RelativeToolTip": "Models\\IDataLog.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T12:11:48.116Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
-              "Title": "pricing.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\pricing.cshtml",
-              "RelativeDocumentMoniker": "Views\\Template\\pricing.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\pricing.cshtml",
-              "RelativeToolTip": "Views\\Template\\pricing.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-06T11:17:52.366Z"
+              "Title": "ErrorLog.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\ErrorLog.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorLog.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\ErrorLog.cs",
+              "RelativeToolTip": "Models\\ErrorLog.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAADwvxgAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T12:13:07.752Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
-              "Title": "main.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\main.cshtml",
-              "RelativeDocumentMoniker": "Views\\Template\\main.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Template\\main.cshtml",
-              "RelativeToolTip": "Views\\Template\\main.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\Register.cshtml",
+              "RelativeDocumentMoniker": "Views\\Provider\\Register.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\Register.cshtml",
+              "RelativeToolTip": "Views\\Provider\\Register.cshtml",
+              "ViewState": "AgIAAMMAAAAAZWZmZmYkwAsAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-06T11:17:49.07Z"
+              "WhenOpened": "2025-10-15T10:25:36.546Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\Login.cshtml",
+              "RelativeDocumentMoniker": "Views\\Provider\\Login.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\Login.cshtml",
+              "RelativeToolTip": "Views\\Provider\\Login.cshtml",
+              "ViewState": "AgIAAN8AAACAMDMzMzMrwOIAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-15T09:47:13.316Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Admin\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\Index.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Admin\\Index.cshtml",
+              "RelativeToolTip": "Views\\Admin\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-16T13:56:12.962Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-16T13:53:53.506Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Provider\\Index.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\Index.cshtml",
+              "RelativeToolTip": "Views\\Provider\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-15T04:33:28.335Z"
             }
           ]
         }

@@ -71,6 +71,8 @@ namespace LocalLinker.Controllers
         {
             try
             {
+                //TempData["ToastMessage"] = "User Login successfully!";
+                //TempData["ToastType"] = "success"; // success | error | warning | info
                 int? customerId = HttpContext.Session.GetInt32("UserId");
 
                 if (customerId == null)
@@ -136,6 +138,9 @@ namespace LocalLinker.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            TempData["ToastMessage"] = "Welcome to Login Page!";
+            TempData["ToastType"] = "success"; // success | error | warning | info
+           
             return View();
         }
         [HttpPost]
@@ -166,12 +171,28 @@ namespace LocalLinker.Controllers
                 // Example: Store user info in Session
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("UserName", user.Name); // for navbar
+                HttpContext.Session.SetString("UserType", user.UserType);
                 //Session["UserId"] = user.UserId;
                 //Session["UserName"] = user.Name;
                 //Session["UserType"] = user.UserType;
 
                 _conn.Close();
-                return RedirectToAction("MyBookings");  // Redirect to dashboard after successful login
+
+                if(user.UserType == "Customer") {
+                    return RedirectToAction("MyBookings");
+                }
+                else if(user.UserType == "Admin")
+                {
+                    return RedirectToAction("Admin", "Dashboard");
+                }
+                else
+                {
+                    TempData["ToastMessage"] = "Your are not Valid user for this site.";
+                    TempData["ToastType"] = "warning"; // success | error | warning | info
+                    ViewBag.ErrorMessage = "Your are not Valid user for this site.";
+                }
+                return View();
+                    //return RedirectToAction("MyBookings");  // Redirect to dashboard after successful login
             }
             else
             {

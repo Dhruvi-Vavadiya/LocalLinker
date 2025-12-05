@@ -1,0 +1,669 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Update Profile";
+    Layout = "~/Views/Shared/_ProviderLayout.cshtml";
+     string userImage = Context.Session.GetString("UserImage");
+   
+}
+
+<!-- Custom CSS for Profile Page -->
+<style>
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        margin-bottom: 30px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 600;
+        position: relative;
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+    }
+
+    .profile-avatar-edit {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        cursor: pointer;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+
+    .profile-info h2 {
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 8px;
+    }
+
+    .profile-info p {
+        color: var(--gray);
+        margin-bottom: 5px;
+    }
+
+    .rating-badge {
+        background: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .form-section {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-bottom: 25px;
+    }
+
+    .section-title {
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        flex: 1;
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--dark);
+    }
+
+    .form-control, .form-select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1.5px solid #e1e5eb;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s;
+        background: white;
+    }
+
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+    .form-hint {
+        font-size: 0.85rem;
+        color: var(--gray);
+        margin-top: 6px;
+    }
+
+    .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .tag {
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--primary);
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .tag-remove {
+        background: none;
+        border: none;
+        color: var(--danger);
+        font-size: 1rem;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+    }
+
+    .skill-level {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .skill-level-item {
+        flex: 1;
+        text-align: center;
+        padding: 12px;
+        border: 2px solid #e1e5eb;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .skill-level-item:hover {
+            border-color: var(--primary-light);
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .skill-level-item.selected {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .skill-level-item i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+    .btn-save {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1rem;
+    }
+
+        .btn-save:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+    .btn-cancel {
+        background: white;
+        color: var(--gray);
+        border: 1.5px solid #e1e5eb;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .btn-cancel:hover {
+            background: #f8f9fa;
+            border-color: var(--gray);
+            text-decoration: none;
+            color: var(--dark);
+        }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #eee;
+    }
+
+    .status-badge {
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .status-active {
+        background: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+    }
+
+    .status-pending {
+        background: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
+    }
+
+    .availability-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .day-checkbox {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px 10px;
+        border: 2px solid #e1e5eb;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .day-checkbox:hover {
+            border-color: var(--primary-light);
+        }
+
+        .day-checkbox.selected {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .day-checkbox input {
+            display: none;
+        }
+
+        .day-checkbox span {
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+    
+
+    
+</style>
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Update Profile</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Dashboard", "Provider")">Home</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Settings", "Provider")">Settings</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Update Profile</li>
+            </ol>
+        </nav>
+    </div>
+    <div>
+        <span class="status-badge status-active">
+            <i class="fas fa-check-circle"></i> Profile Active
+        </span>
+    </div>
+</div>
+
+@using (Html.BeginForm("UpdateProfile", "Provider", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <img src="~/img/@(userImage ?? "default.png")"
+                 alt="Profile"
+                 class="profile-img " style=" width: 120px;
+            height: 120px;
+            border-radius: 50%;" />
+
+                
+            @* <div class="profile-avatar-edit" title="Change Photo">
+                <i class="fas fa-camera"></i>
+            </div> *@
+        </div>
+
+        <div class="profile-info">
+            <h2>@HttpContextAccessor.HttpContext.Session.GetString("UserName")</h2>
+
+            <p>
+                <i class="fas fa-envelope me-2"></i>
+                @HttpContextAccessor.HttpContext.Session.GetString("UserEmail")
+            </p>
+
+            <p>
+                <i class="fas fa-phone me-2"></i>
+                @HttpContextAccessor.HttpContext.Session.GetString("UserPhone")
+            </p>
+
+            @* <div class="d-flex align-items-center gap-3 mt-2">
+                <span class="rating-badge">
+                    <i class="fas fa-star"></i>
+                    @HttpContextAccessor.HttpContext.Session.GetString("UserRating")
+                    (@HttpContextAccessor.HttpContext.Session.GetString("UserReviews") reviews)
+                </span>
+
+                <span class="text-muted">
+                    <i class="fas fa-calendar-alt me-1"></i>
+                    Member since @HttpContextAccessor.HttpContext.Session.GetString("UserMemberSince")
+                </span>
+            </div> *@
+        </div>
+
+    </div>
+
+    <!-- Basic Information Section -->
+    <div class="form-section">
+        <h3 class="section-title">
+            <i class="fas fa-user-circle"></i> Basic Information
+        </h3>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="Service_id">Service Category</label>
+                <select class="form-select" id="Service_id" name="Service_id" required>
+    <option value="">Select a service</option>
+
+                    @foreach (var item in ViewBag.Services)
+                    {
+                        <option value="@item.Service_id" selected="@(item.Service_id == ViewBag.SelectedService)">
+                            @item.Service_name
+                        </option>
+                    }
+
+</select>
+
+
+                <p class="form-hint">Select your primary service category</p>
+            </div>
+
+
+            
+            <div class="form-group">
+                <label class="form-label" for="Experience_years">Years of Experience</label>
+                <select class="form-select" id="Experience_years" name="Experience_years" required
+                        onchange="toggleCustomExperience(this)">
+                    <option value="">Select option</option>
+                    <option value="0">0 (Just starting)</option>
+                    <option value="1">1 year</option>
+                    <option value="2">2 years</option>
+                    <option value="3">3 years</option>
+                    <option value="4">4 years</option>
+                    <option value="5">5 years</option>
+                    <option value="6">6 years</option>
+                    <option value="custom">Custom (specify below)</option>
+                </select>
+                <div id="customExperienceContainer" style="display: none; margin-top: 10px;">
+                    <input type="number" class="form-control" id="customExperience"
+                           placeholder="Enter exact years (e.g., 4, 12, 18)" min="0" max="50">
+                </div>
+                <p class="form-hint">Your professional experience in years</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="Location_id">Service Area</label>
+            <select class="form-select" id="Location_id" name="Location_id" required>
+                <option value="">Select your service area</option>
+                <option value="1">Downtown</option>
+                <option value="2">North District</option>
+                <option value="3">South District</option>
+                <option value="4">East District</option>
+                <option value="5">West District</option>
+                <option value="6">Suburban Area</option>
+                <option value="7">Metropolitan Area</option>
+            </select>
+            <p class="form-hint">Select the area where you provide services</p>
+        </div>
+    </div>
+
+    <!-- Service Details Section -->
+    <div class="form-section">
+        <h3 class="section-title">
+            <i class="fas fa-tools"></i> Service Details
+        </h3>
+
+        <div class="form-group">
+            <label class="form-label">Service Description</label>
+            <textarea class="form-control" rows="4" placeholder="Describe your services, specialties, and approach..." name="description"></textarea>
+            <p class="form-hint">Briefly describe what services you offer and your expertise</p>
+        </div>
+
+        @* <div class="form-group">
+            <label class="form-label">Hourly Rate ($)</label>
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="number" class="form-control" placeholder="e.g., 45" min="10" max="500" step="5" name="hourly_rate">
+                    <p class="form-hint">Your standard hourly rate</p>
+                </div>
+            </div>
+        </div> *@
+    </div>
+
+    <!-- Availability Section -->
+    @* <div class="form-section">
+        <h3 class="section-title">
+            <i class="fas fa-calendar-check"></i> Availability
+        </h3>
+
+        <div class="form-group">
+            <label class="form-label">Working Days</label>
+            <div class="availability-grid">
+                <label class="day-checkbox">
+                    <input type="checkbox" name="working_days" value="mon">
+                    <i class="far fa-calendar"></i>
+                    <span>Mon</span>
+                </label>
+                <label class="day-checkbox">
+                    <input type="checkbox" name="working_days" value="tue">
+                    <i class="far fa-calendar"></i>
+                    <span>Tue</span>
+                </label>
+                <label class="day-checkbox">
+                    <input type="checkbox" name="working_days" value="wed">
+                    <i class="far fa-calendar"></i>
+                    <span>Wed</span>
+                </label>
+                <label class="day-checkbox">
+                    <input type="checkbox" name="working_days" value="thu">
+                    <i class="far fa-calendar"></i>
+                    <span>Thu</span>
+                </label>
+                <label class="day-checkbox">
+                    <input type="checkbox" name="working_days" value="fri">
+                    <i class="far fa-calendar"></i>
+                    <span>Fri</span>
+                </label>
+                <label class="day-checkbox">
+                    <input type="checkbox" name="working_days" value="sat">
+                    <i class="far fa-calendar"></i>
+                    <span>Sat</span>
+                </label>
+                <label class="day-checkbox">
+                    <input type="checkbox" name="working_days" value="sun">
+                    <i class="far fa-calendar"></i>
+                    <span>Sun</span>
+                </label>
+            </div>
+            <p class="form-hint">Select days you are available for work</p>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Start Time</label>
+                <input type="time" class="form-control" name="start_time" value="09:00">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">End Time</label>
+                <input type="time" class="form-control" name="end_time" value="17:00">
+            </div>
+        </div>
+    </div> *@
+
+    <!-- Skills & Expertise Section -->
+    @* <div class="form-section">
+        <h3 class="section-title">
+            <i class="fas fa-graduation-cap"></i> Skills & Expertise
+        </h3>
+
+        <div class="form-group">
+            <label class="form-label">Skill Level</label>
+            <div class="skill-level">
+                <div class="skill-level-item">
+                    <i class="fas fa-user-graduate"></i>
+                    <div>Beginner</div>
+                </div>
+                <div class="skill-level-item selected">
+                    <i class="fas fa-user-cog"></i>
+                    <div>Intermediate</div>
+                </div>
+                <div class="skill-level-item">
+                    <i class="fas fa-user-tie"></i>
+                    <div>Expert</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Specializations</label>
+            <div class="tag-container">
+                <div class="tag">
+                    Emergency Repairs
+                    <button type="button" class="tag-remove">&times;</button>
+                </div>
+                <div class="tag">
+                    Installation
+                    <button type="button" class="tag-remove">&times;</button>
+                </div>
+                <div class="tag">
+                    Maintenance
+                    <button type="button" class="tag-remove">&times;</button>
+                </div>
+            </div>
+            <input type="text" class="form-control mt-3" placeholder="Add a specialization (press Enter to add)" id="newSpecialization">
+        </div>
+    </div> *@
+
+    <!-- Hidden Fields -->
+    <input type="hidden" name="Provider_id" value="@ViewBag.ProviderId" />
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+        <a href="@Url.Action("Settings", "Provider", new { providerId = ViewBag.ProviderId })" class="btn-cancel">
+            <i class="fas fa-times"></i> Cancel
+        </a>
+        <button type="submit" class="btn-save">
+            <i class="fas fa-save"></i> Save Changes
+        </button>
+    </div>
+}
+
+<!-- JavaScript for Interactive Elements -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Skill Level Selection
+        const skillItems = document.querySelectorAll('.skill-level-item');
+        skillItems.forEach(item => {
+            item.addEventListener('click', function() {
+                skillItems.forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Day Checkbox Selection
+        const dayCheckboxes = document.querySelectorAll('.day-checkbox');
+        dayCheckboxes.forEach(box => {
+            const checkbox = box.querySelector('input[type="checkbox"]');
+            box.addEventListener('click', function() {
+                checkbox.checked = !checkbox.checked;
+                box.classList.toggle('selected', checkbox.checked);
+            });
+        });
+
+        // Specialization Tags
+        const newSpecializationInput = document.getElementById('newSpecialization');
+        const tagContainer = document.querySelector('.tag-container');
+
+        newSpecializationInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== '') {
+                e.preventDefault();
+
+                const tag = document.createElement('div');
+                tag.className = 'tag';
+                tag.innerHTML = `
+                    ${this.value.trim()}
+                    <button type="button" class="tag-remove">&times;</button>
+                `;
+
+                tagContainer.appendChild(tag);
+                this.value = '';
+
+                // Add remove functionality to new tag
+                tag.querySelector('.tag-remove').addEventListener('click', function() {
+                    tag.remove();
+                });
+            }
+        });
+
+        // Tag Remove Functionality
+        document.querySelectorAll('.tag-remove').forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.tag').remove();
+            });
+        });
+
+        // Set default selections based on your model data
+        @if (ViewBag.ServiceId != null)
+        {
+                <text>
+                document.getElementById('Service_id').value = '@ViewBag.ServiceId';
+                </text>
+        }
+
+        @if (ViewBag.ExperienceYears != null)
+        {
+                <text>
+                document.getElementById('Experience_years').value = '@ViewBag.ExperienceYears';
+                </text>
+        }
+
+        @if (ViewBag.LocationId != null)
+        {
+                <text>
+                document.getElementById('Location_id').value = '@ViewBag.LocationId';
+                </text>
+        }
+    });
+</script>
+<script>
+    function toggleCustomExperience(select) {
+        const container = document.getElementById('customExperienceContainer');
+        if (select.value === 'custom') {
+            container.style.display = 'block';
+            document.getElementById('customExperience').required = true;
+        } else {
+            container.style.display = 'none';
+            document.getElementById('customExperience').required = false;
+        }
+    }
+</script>
