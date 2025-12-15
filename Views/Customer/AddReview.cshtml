@@ -1,26 +1,406 @@
 ﻿@{
-    ViewData["Title"] = "AddReview";
+    ViewData["Title"] = "Add Review";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
-<h3>Rate Your Service</h3>
 
-<form method="post">
-    <input type="hidden" name="service_request_id" value="@ViewBag.BookingId" />
+<style>
+    .review-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
 
-    <div class="form-group">
-        <label>Rating (1–5 stars)</label>
-        <select name="rating" class="form-control">
-            @for (int i = 1; i <= 5; i++)
-            {
-                <option value="@i">@i ★</option>
+    .review-header {
+        text-align: center;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+    }
+
+        .review-header h3 {
+            color: #1a1a1a;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+    .review-subtitle {
+        color: #65676B;
+        font-size: 0.95rem;
+    }
+
+    /* Star Rating Styles */
+    .rating-container {
+        text-align: center;
+        margin: 25px 0;
+    }
+
+    .rating-label {
+        display: block;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #1a1a1a;
+        margin-bottom: 15px;
+    }
+
+    .star-rating {
+        display: inline-flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        gap: 8px;
+    }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            background: #f0f2f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+            .star-rating label:before {
+                content: "★";
+                font-size: 28px;
+                color: #bdc3c7;
+                transition: all 0.2s ease;
             }
-        </select>
+
+            .star-rating input:checked ~ label:before,
+            .star-rating label:hover ~ label:before,
+            .star-rating label:hover:before {
+                color: #FFD700;
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            }
+
+        .star-rating input:checked + label:before {
+            color: #FFD700;
+            animation: starPulse 0.5s ease;
+        }
+
+
+    .rating-feedback {
+        margin-top: 15px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        min-height: 28px;
+    }
+
+    .rating-emoji {
+        font-size: 1.8rem;
+        margin-right: 8px;
+    }
+
+    /* Review Textarea */
+    .review-textarea-container {
+        margin: 30px 0;
+    }
+
+    .review-label {
+        font-weight: 500;
+        color: #1a1a1a;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .review-textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 15px;
+        border: 2px solid #e4e6eb;
+        border-radius: 10px;
+        font-size: 1rem;
+        resize: vertical;
+        transition: all 0.3s;
+        font-family: inherit;
+    }
+
+        .review-textarea:focus {
+            outline: none;
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.1);
+        }
+
+    .char-count {
+        text-align: right;
+        font-size: 0.85rem;
+        color: #65676B;
+        margin-top: 5px;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        background: #1877f2;
+        color: white;
+        border: none;
+        padding: 14px 30px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+        .submit-btn:hover {
+            background: #166fe5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(24, 119, 242, 0.2);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn i {
+            font-size: 1.1rem;
+        }
+
+    /* Service Info */
+    .service-info {
+        background: #f7f8fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 25px;
+        border-left: 4px solid #1877f2;
+    }
+
+    .service-title {
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 5px;
+    }
+
+    .service-details {
+        color: #65676B;
+        font-size: 0.9rem;
+    }
+
+    /* Rating Descriptions */
+    .rating-descriptions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        padding: 0 10px;
+    }
+
+    .rating-desc {
+        font-size: 0.8rem;
+        color: #65676B;
+        text-align: center;
+        width: 50px;
+    }
+
+   
+
+   
+</style>
+
+<div class="review-container">
+    <div class="review-header">
+        <h3>Rate Your Service Experience</h3>
+        <p class="review-subtitle">Share your feedback to help improve our service quality</p>
     </div>
 
-    <div class="form-group">
-        <label>Review</label>
-        <textarea name="review_text" class="form-control"></textarea>
+    <!-- Service Information -->
+    <div class="service-info">
+        <div class="service-title">Service Request #@ViewBag.BookingId</div>
+        <div class="service-details">
+            <i class="far fa-calendar-alt me-1"></i> Completed on @DateTime.Now.ToString("MMM dd, yyyy")
+        </div>
     </div>
 
-    <button type="submit" class="btn btn-success">Submit Review</button>
-</form>
+    @using (Html.BeginForm("AddReview", "Customer", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="service_request_id" value="@ViewBag.BookingId" />
+
+        <!-- Star Rating Section -->
+        <div class="rating-container">
+            <span class="rating-label">How would you rate this service?</span>
+
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5" required>
+                <label for="star5" title="5 stars"></label>
+
+                <input type="radio" id="star4" name="rating" value="4">
+                <label for="star4" title="4 stars"></label>
+
+                <input type="radio" id="star3" name="rating" value="3">
+                <label for="star3" title="3 stars"></label>
+
+                <input type="radio" id="star2" name="rating" value="2">
+                <label for="star2" title="2 stars"></label>
+
+                <input type="radio" id="star1" name="rating" value="1">
+                <label for="star1" title="1 star"></label>
+            </div>
+
+            <div class="rating-feedback" id="ratingFeedback">
+                <span id="ratingEmoji">🤔</span>
+                <span id="ratingText">Select a rating</span>
+            </div>
+
+            <!-- Rating Descriptions -->
+            <div class="rating-descriptions">
+                <div class="rating-desc">Poor</div>
+                <div class="rating-desc">Fair</div>
+                <div class="rating-desc">Good</div>
+                <div class="rating-desc">Very Good</div>
+                <div class="rating-desc">Excellent</div>
+            </div>
+        </div>
+
+        <!-- Review Text Section -->
+        <div class="review-textarea-container">
+            <label class="review-label">Your Review (Optional)</label>
+            <textarea name="review_text"
+                  class="review-textarea"
+                  placeholder="Tell us about your experience. What went well? What could be improved?"
+                  maxlength="500"
+                  id="reviewTextarea"></textarea>
+            <div class="char-count">
+                <span id="charCount">0</span>/500 characters
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn" id="submitBtn">
+            <i class="far fa-paper-plane"></i> Submit Review
+        </button>
+    }
+</div>
+
+<!-- JavaScript for Interactive Rating -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stars = document.querySelectorAll('.star-rating input');
+        const ratingFeedback = document.getElementById('ratingFeedback');
+        const ratingEmoji = document.getElementById('ratingEmoji');
+        const ratingText = document.getElementById('ratingText');
+        const reviewTextarea = document.getElementById('reviewTextarea');
+        const charCount = document.getElementById('charCount');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Rating feedback texts
+        const ratingMessages = {
+            1: { emoji: "😞", text: "Very Poor" },
+            2: { emoji: "😐", text: "Below Average" },
+            3: { emoji: "😊", text: "Average" },
+            4: { emoji: "😄", text: "Good" },
+            5: { emoji: "😍", text: "Excellent" }
+        };
+
+        // Handle star rating clicks
+        stars.forEach(star => {
+            star.addEventListener('change', function() {
+                const rating = parseInt(this.value);
+                const feedback = ratingMessages[rating];
+
+                if (feedback) {
+                    ratingEmoji.textContent = feedback.emoji;
+                    ratingText.textContent = feedback.text;
+
+                    // Animate the feedback
+                    ratingFeedback.style.opacity = '0';
+                    setTimeout(() => {
+                        ratingFeedback.style.opacity = '1';
+                        ratingFeedback.style.transform = 'scale(1.05)';
+                        setTimeout(() => {
+                            ratingFeedback.style.transform = 'scale(1)';
+                        }, 200);
+                    }, 150);
+                }
+            });
+
+            // Add hover effect
+            star.addEventListener('mouseenter', function() {
+                const rating = parseInt(this.value);
+                const feedback = ratingMessages[rating];
+
+                if (feedback && !this.checked) {
+                    ratingEmoji.textContent = feedback.emoji;
+                    ratingText.textContent = `Rate: ${feedback.text}`;
+                }
+            });
+        });
+
+        // Reset hover effect when mouse leaves rating area
+        document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+            const checkedStar = document.querySelector('.star-rating input:checked');
+            if (checkedStar) {
+                const rating = parseInt(checkedStar.value);
+                const feedback = ratingMessages[rating];
+                ratingEmoji.textContent = feedback.emoji;
+                ratingText.textContent = feedback.text;
+            } else {
+                ratingEmoji.textContent = "🤔";
+                ratingText.textContent = "Select a rating";
+            }
+        });
+
+        // Character counter for review text
+        reviewTextarea.addEventListener('input', function() {
+            const length = this.value.length;
+            charCount.textContent = length;
+
+            // Change color when approaching limit
+            if (length > 450) {
+                charCount.style.color = '#e74c3c';
+            } else if (length > 400) {
+                charCount.style.color = '#f39c12';
+            } else {
+                charCount.style.color = '#65676B';
+            }
+        });
+
+        // Form validation
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            const ratingSelected = document.querySelector('.star-rating input:checked');
+
+            if (!ratingSelected) {
+                e.preventDefault();
+                alert('Please select a star rating before submitting.');
+
+                // Shake rating container
+                const ratingContainer = document.querySelector('.rating-container');
+                ratingContainer.style.transform = 'translateX(-5px)';
+                setTimeout(() => {
+                    ratingContainer.style.transform = 'translateX(5px)';
+                    setTimeout(() => {
+                        ratingContainer.style.transform = 'translateX(0)';
+                    }, 100);
+                }, 100);
+                return false;
+            }
+
+            // Add loading state to button
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.disabled = true;
+        });
+
+        // Auto-focus first star on page load for better UX
+        setTimeout(() => {
+            document.getElementById('star3').focus();
+        }, 500);
+    });
+</script>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

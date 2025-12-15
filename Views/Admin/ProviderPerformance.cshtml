@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "ProviderPerformance";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var report = ViewBag.Report;
+}
+
+<section class="container mt-4">
+    <h2 class="mb-3 text-center">Provider Performance Report</h2>
+
+    <div class="text-end mb-3">
+        <a href="@Url.Action("ExportProviderPerformanceExcel")" class="btn btn-success btn-sm">
+            Export Excel
+        </a>
+        @* <a href="@Url.Action("ExportProviderPerformancePdf")" class="btn btn-danger btn-sm">
+            Export PDF
+        </a> *@
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>Provider Name</th>
+                <th>Total Bookings</th>
+                <th>Completed</th>
+                <th>Total Earnings (₹)</th>
+                <th>Avg Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in report)
+            {
+                <tr class="text-center">
+                    <td>@item.ProviderName</td>
+                    <td>@item.TotalBookings</td>
+                    <td>@item.CompletedBookings</td>
+                    <td>@item.TotalEarnings</td>
+                    <td>@item.AverageRating.ToString("0.0")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+

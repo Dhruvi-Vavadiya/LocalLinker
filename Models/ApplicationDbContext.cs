@@ -14,7 +14,7 @@ namespace LocalLinker.Models
         public DbSet<ServiceProvider> ServiceProviders { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
         public DbSet<Reviews> Reviews { get; set; }
-        public DbSet<Location> Locations { get; set; }
+        public DbSet<Location> Location { get; set; }
         public DbSet<Booking> Booking { get; set; }
     }
 }

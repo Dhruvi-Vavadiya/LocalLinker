@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewData["Title"] = "Locations";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model IEnumerable<LocalLinker.Models.Location>
+
+
+<a class="btn btn-success mb-3"
+   href="@Url.Action("AddLocation")">
+    <i class="fa fa-plus"></i> Add Location
+</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>City</th>
+            <th>Area</th>
+            <th>Postal Code</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.City</td>
+                <td>@item.Area</td>
+                <td>@item.PostalCode</td>
+                <td>
+                    <a class="btn btn-sm btn-primary"
+                       href="@Url.Action("EditLocation", new { id = item.Location_id })">
+                        Edit
+                    </a>
+                    <a class="btn btn-sm btn-danger"
+                       href="@Url.Action("DeleteLocation", new { id = item.Location_id })"
+                       onclick="return confirm('Delete this location?');">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

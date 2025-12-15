@@ -1,0 +1,694 @@
+﻿@model IEnumerable<LocalLinker.Models.Service>
+
+@{
+    ViewBag.Title = "All Services";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3a0ca3;
+        --accent-color: #4cc9f0;
+        --light-bg: #f8f9ff;
+        --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --card-hover-shadow: 0 20px 40px rgba(67, 97, 238, 0.15);
+        --border-radius: 16px;
+    }
+
+    .services-hero {
+        background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+        color: white;
+        padding: 80px 0 60px;
+        margin-bottom: 60px;
+        border-radius: 0 0 30px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .services-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="%23ffffff"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35,6.36,119.13-6.25,47.34-15.68,92.68-44.26,134.45-70.9C1192.19,29.22,1200,52.47,1200,52.47V0Z" opacity=".5" fill="%23ffffff"/></svg>');
+            background-size: cover;
+            opacity: 0.1;
+        }
+
+        .services-hero h1 {
+            font-weight: 700;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .services-hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+    .service-count-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .filter-section {
+        background: white;
+        padding: 25px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        margin-bottom: 40px;
+        border: 1px solid #f0f0f0;
+    }
+
+    .filter-btn {
+        border: 2px solid #eef2ff;
+        background: white;
+        color: #666;
+        padding: 10px 25px;
+        border-radius: 50px;
+        margin: 0 8px 10px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+    .search-box {
+        border: 2px solid #eef2ff;
+        border-radius: 50px;
+        padding: 12px 25px;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+        background: #f8f9ff;
+    }
+
+        .search-box:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background: white;
+        }
+
+    .service-card {
+        border: none;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        background: white;
+        height: 100%;
+        box-shadow: var(--card-shadow);
+        position: relative;
+    }
+
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            transform-origin: left;
+        }
+
+        .service-card:hover::after {
+            transform: scaleX(1);
+        }
+
+    .service-image {
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+        transition: transform 0.8s ease;
+    }
+
+    .service-card:hover .service-image {
+        transform: scale(1.05);
+    }
+
+    .service-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--primary-color);
+        color: white;
+        padding: 6px 15px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        z-index: 1;
+        box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+    }
+
+    .service-category {
+        color: var(--primary-color);
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        display: inline-block;
+    }
+
+    .service-title {
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 12px;
+        font-size: 1.3rem;
+        line-height: 1.4;
+    }
+
+    .service-description {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .service-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+        padding-top: 15px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .service-rating {
+        display: flex;
+        align-items: center;
+        color: #ffb800;
+        font-weight: 600;
+    }
+
+    .service-price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+    }
+
+        .service-price small {
+            font-size: 0.9rem;
+            color: #888;
+            font-weight: 400;
+        }
+
+    .details-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+        .details-btn:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+            text-decoration: none;
+        }
+
+        .details-btn i {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .details-btn:hover i {
+            transform: translateX(5px);
+        }
+
+    .no-services {
+        text-align: center;
+        padding: 60px 20px;
+        background: var(--light-bg);
+        border-radius: var(--border-radius);
+        border: 2px dashed #ddd;
+    }
+
+    .no-services-icon {
+        font-size: 4rem;
+        color: #ccc;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .pagination-container {
+        margin-top: 50px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .page-link {
+        border: none;
+        color: #666;
+        padding: 12px 20px;
+        margin: 0 5px;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .page-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .page-item.active .page-link {
+        background: var(--primary-color);
+        color: white;
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    @@media (max-width: 768px) {
+        .services-hero {
+            padding: 50px 0 40px;
+            border-radius: 0 0 20px 20px;
+        }
+
+            .services-hero h1 {
+                font-size: 2rem;
+            }
+
+        .service-image {
+            height: 180px;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Search Results Animation */
+    .search-highlight {
+        background-color: rgba(255, 255, 100, 0.3);
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+
+    .search-results-info {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin-top: 15px;
+        display: inline-block;
+        font-size: 0.9rem;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-results-count {
+        font-weight: 600;
+        color: var(--primary-color);
+        animation: countPulse 0.5s ease;
+    }
+
+    @@keyframes countPulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="services-hero text-center">
+    <div class="container">
+        <h1>Explore Our Premium Services</h1>
+        <p>Professional solutions tailored to meet your specific needs with quality and reliability</p>
+        <div class="service-count-badge" id="serviceCountBadge">
+            <i class="fas fa-concierge-bell mr-2"></i>
+            <span id="totalServicesCount">@Model.Count()</span> Services Available
+        </div>
+        <div id="searchResultsInfo" class="search-results-info" style="display: none;">
+            Showing <span id="filteredServicesCount" class="search-results-count">0</span> of <span id="originalServicesCount">@Model.Count()</span> services
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Filter & Search Section -->
+    <div class="filter-section">
+        <div class="row align-items-center">
+            <div class="col-lg-4 ms-auto">
+                <div class="input-group">
+                    <input type="text" class="form-control search-box" placeholder="Search services by name or description..." id="serviceSearch">
+                    <div class="input-group-append">
+                        <span class="input-group-text bg-white border-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Grid -->
+    @if (Model != null && Model.Any())
+    {
+        <div class="row" id="servicesGrid">
+            @foreach (var s in Model)
+            {
+                <div class="col-lg-4 col-md-6 mb-4 service-item"
+                     data-name="@s.Service_name?.ToLower()"
+                     data-description="@s.description?.ToLower()"
+                     data-category="@s.Service_name?.ToLower()">
+
+                    <div class="service-card h-100">
+                        <!-- Service Badge -->
+                        <span class="service-badge">POPULAR</span>
+
+                        <!-- Service Image -->
+                        <div class="overflow-hidden">
+                            <img src="~/img/@(string.IsNullOrEmpty(s.Image) ? "default_service.jpg" : s.Image)"
+                                 class="service-image"
+                                 alt="@s.Service_name"
+                                 onerror="this.src='/img/default_service.jpg'" />
+                        </div>
+
+                        <div class="card-body d-flex flex-column">
+                            <!-- Category -->
+                            <span class="service-category">
+                                <i class="fas fa-tag mr-1"></i> @s.Service_name
+                            </span>
+
+                            <!-- Title -->
+                            <h5 class="service-title service-name">@s.Service_name</h5>
+
+                            <!-- Description -->
+                            <p class="service-description service-desc">
+                                @(string.IsNullOrEmpty(s.description) ?
+                                                        "Professional service with quality assurance." :
+                                                        s.description.Length > 100 ? s.description.Substring(0, 100) + "..." : s.description)
+                    </p>
+
+                            <!-- Meta Info -->
+                            <div class="service-meta">
+                                <div class="service-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span class="ml-1">4.8</span>
+                                    <span class="text-muted ml-1">(24)</span>
+                                </div>
+                                <div class="service-price">
+                                    ₹@s.price <small>/service</small>
+                                </div>
+                            </div>
+
+                            <!-- Action Button -->
+                            <a href="/Service/Details/@s.Service_id" class="details-btn">
+                                View Details <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                }
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+    else
+    {
+        <div class="no-services">
+            <div class="no-services-icon">
+                <i class="fas fa-concierge-bell"></i>
+            </div>
+            <h3 class="mb-3">No Services Available</h3>
+            <p class="text-muted mb-4">We're currently updating our service catalog. Please check back soon.</p>
+            <a href="/customer/index" class="btn btn-primary px-4">
+                <i class="fas fa-home mr-2"></i> Back to Home
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            const totalServices = @Model.Count();
+            let currentSearchTerm = '';
+
+            // Initialize counters
+            $('#originalServicesCount').text(totalServices);
+            updateServiceCount(totalServices);
+
+            // Search functionality with debouncing
+            let searchTimeout;
+            $('#serviceSearch').on('keyup', function() {
+                clearTimeout(searchTimeout);
+                currentSearchTerm = $(this).val().toLowerCase().trim();
+
+                searchTimeout = setTimeout(() => {
+                    performSearch(currentSearchTerm);
+                }, 300);
+            });
+
+            function performSearch(searchTerm) {
+                let visibleCount = 0;
+
+                if (searchTerm.length === 0) {
+                    // Show all services
+                    $('.service-item').fadeIn();
+                    $('.service-name, .service-desc').each(function() {
+                        $(this).html($(this).text()); // Remove highlights
+                    });
+                    visibleCount = totalServices;
+                    $('#searchResultsInfo').fadeOut();
+                } else {
+                    // Search and filter
+                    $('.service-item').each(function() {
+                        var $item = $(this);
+                        var name = $item.data('name') || '';
+                        var description = $item.data('description') || '';
+
+                        var matches = name.includes(searchTerm) || description.includes(searchTerm);
+
+                        if (matches) {
+                            $item.fadeIn();
+                            visibleCount++;
+
+                            // Highlight search term in text
+                            highlightText($item.find('.service-name'), searchTerm);
+                            highlightText($item.find('.service-desc'), searchTerm);
+                        } else {
+                            $item.hide();
+                            // Remove highlights from non-matching items
+                            $item.find('.service-name, .service-desc').each(function() {
+                                $(this).html($(this).text());
+                            });
+                        }
+                    });
+
+                    // Show search results info
+                    $('#filteredServicesCount').text(visibleCount);
+                    $('#searchResultsInfo').fadeIn();
+
+                    // Pulse animation for count
+                    $('.search-results-count').css('animation', 'none');
+                    setTimeout(() => {
+                        $('.search-results-count').css('animation', 'countPulse 0.5s ease');
+                    }, 10);
+                }
+
+                // Update service count badge
+                updateServiceCount(visibleCount);
+
+                // Show no results message if needed
+                if (visibleCount === 0 && searchTerm.length > 0) {
+                    showNoResultsMessage(searchTerm);
+                } else {
+                    hideNoResultsMessage();
+                }
+            }
+
+            function highlightText($element, searchTerm) {
+                if (!searchTerm || !$element.length) return;
+
+                var text = $element.text();
+                var regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+                var highlighted = text.replace(regex, '<span class="search-highlight">$1</span>');
+                $element.html(highlighted);
+            }
+
+            function escapeRegExp(string) {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+
+            function updateServiceCount(count) {
+                const $countSpan = $('#totalServicesCount');
+                $countSpan.text(count);
+
+                // Animate the count change
+                $countSpan.css('animation', 'none');
+                setTimeout(() => {
+                    $countSpan.css('animation', 'countPulse 0.5s ease');
+                }, 10);
+
+                // Update badge color based on count
+                const $badge = $('#serviceCountBadge');
+                if (count === 0) {
+                    $badge.css({
+                        'background': 'rgba(220, 53, 69, 0.2)',
+                        'border-color': 'rgba(220, 53, 69, 0.3)'
+                    });
+                } else if (count < totalServices) {
+                    $badge.css({
+                        'background': 'rgba(255, 193, 7, 0.2)',
+                        'border-color': 'rgba(255, 193, 7, 0.3)'
+                    });
+                } else {
+                    $badge.css({
+                        'background': 'rgba(255, 255, 255, 0.2)',
+                        'border-color': 'rgba(255, 255, 255, 0.3)'
+                    });
+                }
+            }
+
+            function showNoResultsMessage(searchTerm) {
+                // Remove existing no results message
+                hideNoResultsMessage();
+
+                // Add no results message
+                const $noResults = $(`
+                    <div class="no-services" id="noSearchResults">
+                        <div class="no-services-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3 class="mb-3">No Services Found</h3>
+                        <p class="text-muted mb-4">No services match "<strong>${searchTerm}</strong>"</p>
+                        <button class="btn btn-outline-primary px-4" id="clearSearchBtn">
+                            <i class="fas fa-times mr-2"></i> Clear Search
+                        </button>
+                    </div>
+                `);
+
+                $('#servicesGrid').after($noResults);
+
+                // Add clear search button functionality
+                $('#clearSearchBtn').click(function() {
+                    $('#serviceSearch').val('').focus();
+                    performSearch('');
+                });
+            }
+
+            function hideNoResultsMessage() {
+                $('#noSearchResults').remove();
+            }
+
+            // Filter functionality (if you add filters back)
+            $('.filter-btn').click(function() {
+                var filter = $(this).data('filter');
+
+                // Update active button
+                $('.filter-btn').removeClass('active');
+                $(this).addClass('active');
+
+                if (filter === 'all') {
+                    $('.service-item').fadeIn();
+                } else {
+                    $('.service-item').hide();
+                    $('.service-item[data-category*="' + filter + '"]').fadeIn();
+                }
+
+                // Update count
+                const visibleCount = $('.service-item:visible').length;
+                updateServiceCount(visibleCount);
+
+                // Update search results info
+                if (visibleCount < totalServices) {
+                    $('#filteredServicesCount').text(visibleCount);
+                    $('#searchResultsInfo').fadeIn();
+                } else {
+                    $('#searchResultsInfo').fadeOut();
+                }
+            });
+
+            // Add hover effect delay for better UX
+            $('.service-card').hover(
+                function() {
+                    $(this).css('z-index', '10');
+                },
+                function() {
+                    $(this).css('z-index', '1');
+                }
+            );
+
+            // Image loading error fallback
+            $('.service-image').on('error', function() {
+                $(this).attr('src', '/img/default_service.jpg');
+            });
+
+            // Clear search on escape key
+            $(document).keyup(function(e) {
+                if (e.key === "Escape") {
+                    $('#serviceSearch').val('').focus();
+                    performSearch('');
+                }
+            });
+        });
+    </script>
+}

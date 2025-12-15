@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewData["Title"] = "Servicesrequest";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model IEnumerable<dynamic>
+
+<h2>Service Requests</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Request ID</th>
+            <th>Customer</th>
+            <th>Service</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.RequestId</td>
+                <td>@r.CustomerName</td>
+                <td>@r.ServiceName</td>
+                <td>@r.LocationName</td>
+                <td>@r.Status</td>
+                <td>@r.Entry_Date.ToString("dd-MMM-yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

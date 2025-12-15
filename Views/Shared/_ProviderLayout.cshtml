@@ -39,7 +39,7 @@
 @*     </footer> *@
 @* </body> *@
 @{
-    string userImage = Context.Session.GetString("UserImage");
+    string userImage = Context.Session.GetString("pUserImage");
 }
 
 
@@ -545,19 +545,21 @@
                 <span class="menu-text">Earnings</span>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="@Url.Action("Reviews", "Provider")" class="menu-item">
                 <i class="fas fa-star menu-icon"></i>
                 <span class="menu-text">Reviews</span>
             </a>
-            <a href="@Url.Action("UpdateProfile", "Provider")" class="menu-item" ">
+            <a href="@Url.Action("AssignedBookings", "Provider")" class="menu-item">
+                <i class="fas fa-star menu-icon"></i>
+                <span class="menu-text">Booking Request</span>
+            </a>
+
+            <a href="@Url.Action("UpdateProfile", "Provider")" class="menu-item" >
                 <i class="fas fa-cog menu-icon"></i>
                 <span class="menu-text">Settings</span>
             </a>
 
-            <a href="#" class="menu-item">
-                <i class="fas fa-question-circle menu-icon"></i>
-                <span class="menu-text">Help & Support</span>
-            </a>
+            
         </div>
 
         <div class="sidebar-footer">
@@ -590,7 +592,7 @@
                 </div> 
 
                 <div class="user-info">
-                    <div class="user-name">@HttpContextAccessor.HttpContext.Session.GetString("UserName")</div>
+                    <div class="user-name">@HttpContextAccessor.HttpContext.Session.GetString("pUserName")</div>
                     <div class="user-role">Service Provider</div>
                 </div>
             </div>

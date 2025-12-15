@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "Book a Service";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    var locations = ViewBag.Location as List<LocalLinker.Models.Location>;
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#city").change(function () {
+
+            var selectedCity = $(this).val();
+
+            $("#area").empty();
+            $("#area").append('<option value="">-- Select Area --</option>');
+
+            $.ajax({
+                url: '@Url.Action("GetAreas", "Customer")',
+                type: 'GET',
+                data: { city: selectedCity },
+                   success: function (data) {
+        $.each(data, function (i, item) {
+            $("#area").append(
+                '<option value="' + item.location_id + '">' + item.area + '</option>'
+            );
+        });
+    }
+
+            });
+
+        });
+
+    });
+</script>
+
+
+<div class="container mdd mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-calendar-plus me-2"></i>Book a Service</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="MakeRequest">
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-concierge-bell me-2"></i>Select Service</label>
+                            <select name="Service_id" class="form-select" required>
+                                <option value="">-- Choose a Service --</option>
+                                @foreach (var s in ViewBag.Services)
+                                {
+                                    <option value="@s.Service_id">@s.Service_name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="mb-3">
+                                <label>Select City</label>
+                                <select id="city" class="form-select" required>
+                                    <option value="">-- Select City --</option>
+                                    @foreach (var c in locations.Select(x => x.City).Distinct())
+                                    {
+                                        <option value="@c">@c</option>
+                                    }
+                                </select>
+
+                            </div>
+                            <div class="mb-3">
+                                <label>Select Area</label>
+                                <select id="area" name="Location_id" class="form-select" required>
+                                    <option value="">-- Select Area --</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        @* <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-clock me-2"></i>Choose Time</label>
+                            <input type="datetime-local" name="BookingTime" class="form-control" required />
+                        </div> *@
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-info-circle me-2"></i>Description</label>
+                            <textarea name="Description" class="form-control" rows="3" placeholder="Enter details if needed..."></textarea>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check-circle me-1"></i> Book Now
+                            </button>
+                        </div>
+                    </form>
+
+                    @if (TempData["msg"] != null)
+                    {
+                        <div class="alert alert-success mt-3">
+                            <i class="fas fa-check-circle me-2"></i> @TempData["msg"]
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

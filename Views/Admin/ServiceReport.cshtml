@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewData["Title"] = "ServiceReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model IEnumerable<dynamic>
+
+
+<div class="container mt-4">
+    <h2 class="mb-4">📊 Service Performance Report</h2>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Service Name</th>
+                        <th>Total Bookings</th>
+                        <th>Average Rating</th>
+                        <th>Rating Stars</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        double avg = Math.Round((double)r.AvgRating, 1);
+
+                        <tr>
+                            <td class="fw-bold">@r.ServiceName</td>
+                            <td>@r.TotalBookings</td>
+                            <td>@avg</td>
+                            <td>
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= avg)
+                                    {
+                                        <i class="fas fa-star text-warning"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star text-muted"></i>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            No report data available.
+        </div>
+    }
+</div>
+

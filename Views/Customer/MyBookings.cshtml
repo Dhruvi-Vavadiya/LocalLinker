@@ -4,52 +4,368 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<h2 class="text-center mb-4">My Bookings</h2>
+<style>
+    .status-card {
+        transition: transform 0.2s;
+        cursor: pointer;
+        border-radius: 10px;
+    }
 
-<table class="table table-striped table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>Booking ID</th>
-            <th>Provider</th>
-            <th>Service</th>
-            <th>Status</th>
-            <th>Created At</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            foreach (var b in Model)
-            {
-                <tr>
-                    <td>@b.BookingId</td>
-                    <td>@b.ProviderName</td>
-                    <td>@b.ServiceName</td>
-                    <td>
-                        <span class="badge @(b.Status == "Pending" ? "bg-warning" :
-                                            b.Status == "Confirmed" ? "bg-success" :
-                                            b.Status == "Completed" ? "bg-info" : "bg-secondary")">
-                            @b.Status
-                        </span>
-                    </td>
-                    <td>@b.Created_At?.ToString("dd-MMM-yyyy")</td>
-                    <td>
-                        <a asp-action="AddReview" asp-route-bookingId="@b.BookingId" class="btn btn-sm btn-outline-primary">Add Review</a>
-                    </td>
-                </tr>
+        .status-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+    .provider-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+        margin-right: 10px;
+    }
+
+    .search-box {
+        border-radius: 25px;
+        padding-left: 40px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+    }
+
+    .badge-custom {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+    }
+
+    .action-btn {
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 0.85em;
+        margin-right: 5px;
+    }
+</style>
+
+<div class="container-fluid mt-3">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="mb-0">My Bookings</h2>
+        </div>
+        <div class="col-md-4">
+            <div class="position-relative">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="form-control search-box" placeholder="Search bookings..." id="searchInput">
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card status-card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">@Model?.Count()</h5>
+                    <p class="card-text mb-0">ALL BOOKINGS</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            @{
+                var pendingCount = Model?.Count(b => b.Status == "Pending" || b.Status == "PENDING") ?? 0;
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="6" class="text-center text-muted">No bookings found.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <div class="card status-card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">@pendingCount</h5>
+                    <p class="card-text mb-0">PENDING</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            @{
+                var completedCount = Model?.Count(b => b.Status == "Completed" || b.Status == "COMPLETED") ?? 0;
+            }
+            <div class="card status-card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">@completedCount</h5>
+                    <p class="card-text mb-0">COMPLETED</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            @{
+                var canceledCount = Model?.Count(b => b.Status == "canceled" || b.Status == "CANCELED") ?? 0;
+            }
+            <div class="card status-card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">@canceledCount</h5>
+                    <p class="card-text mb-0">CANCELED</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-@if (TempData["msg"] != null)
-{
-    <div class="alert alert-success mt-3">@TempData["msg"]</div>
+    <!-- Filters -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <div class="d-flex align-items-center">
+                <div class="btn-group mr-3">
+                    <button type="button" class="btn btn-outline-secondary active" data-filter="all">All Status</button>
+                    <button type="button" class="btn btn-outline-secondary" data-filter="pending">Pending</button>
+                    <button type="button" class="btn btn-outline-secondary" data-filter="completed">Completed</button>
+                    <button type="button" class="btn btn-outline-secondary" data-filter="canceled">Canceled</button>
+                </div>
+                <button type="button" class="btn btn-outline-primary" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="bookingsTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>REQUEST ID</th>
+                            <th>PROVIDER</th>
+                            <th>SERVICE</th>
+                            <th>STATUS</th>
+                            <th>CREATED AT</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var b in Model)
+                            {
+                                var status = b.Status?.ToString() ?? "";
+                                var statusLower = status.ToLower();
+                               
+                                var providerName = b.ProviderName?.ToString() ?? "N/A";
+                                var serviceName = b.ServiceName?.ToString() ?? "N/A";
+                                @* var createdAt = b.Entry_Date as DateTime?; *@
+                                DateTime? createdAt = b.Entry_Date;
+
+                                <tr data-booking-id="@b.RequestId" data-status="@statusLower">
+                                    <td><strong>#@b.RequestId</strong></td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="provider-avatar" style="background-color: @GetRandomColor(providerName);">
+                                                @GetInitials(providerName)
+                                            </div>
+                                            <div>
+                                                <div class="font-weight-bold">@providerName</div>
+                                                <small class="text-muted">
+                                                    @GetProviderTitleFromName(providerName) <!-- Fallback if no title available -->
+                                                </small>
+                                                <div>
+                                                    <small class="text-warning">
+                                                        <i class="fas fa-star"></i> 4.8 <!-- Static rating for now -->
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="font-weight-bold">@serviceName</td>
+                                    <td class="font-weight-bold">
+                                        
+                                            @status.ToUpper()
+                                        
+                                    </td>
+                                    <td>
+                                        @if (createdAt.HasValue)
+                                        {
+                                            <div>@createdAt.Value.ToString("dd-MMM-yyyy")</div>
+                                            <small class="text-muted">@createdAt.Value.ToString("hh:mm tt")</small>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-muted">N/A</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            <button class="btn btn-sm btn-outline-success action-btn restore-btn" data-id="@b.RequestId">
+                                                <i class="fas fa-redo"></i> Restore
+                                            </button>
+                                        }
+                                        @if (status.Equals("Confirmed", StringComparison.OrdinalIgnoreCase)
+                                                                        || status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase)
+                                                                        || status.Equals("Completed", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            <a asp-action="AddReview"
+                                               asp-route-bookingId="@b.RequestId"
+                                               class="btn btn-sm btn-outline-primary action-btn">
+                                                <i class="fas fa-edit"></i> Review
+                                            </a>
+                                        }
+
+                                        @if (status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            <a asp-action="CancelRequest"
+                                               asp-route-requestId="@b.RequestId"
+                                               class="btn btn-sm btn-outline-danger action-btn"
+                                               onclick="return confirm('Cancel this request?');">
+                                                <i class="fas fa-times"></i> Cancel
+                                            </a>
+
+                                        }
+                                       
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    <i class="fas fa-calendar-times fa-2x mb-3"></i>
+                                    <p class="mb-0">No bookings found.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Filter functionality
+            $('[data-filter]').click(function() {
+                var filter = $(this).data('filter');
+
+                // Update active button
+                $('[data-filter]').removeClass('active');
+                $(this).addClass('active');
+
+                // Filter table rows
+                if (filter === 'all') {
+                    $('#bookingsTable tbody tr').show();
+                } else {
+                    $('#bookingsTable tbody tr').hide();
+                    $('#bookingsTable tbody tr[data-status="' + filter + '"]').show();
+                }
+            });
+
+            // Search functionality
+            $('#searchInput').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('#bookingsTable tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+            // Refresh button
+            $('#refreshBtn').click(function() {
+                $(this).find('i').addClass('fa-spin');
+                setTimeout(function() {
+                    $('#refreshBtn').find('i').removeClass('fa-spin');
+                    // In a real application, you would reload data here
+                    location.reload(); // Simple refresh for now
+                }, 1000);
+            });
+
+            // Restore booking
+            $('.restore-btn').click(function() {
+                var bookingId = $(this).data('id');
+                if (confirm('Are you sure you want to restore this booking?')) {
+                    // In a real application, you would make an API call here
+                    $(this).closest('tr').fadeOut();
+                    console.log('Restored booking:', bookingId);
+                }
+            });
+
+            // Cancel booking
+            $('.cancel-btn').click(function() {
+                var bookingId = $(this).data('id');
+                if (confirm('Are you sure you want to cancel this booking?')) {
+                    // In a real application, you would make an API call here
+                    $(this).closest('tr').fadeOut();
+                    console.log('Canceled booking:', bookingId);
+                }
+            });
+        });
+    </script>
+}
+
+@functions {
+    // Helper function to get status badge class
+    public static string GetStatusBadgeClass(string status)
+    {
+        var statusLower = (status ?? "").ToLower();
+        return statusLower switch
+        {
+            "Pending" => "badge-warning",
+            "Confirmed" => "badge-success",
+            "Completed" => "badge-success", // Changed to green like in image
+            "Cancelled" => "badge-danger",
+            _ => "badge-secondary"
+        };
+    }
+
+    // Helper function to get initials
+    public static string GetInitials(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return "??";
+
+        var names = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (names.Length >= 2)
+            return $"{names[0][0]}{names[1][0]}".ToUpper();
+
+        return name.Length >= 2 ? name.Substring(0, 2).ToUpper() : name.ToUpper();
+    }
+
+    // Helper function to generate consistent color from name
+    public static string GetRandomColor(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return "#6c757d";
+
+        var colors = new[]
+        {
+            "#007bff", "#28a745", "#dc3545", "#fd7e14", "#17a2b8",
+            "#6f42c1", "#e83e8c", "#20c997", "#ffc107", "#343a40"
+        };
+
+        var hash = name.GetHashCode();
+        var index = Math.Abs(hash) % colors.Length;
+        return colors[index];
+    }
+
+    // Helper function to generate a title from name (as fallback)
+    public static string GetProviderTitleFromName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return "Service Provider";
+
+        // Simple mapping based on common names in your example
+        if (name.Contains("Ravi", StringComparison.OrdinalIgnoreCase) ||
+            name.Contains("Patel", StringComparison.OrdinalIgnoreCase))
+            return "Plumbing Expert";
+
+        if (name.Contains("Karan", StringComparison.OrdinalIgnoreCase) ||
+            name.Contains("Joshi", StringComparison.OrdinalIgnoreCase))
+            return "Electrician";
+
+        return "Service Provider";
+    }
 }

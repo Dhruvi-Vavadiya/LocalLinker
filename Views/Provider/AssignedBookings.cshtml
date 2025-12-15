@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LocalLinker.Models.Booking>
+﻿@model IEnumerable<dynamic>
 
 @{
     ViewData["Title"] = "Assigned Bookings";
@@ -11,42 +11,50 @@
     @if (Model != null && Model.Any())
     {
         <table class="table table-bordered table-striped">
-            <thead class="table-dark">
+            <thead class="">
                 <tr>
-                    <th>Booking ID</th>
-                    <th>Service Request ID</th>
+                    <th>Request ID</th>
+                    <th>Customer Name</th>
+                    <th>Service Name</th>
+                    <th>Location</th>
                     <th>Status</th>
                     <th>Created At</th>
-                    <th>Modify Date</th>
+                    @* <th>Modify Date</th> *@
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-            @foreach (var booking in Model)
-            {
-                <tr>
-                    <td>@booking.BookingId</td>
-                    <td>@booking.Service_Request_Id</td>
-                    <td>@booking.Status</td>
-                    <td>@booking.Created_At?.ToString("dd-MM-yyyy")</td>
-                    <td>@booking.Modifiy_Date?.ToString("dd-MM-yyyy")</td>
-                    <td>
-                        <form asp-action="UpdateStatus" asp-controller="Provider" method="post">
-                            <input type="hidden" name="bookingId" value="@booking.BookingId" />
-                            <select name="status" class="form-select form-select-sm d-inline w-auto">
-									<option value="" disabled>Select Status</option>
+                @foreach (var booking in Model)
+                {
+                    <tr>
+                        <td>@booking.Request_id</td>
+                        <td>@booking.CustomerName</td>
+                        <td>@booking.ServiceName</td>
+                        <td>@booking.LocationName</td>
+                        <td>@booking.Status</td>
+                        <td>@booking.EntryDate.ToString("dd-MM-yyyy")</td>
+                        @* <td>@booking.ModifyDate?.ToString("dd-MM-yyyy")</td> *@
+
+                        <td>
+                            <form asp-action="UpdateStatus" asp-controller="Provider" method="post">
+                                <input type="hidden" name="requestId" value="@booking.Request_id" />
+
+                                <select name="status" class="form-select form-select-sm d-inline w-auto">
                                     <option value="Pending" selected="@(booking.Status == "Pending")">Pending</option>
                                     <option value="Confirmed" selected="@(booking.Status == "Confirmed")">Confirmed</option>
                                     <option value="Completed" selected="@(booking.Status == "Completed")">Completed</option>
                                     <option value="Cancelled" selected="@(booking.Status == "Cancelled")">Cancelled</option>
+                                </select>
 
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-primary ms-2">Update</button>
-                        </form>
-                    </td>
-                </tr>
-            }
+                                <button type="submit" class="btn btn-sm btn-primary ms-2">
+                                    Update
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
             </tbody>
+
         </table>
     }
     else

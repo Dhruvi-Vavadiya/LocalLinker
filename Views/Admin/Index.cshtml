@@ -1,72 +1,1035 @@
 ﻿@model IEnumerable<LocalLinker.Models.users>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "User Management";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Index</h1>
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --success-color: #06d6a0;
+        --warning-color: #ffd166;
+        --danger-color: #ef476f;
+        --dark-color: #073b4c;
+        --light-color: #f8f9fa;
+        --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        --hover-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Is_Active)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Is_Active)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.User_id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.User_id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.User_id">Delete</a>
-            </td>
-        </tr>
+    .user-management-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+    }
+
+        .user-management-header h1 {
+            color: var(--dark-color);
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+    .search-filter-container {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        position: relative;
+        min-width: 300px;
+    }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+            .search-box input:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+    .filter-dropdown {
+        position: relative;
+        min-width: 180px;
+    }
+
+    .filter-button {
+        padding: 10px 15px;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        transition: all 0.3s;
+        width: 100%;
+    }
+
+        .filter-button:hover {
+            border-color: var(--primary-color);
+        }
+
+        .filter-button.active {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+    .filter-dropdown-content {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: var(--card-shadow);
+        margin-top: 5px;
+        padding: 10px;
+        z-index: 100;
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .filter-dropdown:hover .filter-dropdown-content,
+        .filter-dropdown-content:hover {
+            display: flex;
+        }
+
+    .filter-option {
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .filter-option:hover {
+            background-color: #f5f7ff;
+        }
+
+        .filter-option.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .filter-option i {
+            width: 20px;
+            text-align: center;
+        }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        font-weight: 500;
+    }
+
+        .btn-primary:hover {
+            background-color: #3a56d4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+    .stats-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .stat-card.total-users::before {
+            background-color: var(--primary-color);
+        }
+
+        .stat-card.active-users::before {
+            background-color: var(--success-color);
+        }
+
+        .stat-card.providers::before {
+            background-color: var(--warning-color);
+        }
+
+        .stat-card.customers::before {
+            background-color: var(--danger-color);
+        }
+
+        .stat-card h3 {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+            .stat-card .stat-change.positive {
+                color: var(--success-color);
+            }
+
+            .stat-card .stat-change.negative {
+                color: var(--danger-color);
+            }
+
+    .users-table-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+    }
+
+    .table-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .table-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: var(--dark-color);
+        }
+
+    .table-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .pagination-info {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .table {
+        margin: 0;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .table thead th {
+            background-color: #f8f9fa;
+            padding: 1rem 1.5rem;
+            border-bottom: 2px solid #e9ecef;
+            font-weight: 600;
+            color: var(--dark-color);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody tr {
+            transition: all 0.3s;
+        }
+
+            .table tbody tr:hover {
+                background-color: #f9f9ff;
+                transform: scale(1.005);
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+
+        .table tbody td {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .user-name {
+        font-weight: 600;
+        color: var(--dark-color);
+        margin-bottom: 3px;
+    }
+
+    .user-email {
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .user-type-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+        .user-type-badge.provider {
+            background-color: rgba(6, 214, 160, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(6, 214, 160, 0.2);
+        }
+
+        .user-type-badge.customer {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+
+        .user-type-badge.admin {
+            background-color: rgba(239, 71, 111, 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgba(239, 71, 111, 0.2);
+        }
+
+    .status-toggle {
+        position: relative;
+        display: inline-block;
+    }
+
+        .status-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .toggle-slider {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+        background-color: #ccc;
+        border-radius: 34px;
+        cursor: pointer;
+        transition: .4s;
+    }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+
+    .status-toggle input:checked + .toggle-slider {
+        background-color: var(--success-color);
+    }
+
+        .status-toggle input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+        .status-badge.active {
+            background-color: rgba(6, 214, 160, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge.inactive {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+        }
+
+    .action-buttons-cell {
+        display: flex;
+        gap: 10px;
+    }
+
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+        .action-btn.edit {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+        }
+
+            .action-btn.edit:hover {
+                background-color: #ffc107;
+                color: white;
+                transform: translateY(-2px);
+            }
+
+        .action-btn.view {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+
+            .action-btn.view:hover {
+                background-color: var(--primary-color);
+                color: white;
+                transform: translateY(-2px);
+            }
+
+        .action-btn.delete {
+            background-color: rgba(239, 71, 111, 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgba(239, 71, 111, 0.2);
+        }
+
+            .action-btn.delete:hover {
+                background-color: var(--danger-color);
+                color: white;
+                transform: translateY(-2px);
+            }
+
+    .empty-state {
+        padding: 3rem;
+        text-align: center;
+        color: #666;
+    }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            color: #999;
+            margin-bottom: 0.5rem;
+        }
+
+    .bulk-actions {
+        padding: 1rem 1.5rem;
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .bulk-select {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bulk-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+  
+</style>
+
+<div class="container-fluid py-4">
+    <div class="user-management-header">
+        <div>
+            <h1>User Management</h1>
+            <p class="text-muted mb-0">Manage all registered users and their accounts</p>
+        </div>
+        <div class="search-filter-container">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="userSearch" placeholder="Search users by name, email, or phone...">
+            </div>
+            <div class="filter-dropdown">
+                <button class="filter-button" id="filterButton">
+                    <span>All Users</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="filter-dropdown-content">
+                    <div class="filter-option active" data-filter="all">
+                        <i class="fas fa-users"></i>
+                        <span>All Users</span>
+                    </div>
+                    <div class="filter-option" data-filter="active">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Active Only</span>
+                    </div>
+                    <div class="filter-option" data-filter="inactive">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Inactive Only</span>
+                    </div>
+                    <div class="filter-option" data-filter="provider">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Providers</span>
+                    </div>
+                    <div class="filter-option" data-filter="customer">
+                        <i class="fas fa-user"></i>
+                        <span>Customers</span>
+                    </div>
+                </div>
+            </div>
+            <a asp-action="Create" class="btn-primary">
+                <i class="fas fa-plus"></i>
+                <span>Add New User</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-cards">
+        <div class="stat-card total-users">
+            <h3>Total Users</h3>
+            <div class="stat-value" id="totalUsersCount">@Model.Count()</div>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>12% increase</span>
+            </div>
+        </div>
+        <div class="stat-card active-users">
+            <h3>Active Users</h3>
+            <div class="stat-value" id="activeUsersCount">@Model.Count(u => u.Is_Active)</div>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>8% increase</span>
+            </div>
+        </div>
+        <div class="stat-card providers">
+            <h3>Providers</h3>
+            <div class="stat-value" id="providersCount">@Model.Count(u => u.UserType == "provider")</div>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>15% increase</span>
+            </div>
+        </div>
+        <div class="stat-card customers">
+            <h3>Customers</h3>
+            <div class="stat-value" id="customersCount">@Model.Count(u => u.UserType == "customer")</div>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>10% increase</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="users-table-container">
+        <div class="table-header">
+            <h2>User List</h2>
+            <div class="table-controls">
+                <div class="pagination-info">
+                    Showing <span id="showingCount">@Model.Count()</span> of <span id="totalCount">@Model.Count()</span> users
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table" id="usersTable">
+                <thead>
+                    <tr>
+                        <th width="5%">
+                            <input type="checkbox" id="selectAll">
+                        </th>
+                        <th width="25%">User</th>
+                        <th width="15%">Phone</th>
+                        <th width="15%">Type</th>
+                        
+                        <th width="15%">Status</th>
+                        <th width="10%">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    @foreach (var item in Model)
+                    {
+                        var initials = string.Join("", item.Name.Split(' ').Select(n => n.FirstOrDefault())).ToUpper();
+                        <tr data-user-id="@item.User_id"
+                            data-status="@(item.Is_Active ? "active" : "inactive")"
+                            data-type="@item.UserType?.ToLower()"
+                            data-search="@($"{item.Name} {item.Email} {item.Phone}".ToLower())">
+                            <td>
+                                <input type="checkbox" class="user-checkbox" data-id="@item.User_id">
+                            </td>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-avatar">@initials</div>
+                                    <div>
+                                        <div class="user-name">@Html.DisplayFor(modelItem => item.Name)</div>
+                                        <div class="user-email">@Html.DisplayFor(modelItem => item.Email)</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Phone)
+                            </td>
+                            <td>
+                                @{
+                                    var badgeClass = "customer";
+                                    if (item.UserType?.ToLower() == "provider") badgeClass = "provider";
+                                    else if (item.UserType?.ToLower() == "admin") badgeClass = "admin";
+                                }
+                                <span class="user-type-badge @badgeClass">@item.UserType</span>
+                            </td>
+                            
+                            <td>
+                                <label class="status-toggle">
+                                    <input type="checkbox"
+                                           class="toggle-active"
+                                           data-id="@item.User_id"
+                                           @(item.Is_Active ? "checked" : "")>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span class="status-badge @(item.Is_Active ? "active" : "inactive")">
+                                    <i class="fas fa-circle" style="font-size: 8px;"></i>
+                                    @(item.Is_Active ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons-cell">
+                                    <a asp-action="Edit" asp-route-id="@item.User_id" class="action-btn edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.User_id" class="action-btn view" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-users"></i>
+            <h3>No users found</h3>
+            <p>Try adjusting your search or filter criteria</p>
+            <button class="btn-primary mt-3" id="resetFilters">
+                <i class="fas fa-redo"></i>
+                <span>Reset Filters</span>
+            </button>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="bulk-actions" id="bulkActions" style="display: none;">
+            <div class="bulk-select">
+                <span id="selectedCount">0</span> users selected
+            </div>
+            <div class="bulk-buttons">
+                <button class="btn-primary" id="bulkActivate">
+                    <i class="fas fa-check"></i>
+                    <span>Activate</span>
+                </button>
+                <button class="btn-primary" style="background-color: #6c757d;" id="bulkDeactivate">
+                    <i class="fas fa-times"></i>
+                    <span>Deactivate</span>
+                </button>
+                <button class="btn-primary" style="background-color: var(--danger-color);" id="bulkDelete">
+                    <i class="fas fa-trash"></i>
+                    <span>Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let selectedUsers = new Set();
+
+            // Search functionality
+            $('#userSearch').on('keyup', function() {
+                const searchTerm = $(this).val().toLowerCase();
+                filterTable();
+            });
+
+            // Filter functionality
+            $('.filter-option').click(function() {
+                const filterValue = $(this).data('filter');
+
+                // Update filter button text
+                $('#filterButton span').text($(this).find('span').text());
+                $('#filterButton').addClass('active');
+
+                // Update active filter option
+                $('.filter-option').removeClass('active');
+                $(this).addClass('active');
+
+                filterTable();
+            });
+
+            // Status toggle functionality
+            $('.toggle-active').change(function() {
+                var userId = $(this).data('id');
+                var isActive = $(this).is(':checked');
+                var row = $(this).closest('tr');
+
+                // Update status badge
+                var statusBadge = row.find('.status-badge');
+                if (isActive) {
+                    statusBadge.removeClass('inactive').addClass('active').html('<i class="fas fa-circle" style="font-size: 8px;"></i> Active');
+                } else {
+                    statusBadge.removeClass('active').addClass('inactive').html('<i class="fas fa-circle" style="font-size: 8px;"></i> Inactive');
+                }
+
+                // Update data attribute
+                row.attr('data-status', isActive ? 'active' : 'inactive');
+
+                // Send AJAX request
+                $.ajax({
+                    url: '/Admin/UpdateStatus',
+                    type: 'POST',
+                    data: {
+                        id: userId,
+                        isActive: isActive
+                    },
+                    success: function() {
+                        updateStats();
+                        showNotification('User status updated successfully', 'success');
+                    },
+                    error: function() {
+                        // Revert the toggle if failed
+                        $(this).prop('checked', !isActive);
+                        showNotification('Error updating status', 'error');
+                    }
+                });
+            });
+
+            // Select All checkbox
+            $('#selectAll').change(function() {
+                const isChecked = $(this).is(':checked');
+                $('.user-checkbox').prop('checked', isChecked);
+
+                if (isChecked) {
+                    $('.user-checkbox').each(function() {
+                        selectedUsers.add($(this).data('id'));
+                    });
+                } else {
+                    selectedUsers.clear();
+                }
+
+                updateBulkActions();
+            });
+
+            // Individual checkbox selection
+            $(document).on('change', '.user-checkbox', function() {
+                const userId = $(this).data('id');
+
+                if ($(this).is(':checked')) {
+                    selectedUsers.add(userId);
+                } else {
+                    selectedUsers.delete(userId);
+                    $('#selectAll').prop('checked', false);
+                }
+
+                updateBulkActions();
+            });
+
+            // Bulk actions
+            $('#bulkActivate').click(function() {
+                if (selectedUsers.size === 0) return;
+
+                if (confirm(`Activate ${selectedUsers.size} user(s)?`)) {
+                    bulkUpdateStatus(true);
+                }
+            });
+
+            $('#bulkDeactivate').click(function() {
+                if (selectedUsers.size === 0) return;
+
+                if (confirm(`Deactivate ${selectedUsers.size} user(s)?`)) {
+                    bulkUpdateStatus(false);
+                }
+            });
+
+            $('#bulkDelete').click(function() {
+                if (selectedUsers.size === 0) return;
+
+                if (confirm(`Delete ${selectedUsers.size} user(s)? This action cannot be undone.`)) {
+                    bulkDeleteUsers();
+                }
+            });
+
+            // Reset filters
+            $('#resetFilters').click(function() {
+                $('#userSearch').val('');
+                $('.filter-option').removeClass('active');
+                $('.filter-option[data-filter="all"]').addClass('active');
+                $('#filterButton span').text('All Users');
+                $('#filterButton').removeClass('active');
+                filterTable();
+            });
+
+            // Function to filter table
+            function filterTable() {
+                const searchTerm = $('#userSearch').val().toLowerCase();
+                const activeFilter = $('.filter-option.active').data('filter');
+                let visibleCount = 0;
+
+                $('tbody tr').each(function() {
+                    const searchData = $(this).data('search');
+                    const status = $(this).data('status');
+                    const type = $(this).data('type');
+                    let showRow = true;
+
+                    // Apply search filter
+                    if (searchTerm && !searchData.includes(searchTerm)) {
+                        showRow = false;
+                    }
+
+                    // Apply status/type filter
+                    if (activeFilter !== 'all') {
+                        if (activeFilter === 'active' && status !== 'active') {
+                            showRow = false;
+                        } else if (activeFilter === 'inactive' && status !== 'inactive') {
+                            showRow = false;
+                        } else if (activeFilter === 'provider' && type !== 'provider') {
+                            showRow = false;
+                        } else if (activeFilter === 'customer' && type !== 'customer') {
+                            showRow = false;
+                        }
+                    }
+
+                    if (showRow) {
+                        $(this).show();
+                        visibleCount++;
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                // Show/hide empty state
+                if (visibleCount === 0) {
+                    $('#emptyState').show();
+                    $('#usersTable').hide();
+                    $('#bulkActions').hide();
+                } else {
+                    $('#emptyState').hide();
+                    $('#usersTable').show();
+                }
+
+                // Update showing count
+                $('#showingCount').text(visibleCount);
+            }
+
+            // Function to update bulk actions UI
+            function updateBulkActions() {
+                const count = selectedUsers.size;
+                $('#selectedCount').text(count);
+
+                if (count > 0) {
+                    $('#bulkActions').show();
+                } else {
+                    $('#bulkActions').hide();
+                }
+            }
+
+            // Function to update stats
+            function updateStats() {
+                const totalUsers = $('tbody tr').length;
+                const activeUsers = $('tbody tr[data-status="active"]').length;
+                const providers = $('tbody tr[data-type="provider"]').length;
+                const customers = $('tbody tr[data-type="customer"]').length;
+
+                $('#totalUsersCount').text(totalUsers);
+                $('#activeUsersCount').text(activeUsers);
+                $('#providersCount').text(providers);
+                $('#customersCount').text(customers);
+            }
+
+            // Function for bulk status update
+            function bulkUpdateStatus(isActive) {
+                const userIds = Array.from(selectedUsers);
+
+                $.ajax({
+                    url: '/Admin/BulkUpdateStatus',
+                    type: 'POST',
+                    data: {
+                        ids: userIds,
+                        isActive: isActive
+                    },
+                    success: function() {
+                        // Update UI for each selected user
+                        userIds.forEach(userId => {
+                            const row = $(`tr[data-user-id="${userId}"]`);
+                            const checkbox = row.find('.toggle-active');
+                            const statusBadge = row.find('.status-badge');
+
+                            checkbox.prop('checked', isActive);
+
+                            if (isActive) {
+                                statusBadge.removeClass('inactive').addClass('active').html('<i class="fas fa-circle" style="font-size: 8px;"></i> Active');
+                                row.attr('data-status', 'active');
+                            } else {
+                                statusBadge.removeClass('active').addClass('inactive').html('<i class="fas fa-circle" style="font-size: 8px;"></i> Inactive');
+                                row.attr('data-status', 'inactive');
+                            }
+
+                            // Remove from selection
+                            row.find('.user-checkbox').prop('checked', false);
+                            selectedUsers.delete(userId);
+                        });
+
+                        // Update stats and bulk actions
+                        updateStats();
+                        updateBulkActions();
+                        $('#selectAll').prop('checked', false);
+
+                        showNotification(`${userIds.length} user(s) updated successfully`, 'success');
+                    },
+                    error: function() {
+                        showNotification('Error updating users', 'error');
+                    }
+                });
+            }
+
+            // Function for bulk delete (simulated)
+            function bulkDeleteUsers() {
+                const userIds = Array.from(selectedUsers);
+
+                // Simulate deletion (in real app, this would be an AJAX call)
+                userIds.forEach(userId => {
+                    $(`tr[data-user-id="${userId}"]`).remove();
+                    selectedUsers.delete(userId);
+                });
+
+                // Update stats and UI
+                updateStats();
+                filterTable();
+                updateBulkActions();
+                $('#selectAll').prop('checked', false);
+
+                showNotification(`${userIds.length} user(s) deleted successfully`, 'success');
+            }
+
+            // Notification function
+            function showNotification(message, type) {
+                // Remove existing notification
+                $('.notification').remove();
+
+                const notification = $(`
+                    <div class="notification" style="position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 8px; color: white; z-index: 10000; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                        <span style="margin-left: 10px;">${message}</span>
+                    </div>
+                `);
+
+                if (type === 'success') {
+                    notification.css('background-color', 'var(--success-color)');
+                } else {
+                    notification.css('background-color', 'var(--danger-color)');
+                }
+
+                $('body').append(notification);
+
+                // Auto remove after 3 seconds
+                setTimeout(() => {
+                    notification.fadeOut(300, function() {
+                        $(this).remove();
+                    });
+                }, 3000);
+            }
+
+            // Initialize the table
+            filterTable();
+        });
+    </script>
 }
-    </tbody>
-</table>

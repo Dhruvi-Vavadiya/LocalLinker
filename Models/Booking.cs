@@ -17,6 +17,8 @@ namespace LocalLinker.Models
         [StringLength(50)]
         public string? Status { get; set; }  // ENUM: Pending, Confirmed, Completed, Cancelled
 
+        public int? Amount { get; set; }
+
         public DateTime? Created_At { get; set; }
 
         public DateTime? Modifiy_Date { get; set; }

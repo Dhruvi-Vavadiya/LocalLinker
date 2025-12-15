@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Update Profile";
     Layout = "~/Views/Shared/_ProviderLayout.cshtml";
-     string userImage = Context.Session.GetString("UserImage");
+     string userImage = Context.Session.GetString("pUserImage");
    
 }
 
@@ -343,16 +343,16 @@
         </div>
 
         <div class="profile-info">
-            <h2>@HttpContextAccessor.HttpContext.Session.GetString("UserName")</h2>
+            <h2>@HttpContextAccessor.HttpContext.Session.GetString("pUserName")</h2>
 
             <p>
                 <i class="fas fa-envelope me-2"></i>
-                @HttpContextAccessor.HttpContext.Session.GetString("UserEmail")
+                @HttpContextAccessor.HttpContext.Session.GetString("pUserEmail")
             </p>
 
             <p>
                 <i class="fas fa-phone me-2"></i>
-                @HttpContextAccessor.HttpContext.Session.GetString("UserPhone")
+                @HttpContextAccessor.HttpContext.Session.GetString("pUserPhone")
             </p>
 
             @* <div class="d-flex align-items-center gap-3 mt-2">

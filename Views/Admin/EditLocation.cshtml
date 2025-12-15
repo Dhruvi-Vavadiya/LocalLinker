@@ -1,0 +1,29 @@
+﻿@model LocalLinker.Models.Location
+@{
+    ViewData["Title"] = "Edit Location";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit Location</h2>
+
+<form asp-action="EditLocation" method="post">
+    <input type="hidden" asp-for="Location_id" />
+
+    <div class="mb-3">
+        <label>City</label>
+        <input asp-for="City" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Area</label>
+        <input asp-for="Area" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Postal Code</label>
+        <input asp-for="PostalCode" class="form-control" required />
+    </div>
+
+    <button class="btn btn-primary">Update</button>
+    <a class="btn btn-secondary" href="@Url.Action("Locations")">Back</a>
+</form>

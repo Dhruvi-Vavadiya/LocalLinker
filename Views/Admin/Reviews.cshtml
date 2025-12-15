@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewData["Title"] = "Reviews";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model IEnumerable<dynamic>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Customer Reviews</h2>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Review ID</th>
+                       
+                        <th>Customer</th>
+                        <th>Service</th>
+                        <th>Rating</th>
+                        <th>Review</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        <tr>
+                            <td>#@r.Review_id</td>
+                           
+                            <td>@r.CustomerName</td>
+                            <td>@r.ServiceName</td>
+                            <td>
+                                @{
+                                    int rating = r.Rating ?? 0;
+                                }
+
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= rating)
+                                    {
+                                        <i class="fas fa-star text-warning"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star text-muted"></i>
+                                    }
+                                }
+                        </td>
+                        <td>@r.Review_Text</td>
+                        <td>
+                            @(r.Created_At != null
+                                                    ? ((DateTime)r.Created_At).ToString("dd-MMM-yyyy")
+                                                    : "N/A")
+                    </td>
+                </tr>
+                                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            No reviews found.
+        </div>
+    }
+</div>
+

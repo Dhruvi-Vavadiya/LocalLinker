@@ -9,25 +9,27 @@ namespace LocalLinker.Models
         public int User_id { get; set; }
 
         [MaxLength(50)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [MaxLength(50)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         //[MaxLength(50)]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [NotMapped]
-        public string ConfirmPassword { get; set; }
+        [Required(ErrorMessage = "Confirm password is required")]
+        [Compare("Password", ErrorMessage = "Passwords do not match")]
+        public string? ConfirmPassword { get; set; }
 
         [MaxLength(50)]
-        public string Phone { get; set; }
+        public  string? Phone { get; set; }
 
-        [MaxLength(255)]
-        public string Image { get; set; }
+        
+        public string? Image { get; set; }
 
-        [MaxLength(50)]
-        public string UserType { get; set; }  
+        [Required]
+        public string? UserType { get; set; }  
 
         public bool Is_Active { get; set; } = true;
         public DateTime? CreatedAt { get; set; } = DateTime.Now;

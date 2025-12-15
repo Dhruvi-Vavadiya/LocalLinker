@@ -10,7 +10,7 @@ namespace LocalLinker.Models
         public int Review_id { get; set; }
 
         [StringLength(50)]
-        public string? Service_Request_Id { get; set; }
+        public int? Service_Request_Id { get; set; }
 
         public int? Rating { get; set; }
 

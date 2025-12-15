@@ -1,0 +1,380 @@
+﻿@model LocalLinker.Models.users
+@{
+    ViewData["Title"] = "Manage Profile";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<style>
+    .profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .profile-header {
+        border-bottom: 1px solid #eef2f7;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+
+        .profile-header h3 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .profile-header p {
+            color: #7b8a8b;
+            font-size: 0.95rem;
+        }
+
+    .profile-image-container {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .profile-image-wrapper {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 5px solid #f8f9fa;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin: 0 auto 20px;
+        position: relative;
+    }
+
+    .profile-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .image-upload-btn {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        width: 100%;
+        max-width: 200px;
+    }
+
+        .image-upload-btn input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+    .image-upload-label {
+        display: block;
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
+        border-radius: 8px;
+        padding: 12px 20px;
+        text-align: center;
+        color: #6c757d;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .image-upload-label:hover {
+            background: #e9ecef;
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+    .form-section {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 25px;
+    }
+
+        .form-section h5 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+    .form-label {
+        color: #495057;
+        font-weight: 500;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+
+    .form-control {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 15px;
+        transition: all 0.3s;
+        font-size: 0.95rem;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+        }
+
+    .update-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 40px;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+
+        .update-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+    .info-text {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+
+    .profile-stats {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 30px;
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 15px;
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="container">
+    <div class="profile-container">
+        <!-- Header -->
+        <div class="profile-header">
+            <h3>Manage Profile</h3>
+            <p>Update your personal information and profile picture</p>
+        </div>
+
+        <form asp-action="ManageProfile" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="User_id" />
+
+            <div class="row">
+                <!-- Left Column - Profile Image -->
+                <div class="col-lg-4">
+                    <div class="profile-image-container text-center">
+                        <div class="profile-image-wrapper">
+                            <img id="previewImg"
+                                 src="@(string.IsNullOrEmpty(Model.Image) ? "/img/default-avatar.png" : $"/img/{Model.Image}")"
+                                 class="profile-img"
+                                 alt="Profile Picture" />
+                        </div>
+
+                        <div class="image-upload-btn">
+                            <label class="image-upload-label">
+                                <i class="fas fa-camera mr-2"></i>Change Photo
+                                <input type="file" name="ProfileImage" accept="image/*"
+                                       onchange="readURL(this);" />
+                            </label>
+                        </div>
+
+                        <p class="info-text mt-2">
+                            JPG, PNG or GIF. Max size 2MB.
+                        </p>
+                    </div>
+
+                    <!-- Optional: Profile Stats -->
+                    @* <div class="profile-stats d-none d-lg-block">
+                        <div class="row">
+                            <div class="col-6 stat-item">
+                                <div class="stat-value">0</div>
+                                <div class="stat-label">Bookings</div>
+                            </div>
+                            <div class="col-6 stat-item">
+                                <div class="stat-value">0</div>
+                                <div class="stat-label">Reviews</div>
+                            </div>
+                        </div>
+                    </div> *@
+                </div>
+
+                <!-- Right Column - Form Fields -->
+                <div class="col-lg-8">
+                    <!-- Personal Information Section -->
+                    <div class="form-section">
+                        <h5>Personal Information</h5>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input asp-for="Name" class="form-control" placeholder="Enter your full name" />
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input asp-for="Email" class="form-control" placeholder="example@email.com" />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input asp-for="Phone" class="form-control" placeholder="+91 9876543210" />
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Passsword</label>
+                                <input  class="form-control" placeholder="Ex.123456789" />
+                                <span asp-validation-for="Password" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                <input asp-for="ConfirmPassword" class="form-control" placeholder="Ex. 123456789" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Information Section (Optional - Add if your model has more fields) -->
+                    <!--
+                    <div class="form-section">
+                        <h5>Additional Information</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Gender</label>
+                                <select class="form-control">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter your address"></textarea>
+                        </div>
+                    </div>
+                    -->
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div>
+                            <a href="@Url.Action("MyBookings", "Customer")" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-arrow-left mr-2"></i>Back
+                            </a>
+                        </div>
+                        <div>
+                            <button type="reset" class="btn btn-light px-4 mr-2">Reset</button>
+                            <button type="submit" class="btn update-btn px-4">
+                                <i class="fas fa-save mr-2"></i>Update Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Mobile Profile Stats -->
+        @* <div class="profile-stats d-block d-lg-none mt-4">
+            <div class="row">
+                <div class="col-6 stat-item">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Bookings</div>
+                </div>
+                <div class="col-6 stat-item">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Reviews</div>
+                </div>
+            </div>
+        </div> *@
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                // Validate file size (max 2MB)
+                if (input.files[0].size > 2 * 1024 * 1024) {
+                    alert('File size should not exceed 2MB.');
+                    input.value = '';
+                    return;
+                }
+
+                // Validate file type
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!allowedTypes.includes(input.files[0].type)) {
+                    alert('Please select a valid image file (JPG, PNG, GIF).');
+                    input.value = '';
+                    return;
+                }
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.getElementById('previewImg');
+                    img.src = e.target.result;
+
+                    // Add fade effect
+                    img.style.opacity = '0';
+                    setTimeout(() => {
+                        img.style.transition = 'opacity 0.3s ease';
+                        img.style.opacity = '1';
+                    }, 10);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Show file name when selected
+        document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                const label = document.querySelector('.image-upload-label');
+                label.innerHTML = `<i class="fas fa-check mr-2"></i>${fileName.substring(0, 20)}${fileName.length > 20 ? '...' : ''}`;
+            }
+        });
+    </script>
+
+    @if (ViewData.ModelState.IsValid && !string.IsNullOrEmpty(ViewBag.SuccessMessage))
+    {
+        <script>
+            $(document).ready(function() {
+                toastr.success('@ViewBag.SuccessMessage', 'Success', {
+                    timeOut: 3000,
+                    positionClass: 'toast-top-right'
+                });
+            });
+        </script>
+    }
+}

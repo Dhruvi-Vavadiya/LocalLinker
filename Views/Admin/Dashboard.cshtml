@@ -1,42 +1,773 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    string userName = Context.Session.GetString("UserName");
+}
+@{
     ViewData["Title"] = "Admin Dashboard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.0"></script>
 
-<div class="container-fluid">
-    <h2 class="mb-4">Dashboard Overview</h2>
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --success-color: #06d6a0;
+        --warning-color: #ffd166;
+        --danger-color: #ef476f;
+        --dark-color: #073b4c;
+        --light-color: #f8f9fa;
+        --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        --card-hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    }
 
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-primary text-white">
-                <div class="card-body text-center">
-                    <i class="fas fa-users fa-2x mb-2"></i>
-                    <h5 class="card-title">Total Users</h5>
-                    <h3>@ViewBag.TotalUsers</h3>
-                </div>
-            </div>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7fb;
+    }
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1.5rem 0;
+        border-bottom: 1px solid #eaeaea;
+    }
+
+        .dashboard-header h2 {
+            color: var(--dark-color);
+            font-weight: 700;
+            margin: 0;
+        }
+
+    .date-filter {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border: none;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            border-radius: 16px 0 0 16px;
+        }
+
+        .stat-card.users::before {
+            background-color: var(--primary-color);
+        }
+
+        .stat-card.providers::before {
+            background-color: var(--success-color);
+        }
+
+        .stat-card.bookings::before {
+            background-color: var(--warning-color);
+        }
+
+        .stat-card .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .stat-card.users .stat-icon {
+            background-color: var(--primary-color);
+        }
+
+        .stat-card.providers .stat-icon {
+            background-color: var(--success-color);
+        }
+
+        .stat-card.bookings .stat-icon {
+            background-color: var(--warning-color);
+        }
+
+        .stat-card h3 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+            color: var(--dark-color);
+        }
+
+        .stat-card .stat-change {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+            .stat-card .stat-change.positive {
+                color: var(--success-color);
+            }
+
+            .stat-card .stat-change.negative {
+                color: var(--danger-color);
+            }
+
+    .charts-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.8rem;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+    }
+
+        .chart-card:hover {
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .chart-card h5 {
+            color: var(--dark-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .chart-card h5 i {
+                color: var(--primary-color);
+            }
+
+    .chart-container {
+        height: 300px;
+        position: relative;
+    }
+
+    .recent-activity {
+        background: white;
+        border-radius: 16px;
+        padding: 1.8rem;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 2.5rem;
+    }
+
+        .recent-activity h5 {
+            color: var(--dark-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+    .activity-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background-color 0.2s;
+    }
+
+        .activity-item:hover {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            margin-left: -1rem;
+            margin-right: -1rem;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        color: white;
+        font-size: 1rem;
+    }
+
+        .activity-icon.booking {
+            background-color: var(--primary-color);
+        }
+
+        .activity-icon.user {
+            background-color: var(--success-color);
+        }
+
+        .activity-icon.provider {
+            background-color: var(--warning-color);
+        }
+
+        .activity-icon.payment {
+            background-color: var(--danger-color);
+        }
+
+    .activity-content {
+        flex: 1;
+    }
+
+        .activity-content p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+    .activity-time {
+        color: #888;
+        font-size: 0.85rem;
+        margin-top: 3px;
+    }
+
+    .filter-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-tab {
+        padding: 8px 16px;
+        background: #f0f2f5;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+    }
+
+        .filter-tab:hover {
+            background: #e4e6e9;
+        }
+
+        .filter-tab.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+    
+
+   
+</style>
+
+<div class="container-fluid py-4">
+    <div class="dashboard-header">
+        <div>
+            <h2>Dashboard Overview</h2>
+            <p class="text-muted">Welcome back, @userName Admin! Here's what's happening with your business today.</p>
         </div>
-
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-success text-white">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-tie fa-2x mb-2"></i>
-                    <h5 class="card-title">Total Providers</h5>
-                    <h3>@ViewBag.TotalProviders</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-warning text-dark">
-                <div class="card-body text-center">
-                    <i class="fas fa-calendar-check fa-2x mb-2"></i>
-                    <h5 class="card-title">Total Bookings</h5>
-                    <h3>@ViewBag.TotalBookings</h3>
-                </div>
+        <div class="date-filter">
+            <div class="filter-tabs">
+                <div class="filter-tab active" data-period="today">Today</div>
+                <div class="filter-tab" data-period="week">This Week</div>
+                <div class="filter-tab" data-period="month">This Month</div>
+                <div class="filter-tab" data-period="year">This Year</div>
             </div>
         </div>
     </div>
 
-    
+    <div class="stats-grid">
+        <div class="stat-card users">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h5>Total Users</h5>
+            <h3 id="totalUsers">@ViewBag.TotalUsers</h3>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>12% increase from last month</span>
+            </div>
+        </div>
+
+        <div class="stat-card providers">
+            <div class="stat-icon">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <h5>Total Providers</h5>
+            <h3 id="totalProviders">@ViewBag.TotalProviders</h3>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>8% increase from last month</span>
+            </div>
+        </div>
+
+        <div class="stat-card bookings">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <h5>Total Bookings</h5>
+            <h3 id="totalBookings">@ViewBag.TotalBookings</h3>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>24% increase from last month</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="charts-container">
+        <div class="chart-card">
+            <h5><i class="fas fa-chart-pie"></i> Bookings Distribution</h5>
+            <div class="filter-tabs mb-3">
+                <div class="filter-tab active" data-chart="bookings" data-type="pie">Pie Chart</div>
+                @* <div class="filter-tab" data-chart="bookings" data-type="bar">Bar Chart</div>
+                <div class="filter-tab" data-chart="bookings" data-type="line">Line Chart</div> *@
+            </div>
+            <div class="chart-container">
+                <canvas id="bookingChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h5><i class="fas fa-chart-line"></i> Earnings Overview</h5>
+            <div class="filter-tabs mb-3">
+                <div class="filter-tab active" data-chart="earnings" data-type="pie">Pie Chart</div>
+                @* <div class="filter-tab" data-chart="earnings" data-type="bar">Bar Chart</div>
+                <div class="filter-tab" data-chart="earnings" data-type="line">Line Chart</div> *@
+            </div>
+            <div class="chart-container">
+                <canvas id="earningChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="chart-card">
+                <h5><i class="fas fa-chart-bar"></i> Monthly Performance</h5>
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        @* <div class="col-lg-4">
+            <div class="recent-activity">
+                <h5><i class="fas fa-history"></i> Recent Activity</h5>
+                <ul class="activity-list" id="activityList">
+                    <!-- Activities will be populated by JavaScript -->
+                </ul>
+            </div>
+        </div> *@
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Data from Controller
+        const providerNames = @Html.Raw(Json.Serialize(ViewBag.ProviderNames));
+        const completedBookings = @Html.Raw(Json.Serialize(ViewBag.CompletedBookings));
+        const pendingBookings = @Html.Raw(Json.Serialize(ViewBag.PendingBookings));
+        const earnings = @Html.Raw(Json.Serialize(ViewBag.Earnings));
+
+        // Chart instances
+        let bookingChartInstance = null;
+        let earningChartInstance = null;
+        let monthlyChartInstance = null;
+
+        // Sample recent activities
+        const recentActivities = [
+            { type: 'booking', text: 'New booking from John Doe', time: '10 minutes ago' },
+            { type: 'user', text: 'Sarah Johnson registered as new user', time: '25 minutes ago' },
+            { type: 'provider', text: 'Mike\'s Cleaning Service joined as provider', time: '1 hour ago' },
+            { type: 'payment', text: 'Payment of $250 received from Emma Wilson', time: '2 hours ago' },
+            { type: 'booking', text: 'Booking #4567 was completed', time: '3 hours ago' },
+            { type: 'user', text: 'David Miller updated his profile', time: '5 hours ago' }
+        ];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            populateActivities();
+            setupFilterTabs();
+            setupChartTypeToggles();
+
+            // Simulate real-time updates
+            simulateLiveUpdates();
+        });
+
+        // Initialize all charts
+        function initializeCharts() {
+            // Booking Chart
+            const bookingCtx = document.getElementById('bookingChart').getContext('2d');
+            bookingChartInstance = new Chart(bookingCtx, {
+                type: 'pie',
+                data: {
+                    labels: providerNames,
+                    datasets: [{
+                        label: 'Completed Bookings',
+                        data: completedBookings,
+                        backgroundColor: [
+                            '#4361ee', '#06d6a0', '#ffd166', '#ef476f', '#7209b7',
+                            '#3a0ca3', '#f72585', '#4cc9f0', '#4895ef', '#560bad'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} bookings (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Earning Chart
+            const earningCtx = document.getElementById('earningChart').getContext('2d');
+            earningChartInstance = new Chart(earningCtx, {
+                type: 'pie',
+                data: {
+                    labels: providerNames,
+                    datasets: [{
+                        label: 'Earnings ($)',
+                        data: earnings,
+                        backgroundColor: [
+                            '#7209b7', '#3a0ca3', '#4361ee', '#4cc9f0', '#06d6a0',
+                            '#ffd166', '#ef476f', '#f72585', '#4895ef', '#560bad'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: $${context.raw}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Monthly Performance Chart
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const monthlyData = Array.from({length: 12}, () => Math.floor(Math.random() * 1000) + 500);
+
+            monthlyChartInstance = new Chart(monthlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Bookings',
+                        data: monthlyData,
+                        backgroundColor: '#4361ee',
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value;
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Populate recent activities
+        function populateActivities() {
+            const activityList = document.getElementById('activityList');
+            activityList.innerHTML = '';
+
+            recentActivities.forEach(activity => {
+                const activityItem = document.createElement('li');
+                activityItem.className = 'activity-item';
+
+                const iconClass = {
+                    'booking': 'fas fa-calendar-check',
+                    'user': 'fas fa-user-plus',
+                    'provider': 'fas fa-user-tie',
+                    'payment': 'fas fa-dollar-sign'
+                }[activity.type];
+
+                activityItem.innerHTML = `
+                    <div class="activity-icon ${activity.type}">
+                        <i class="${iconClass}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p>${activity.text}</p>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                `;
+
+                activityList.appendChild(activityItem);
+            });
+        }
+
+        // Setup filter tabs for time period
+        function setupFilterTabs() {
+            const filterTabs = document.querySelectorAll('.filter-tab[data-period]');
+
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    filterTabs.forEach(t => t.classList.remove('active'));
+
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+
+                    const period = this.getAttribute('data-period');
+
+                    // In a real application, you would fetch new data based on the period
+                    // For this demo, we'll just update the stats with random values
+                    updateStatsForPeriod(period);
+                });
+            });
+        }
+
+        // Setup chart type toggles
+        function setupChartTypeToggles() {
+            const chartTabs = document.querySelectorAll('.filter-tab[data-chart]');
+
+            chartTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const chartName = this.getAttribute('data-chart');
+                    const chartType = this.getAttribute('data-type');
+
+                    // Remove active class from all tabs in the same group
+                    const parent = this.parentElement;
+                    parent.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+
+                    // Update the chart type
+                    updateChartType(chartName, chartType);
+                });
+            });
+        }
+
+        // Update chart type
+        function updateChartType(chartName, chartType) {
+            if (chartName === 'bookings' && bookingChartInstance) {
+                bookingChartInstance.config.type = chartType;
+                bookingChartInstance.update();
+            } else if (chartName === 'earnings' && earningChartInstance) {
+                earningChartInstance.config.type = chartType;
+                earningChartInstance.update();
+            }
+        }
+
+        // Update stats based on selected time period
+        function updateStatsForPeriod(period) {
+            // Simulate data changes based on period
+            const multipliers = {
+                'today': 1,
+                'week': 7,
+                'month': 30,
+                'year': 365
+            };
+
+            const multiplier = multipliers[period] || 1;
+
+            // Update stats with simulated data
+            const totalUsers = parseInt(document.getElementById('totalUsers').textContent);
+            const totalProviders = parseInt(document.getElementById('totalProviders').textContent);
+            const totalBookings = parseInt(document.getElementById('totalBookings').textContent);
+
+            // Simulate different values for different periods
+            const newUsers = Math.round(totalUsers * (0.8 + Math.random() * 0.4));
+            const newProviders = Math.round(totalProviders * (0.8 + Math.random() * 0.4));
+            const newBookings = Math.round(totalBookings * (0.8 + Math.random() * 0.4));
+
+            // Animate the stat changes
+            animateCounter('totalUsers', newUsers);
+            animateCounter('totalProviders', newProviders);
+            animateCounter('totalBookings', newBookings);
+
+            // Update change indicators
+            updateChangeIndicators(period);
+        }
+
+        // Animate counter from old value to new value
+        function animateCounter(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            const oldValue = parseInt(element.textContent);
+            const duration = 800; // ms
+            const steps = 60;
+            const stepValue = (newValue - oldValue) / steps;
+            const stepTime = duration / steps;
+            let currentStep = 0;
+
+            const timer = setInterval(() => {
+                currentStep++;
+                const currentValue = Math.round(oldValue + (stepValue * currentStep));
+                element.textContent = currentValue;
+
+                if (currentStep >= steps) {
+                    element.textContent = newValue;
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        // Update change indicators based on period
+        function updateChangeIndicators(period) {
+            // In a real app, you would calculate actual changes
+            // For demo, we'll use random positive/negative changes
+            const changes = document.querySelectorAll('.stat-change');
+
+            changes.forEach(change => {
+                const isPositive = Math.random() > 0.3; // 70% chance of positive
+                const percentage = Math.floor(Math.random() * 25) + 1;
+
+                change.className = `stat-change ${isPositive ? 'positive' : 'negative'}`;
+                change.innerHTML = `
+                    <i class="fas fa-arrow-${isPositive ? 'up' : 'down'}"></i>
+                    <span>${percentage}% ${isPositive ? 'increase' : 'decrease'} from last ${period}</span>
+                `;
+            });
+        }
+
+        // Simulate live updates to the dashboard
+        function simulateLiveUpdates() {
+            // Update stats every 30 seconds
+            setInterval(() => {
+                // Randomly update one of the stats
+                const statIds = ['totalUsers', 'totalProviders', 'totalBookings'];
+                const randomStat = statIds[Math.floor(Math.random() * statIds.length)];
+                const currentValue = parseInt(document.getElementById(randomStat).textContent);
+                const change = Math.floor(Math.random() * 10) + 1;
+
+                animateCounter(randomStat, currentValue + change);
+
+                // Add a new activity
+                addNewActivity();
+
+            }, 30000); // 30 seconds
+        }
+
+        // Add a new recent activity
+        function addNewActivity() {
+            const activityTypes = ['booking', 'user', 'provider', 'payment'];
+            const activityTexts = [
+                'New booking received',
+                'User updated their profile',
+                'Provider completed a service',
+                'Payment processed successfully',
+                'New user registration',
+                'Provider rating submitted'
+            ];
+
+            const randomType = activityTypes[Math.floor(Math.random() * activityTypes.length)];
+            const randomText = activityTexts[Math.floor(Math.random() * activityTexts.length)];
+
+            const newActivity = {
+                type: randomType,
+                text: randomText,
+                time: 'Just now'
+            };
+
+            // Add to the beginning of the list
+            recentActivities.unshift(newActivity);
+
+            // Keep only the last 6 activities
+            if (recentActivities.length > 6) {
+                recentActivities.pop();
+            }
+
+            // Refresh the activity list
+            populateActivities();
+        }
+    </script>
+}

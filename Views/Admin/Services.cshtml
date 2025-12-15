@@ -15,6 +15,7 @@
         <tr>
             <th>Service ID</th>
             <th>Service Name</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -24,16 +25,47 @@
             <tr>
                 <td>@service.Service_id</td>
                 <td>@service.Service_name</td>
+
+                <!-- STATUS -->
                 <td>
-                    <a class="btn btn-sm btn-primary" href="@Url.Action("EditService", new { id = service.Service_id })">
+                    @if (service.IsActive == true)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactive</span>
+                    }
+                </td>
+
+                <!-- ACTION BUTTON -->
+                <td>
+                    <a class="btn btn-sm btn-primary"
+                       href="@Url.Action("EditService", new { id = service.Service_id })">
                         <i class="fa fa-edit"></i> Edit
                     </a>
-                    <a class="btn btn-sm btn-danger" href="@Url.Action("DeleteService", new { id = service.Service_id })"
-                       onclick="return confirm('Are you sure you want to delete this service?');">
-                        <i class="fa fa-trash"></i> Delete
-                    </a>
+
+                    @if (service.IsActive == true)
+                    {
+                        <!-- ON → OFF -->
+                        <a class="btn btn-sm btn-warning"
+                           href="@Url.Action("DeactivateService", new { id = service.Service_id })"
+                           onclick="return confirm('Deactivate this service?');">
+                            <i class="fa fa-toggle-off"></i> Deactivate
+                        </a>
+                    }
+                    else
+                    {
+                        <!-- OFF → ON -->
+                        <a class="btn btn-sm btn-success"
+                           href="@Url.Action("ActivateService", new { id = service.Service_id })"
+                           onclick="return confirm('Activate this service?');">
+                            <i class="fa fa-toggle-on"></i> Activate
+                        </a>
+                    }
                 </td>
             </tr>
         }
     </tbody>
+
 </table>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Reviews";
+    Layout = "~/Views/Shared/_ProviderLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Customer Reviews</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Review ID</th>
+                    <th>Service Request ID</th>
+                    <th>Customer Name</th>
+                    <th>Service Name</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th>Created Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@r.Review_id</td>
+                        <td>@r.ServiceRequestId</td>
+                        <td>@r.CustomerName</td>
+                        <td>@r.ServiceName</td>
+                        <td>@r.Rating</td>
+                        <td>@r.Review_Text</td>
+                        <td>@r.Created_At.ToString("dd-MM-yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-center text-muted">No reviews found.</p>
+    }
+</div>

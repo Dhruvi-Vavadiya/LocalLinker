@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewData["Title"] = "ServicesProvider";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model IEnumerable<dynamic>
+
+<h2>Service Providers</h2>
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 42px;
+        height: 22px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 22px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: #28a745;
+    }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+</style>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Provider</th>
+            <th>Service</th>
+            <th>Location</th>
+            <th>Experience (Years)</th>
+            <th>Verified</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.ProviderName</td>
+                <td>@p.ServiceName</td>
+                <td>@p.LocationName</td>
+                <td>@p.Experience_years</td>
+                <td>
+                    @if (p.IsVerified == true)
+                    {
+                        <!-- VERIFIED → UNVERIFY -->
+                        <a class="btn btn-sm btn-warning"
+                           href="@Url.Action("DeactivateProvider", "Admin", new { id = p.ProviderId })"
+                           onclick="return confirm('Deactivate this provider?');">
+                            <i class="fa fa-toggle-off"></i> Deactivate
+                        </a>
+                    }
+                    else
+                    {
+                        <!-- UNVERIFIED → VERIFY -->
+                        <a class="btn btn-sm btn-success"
+                           href="@Url.Action("ActivateProvider", "Admin", new { id = p.ProviderId })"
+                           onclick="return confirm('Activate this provider?');">
+                            <i class="fa fa-toggle-on"></i> Activate
+                        </a>
+                    }
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.verify-toggle').change(function () {
+                var providerId = $(this).data('id');
+                var isVerified = $(this).is(':checked');
+
+                $.ajax({
+                    url: '/Admin/UpdateProviderVerification',
+                    type: 'POST',
+                    data: {
+                        providerId: providerId,
+                        isVerified: isVerified
+                    },
+                    success: function () {
+                        console.log('Verification status updated');
+                        location.reload(); // refresh badge status
+                    },
+                    error: function () {
+                        alert('Failed to update verification status');
+                    }
+                });
+            });
+        });
+    </script>
+}
