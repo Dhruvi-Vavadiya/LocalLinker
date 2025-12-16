@@ -228,26 +228,26 @@
     @using (Html.BeginForm("AddReview", "Customer", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        <input type="hidden" name="service_request_id" value="@ViewBag.BookingId" />
+        <input type="hidden" name="Service_Request_Id" value="@ViewBag.BookingId" />
 
         <!-- Star Rating Section -->
         <div class="rating-container">
             <span class="rating-label">How would you rate this service?</span>
 
             <div class="star-rating">
-                <input type="radio" id="star5" name="rating" value="5" required>
+                <input type="radio" id="star5" name="Rating" value="5" required>
                 <label for="star5" title="5 stars"></label>
 
-                <input type="radio" id="star4" name="rating" value="4">
+                <input type="radio" id="star4" name="Rating" value="4">
                 <label for="star4" title="4 stars"></label>
 
-                <input type="radio" id="star3" name="rating" value="3">
+                <input type="radio" id="star3" name="Rating" value="3">
                 <label for="star3" title="3 stars"></label>
 
-                <input type="radio" id="star2" name="rating" value="2">
+                <input type="radio" id="star2" name="Rating" value="2">
                 <label for="star2" title="2 stars"></label>
 
-                <input type="radio" id="star1" name="rating" value="1">
+                <input type="radio" id="star1" name="Rating" value="1">
                 <label for="star1" title="1 star"></label>
             </div>
 
@@ -269,7 +269,7 @@
         <!-- Review Text Section -->
         <div class="review-textarea-container">
             <label class="review-label">Your Review (Optional)</label>
-            <textarea name="review_text"
+            <textarea name="Review_Text"
                   class="review-textarea"
                   placeholder="Tell us about your experience. What went well? What could be improved?"
                   maxlength="500"

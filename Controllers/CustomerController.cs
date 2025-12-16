@@ -125,6 +125,7 @@ namespace LocalLinker.Controllers
                 _context.ServiceRequests.Add(sr);
                 _context.SaveChanges();
 
+
                 //TempData["msg"] = "Booking Created Successfully!";
                 _dataLog.Log("MakeRequest", "one booking request are added suucessfully");
                 TempData["ToastMessage"] = "Booking Created Successfully!";
@@ -135,6 +136,7 @@ namespace LocalLinker.Controllers
             catch (Exception ex)
             {
                 TempData["msg"] = "Error creating booking: " + ex.Message;
+                _dataLog.Log("Customer(MakeRequest)", ex.Message);
                 return RedirectToAction("MakeRequest");
             }
         }
@@ -260,13 +262,22 @@ namespace LocalLinker.Controllers
         [HttpPost]
         public IActionResult AddReview(Reviews review)
         {
-            review.Created_At = DateTime.Now;
-            _context.Reviews.Add(review);
-            _context.SaveChanges();
-            TempData["ToastMessage"] = "Review submitted!";
-            TempData["ToastType"] = "success"; // success | error | warning | info
-            //TempData["msg"] = "Review submitted!";
-            return RedirectToAction("MyBookings");
+            try
+            {
+                review.Created_At = DateTime.Now;
+                _context.Reviews.Add(review);
+                _context.SaveChanges();
+                TempData["ToastMessage"] = "Review submitted!";
+                TempData["ToastType"] = "success"; // success | error | warning | info
+                                                   //TempData["msg"] = "Review submitted!";
+                return RedirectToAction("MyBookings");
+            }
+            catch (Exception ex)
+            {
+
+                _dataLog.Log("Customer(AddReview)", ex.Message);
+                return RedirectToAction("AddReview");
+            }
         }
 
         public IActionResult Logout()
@@ -282,108 +293,128 @@ namespace LocalLinker.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            // 🔥 Check cookie first
-            if (Request.Cookies["UserId"] != null &&
-                Request.Cookies["UserType"] != null)
+            try
             {
-                int userId = Convert.ToInt32(Request.Cookies["UserId"]);
-                string userType = Request.Cookies["UserType"];
+                if (Request.Cookies["UserId"] != null &&
+               Request.Cookies["UserType"] != null)
+                {
+                    int userId = Convert.ToInt32(Request.Cookies["UserId"]);
+                    string userType = Request.Cookies["UserType"];
 
-                // Restore session
-                HttpContext.Session.SetInt32("UserId", userId);
-                HttpContext.Session.SetString("UserType", userType);
+                    // Restore session
+                    HttpContext.Session.SetInt32("UserId", userId);
+                    HttpContext.Session.SetString("UserType", userType);
 
-                if (userType == "Customer")
-                    return RedirectToAction("MyBookings");
-                else if (userType == "Admin")
-                    return RedirectToAction("Dashboard", "Admin");
+                    if (userType == "Customer")
+                        return RedirectToAction("MyBookings");
+                    else if (userType == "Admin")
+                        return RedirectToAction("Dashboard", "Admin");
+                }
+
+                TempData["ToastMessage"] = "Welcome to Login Page!";
+                TempData["ToastType"] = "success";
+
+                return View();
             }
+            catch (Exception ex)
+            {
 
-            TempData["ToastMessage"] = "Welcome to Login Page!";
-            TempData["ToastType"] = "success";
-
-            return View();
+                _dataLog.Log("Customer(Login)", ex.Message);
+                return RedirectToAction("Login");
+            }
+            // 🔥 Check cookie first
+           
         }
 
         [HttpPost]
         public ActionResult Login(string email, string password)
         {
-            _conn = _inc.db_locallinker(_config);
-            _cmd.Connection = _conn;
-            _conn.Open();
-
-            _cmd.CommandText = "SELECT * FROM users WHERE email = @Email AND password = @Password";
-            _cmd.Parameters.Clear();
-            _cmd.Parameters.AddWithValue("@Email", email);
-            _cmd.Parameters.AddWithValue("@Password", password);
-
-            MySqlDataReader dr = _cmd.ExecuteReader();
-
-            if (dr.Read())
+            try
             {
+                _conn = _inc.db_locallinker(_config);
+                _cmd.Connection = _conn;
+                _conn.Open();
 
-                var user = new
+                _cmd.CommandText = "SELECT * FROM users WHERE email = @Email AND password = @Password";
+                _cmd.Parameters.Clear();
+                _cmd.Parameters.AddWithValue("@Email", email);
+                _cmd.Parameters.AddWithValue("@Password", password);
+
+                MySqlDataReader dr = _cmd.ExecuteReader();
+
+                if (dr.Read())
                 {
-                    UserId = Convert.ToInt32(dr["User_id"]),
-                    Name = dr["name"].ToString(),
-                    Email = dr["email"].ToString(),
-                    UserType = dr["UserType"].ToString()
-                };
 
-               
-              
-               
-
-                _conn.Close();
-
-                //if(user.UserType == "Customer") {
-                //    HttpContext.Session.SetInt32("UserId", user.UserId);
-                //    HttpContext.Session.SetString("UserName", user.Name);
-                //    HttpContext.Session.SetString("UserType", user.UserType);
-                //    return RedirectToAction("MyBookings");
-                //}
-                if (user.UserType == "Customer")
-                {
-                    HttpContext.Session.SetInt32("UserId", user.UserId);
-                    HttpContext.Session.SetString("UserName", user.Name);
-                    HttpContext.Session.SetString("UserType", user.UserType);
-
-                    // 🔥 SAVE COOKIE (30 days)
-                    CookieOptions options = new CookieOptions
+                    var user = new
                     {
-                        Expires = DateTime.Now.AddDays(30),
-                        HttpOnly = true,
-                        Secure = true
+                        UserId = Convert.ToInt32(dr["User_id"]),
+                        Name = dr["name"].ToString(),
+                        Email = dr["email"].ToString(),
+                        UserType = dr["UserType"].ToString()
                     };
 
-                    Response.Cookies.Append("UserId", user.UserId.ToString(), options);
-                    Response.Cookies.Append("UserType", user.UserType, options);
 
-                    return RedirectToAction("MyBookings");
-                }
 
-                else if (user.UserType == "Admin")
-                {
-                    HttpContext.Session.SetInt32("UserId", user.UserId);
-                    HttpContext.Session.SetString("UserName", user.Name);
-                    HttpContext.Session.SetString("UserType", user.UserType);
-                    return RedirectToAction("Dashboard", "Admin");
+
+
+                    _conn.Close();
+
+                    //if(user.UserType == "Customer") {
+                    //    HttpContext.Session.SetInt32("UserId", user.UserId);
+                    //    HttpContext.Session.SetString("UserName", user.Name);
+                    //    HttpContext.Session.SetString("UserType", user.UserType);
+                    //    return RedirectToAction("MyBookings");
+                    //}
+                    if (user.UserType == "Customer")
+                    {
+                        HttpContext.Session.SetInt32("UserId", user.UserId);
+                        HttpContext.Session.SetString("UserName", user.Name);
+                        HttpContext.Session.SetString("UserType", user.UserType);
+
+                        // 🔥 SAVE COOKIE (30 days)
+                        CookieOptions options = new CookieOptions
+                        {
+                            Expires = DateTime.Now.AddDays(30),
+                            HttpOnly = true,
+                            Secure = true
+                        };
+
+                        Response.Cookies.Append("UserId", user.UserId.ToString(), options);
+                        Response.Cookies.Append("UserType", user.UserType, options);
+
+                        return RedirectToAction("MyBookings");
+                    }
+
+                    else if (user.UserType == "Admin")
+                    {
+                        HttpContext.Session.SetInt32("UserId", user.UserId);
+                        HttpContext.Session.SetString("UserName", user.Name);
+                        HttpContext.Session.SetString("UserType", user.UserType);
+                        return RedirectToAction("Dashboard", "Admin");
+                    }
+                    else
+                    {
+                        TempData["ToastMessage"] = "Your are not Valid user for this site.";
+                        TempData["ToastType"] = "   warning"; // success | error | warning | info
+                        ViewBag.ErrorMessage = "Your are not Valid user for this site.";
+                    }
+                    return View();
+                    //return RedirectToAction("MyBookings");  // Redirect to dashboard after successful login
                 }
                 else
                 {
-                    TempData["ToastMessage"] = "Your are not Valid user for this site.";
-                    TempData["ToastType"] = "   warning"; // success | error | warning | info
-                    ViewBag.ErrorMessage = "Your are not Valid user for this site.";
+                    _conn.Close();
+                    ViewBag.ErrorMessage = "Invalid email or password.";
+                    return View();
                 }
-                return View();
-                    //return RedirectToAction("MyBookings");  // Redirect to dashboard after successful login
             }
-            else
+            catch (Exception ex)
             {
-                _conn.Close();
-                ViewBag.ErrorMessage = "Invalid email or password.";
-                return View();
+
+                _dataLog.Log("Customer(Login)", ex.Message);
+                return RedirectToAction("Login");
             }
+            
         }
 
         // Display registration form
@@ -398,9 +429,8 @@ namespace LocalLinker.Controllers
         [HttpPost]
         public IActionResult Register(users newUser, IFormFile ImageFile)
         {
-            //if (ModelState.IsValid)
-            //{
-                // check duplicate email
+            try
+            {
                 var existingUser = _context.Users.FirstOrDefault(u => u.Email == newUser.Email);
                 if (existingUser != null)
                 {
@@ -453,87 +483,115 @@ namespace LocalLinker.Controllers
                     return RedirectToAction("Dashboard", "Admin");
 
                 return RedirectToAction("Login", "Customer");
-            //}
+                //}
 
-            ViewBag.ErrorMessage = "Please correct the errors.";
-            return View(newUser);
+                ViewBag.ErrorMessage = "Please correct the errors.";
+                return View(newUser);
+            }
+            catch (Exception ex)
+            {
+
+                _dataLog.Log("Customer(Register)", ex.Message);
+                return RedirectToAction("Register");
+            }
+            
         }
         // GET: Manage Profile
         public IActionResult ManageProfile()
         {
-            int userId = Convert.ToInt32(HttpContext.Session.GetInt32("UserId"));
-            var user = _context.Users.FirstOrDefault(x => x.User_id == userId);
-
-            if(user.Image == null)
+            try
             {
-                user.Image = "default.png";
+                int userId = Convert.ToInt32(HttpContext.Session.GetInt32("UserId"));
+                var user = _context.Users.FirstOrDefault(x => x.User_id == userId);
+
+                if (user.Image == null)
+                {
+                    user.Image = "default.png";
+                }
+
+                if (user == null)
+                    return NotFound();
+
+
+                return View(user);
             }
+            catch (Exception ex)
+            {
 
-            if (user == null)
-                return NotFound();
-
-
-            return View(user);
+                _dataLog.Log("Customer(ManageProfile)", ex.Message);
+                return RedirectToAction("ManageProfile");
+            }
+            
         }
 
         // POST: Manage Profile Update
         [HttpPost]
         public IActionResult ManageProfile(users model, IFormFile ProfileImage)
         {
-            var user = _context.Users.FirstOrDefault(x => x.User_id == model.User_id);
-
-            var emailExists = _context.Users
-                       .FirstOrDefault(u => u.Email == model.Email && u.Email != user.Email);
-            if (emailExists != null)
+            try
             {
-                //ViewBag.ErrorMessage = "Email already registered.";
-                TempData["ToastMessage"] = "Email already registered.";
-                TempData["ToastType"] = "warning"; // success | error | warning | info
-                return View(user);
-            }
-            if (user == null)
-                return NotFound();
+                var user = _context.Users.FirstOrDefault(x => x.User_id == model.User_id);
 
-            if (ProfileImage != null && ProfileImage.Length > 0)
-            {
-                string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img");
-                if (!Directory.Exists(uploadFolder))
-                    Directory.CreateDirectory(uploadFolder);
-
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(ProfileImage.FileName);
-                string filePath = Path.Combine(uploadFolder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                var emailExists = _context.Users
+                           .FirstOrDefault(u => u.Email == model.Email && u.Email != user.Email);
+                if (emailExists != null)
                 {
-                    ProfileImage.CopyTo(stream);
+                    //ViewBag.ErrorMessage = "Email already registered.";
+                    TempData["ToastMessage"] = "Email already registered.";
+                    TempData["ToastType"] = "warning"; // success | error | warning | info
+                    return View(user);
+                }
+                if (user == null)
+                    return NotFound();
+
+                if (ProfileImage != null && ProfileImage.Length > 0)
+                {
+                    string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img");
+                    if (!Directory.Exists(uploadFolder))
+                        Directory.CreateDirectory(uploadFolder);
+
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(ProfileImage.FileName);
+                    string filePath = Path.Combine(uploadFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        ProfileImage.CopyTo(stream);
+                    }
+
+                    user.Image = fileName;
                 }
 
-                user.Image = fileName;
-            }
-
-            // Update fields
-            user.Name = model.Name;
-            user.Email = model.Email;
-            user.Phone = model.Phone;
-            if( model.ConfirmPassword != null)
-            {
-                user.Password = model.ConfirmPassword;
-            }
-            else
-            {
-                user.Password = model.Password;
-                TempData["ToastMessage"] = "Profile Updated Successfully!";
-                TempData["ToastType"] = "info"; // success | error | warning | info
-                return View(user);
-            }
+                // Update fields
+                user.Name = model.Name;
+                user.Email = model.Email;
+                user.Phone = model.Phone;
+                if (model.ConfirmPassword != null)
+                {
+                    user.Password = model.ConfirmPassword;
+                }
+                else
+                {
+                    user.Password = model.Password;
+                    TempData["ToastMessage"] = "Profile Updated Successfully!";
+                    TempData["ToastType"] = "info"; // success | error | warning | info
+                    return View(user);
+                }
 
 
                 _context.SaveChanges();
 
-            
-            TempData["ToastMessage"] = "Profile Updated Successfully!";
-            TempData["ToastType"] = "success"; // success | error | warning | info
-            return RedirectToAction("ManageProfile");
+
+                TempData["ToastMessage"] = "Profile Updated Successfully!";
+                TempData["ToastType"] = "success"; // success | error | warning | info
+                return RedirectToAction("ManageProfile");
+            }
+            catch (Exception ex)
+            {
+
+                _dataLog.Log("Customer(ManageProfile)", ex.Message);
+                return RedirectToAction("ManageProfile");
+            }
+          
         }
 
 

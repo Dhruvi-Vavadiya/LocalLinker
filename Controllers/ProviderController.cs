@@ -64,7 +64,7 @@ namespace LocalLinker.Controllers
                                     on sr.Service_id equals s.Service_id
                                 join l in _context.Location
                                     on sr.Location_id equals l.Location_id
-                                    where sr.Status == "Pending"
+                                    where sr.Status == "Pending" || sr.Status == "Confirmed"
                                 select new
                                 {
                                     sr.Request_id,
@@ -124,6 +124,11 @@ namespace LocalLinker.Controllers
         {
             try
             {
+                int? providerId = HttpContext.Session.GetInt32("pUserId");
+                if (providerId == null)
+                {
+                    return RedirectToAction("Login", "Provider"); // or handle unauthorized
+                }
                 // 1️⃣ Fetch the booking and confirm
                 var servicerequest = _context.ServiceRequests
                              .FirstOrDefault(x => x.Request_id == requestId );
@@ -141,26 +146,45 @@ namespace LocalLinker.Controllers
                 // adding a booking record in another table, do it here
                 // Example: add to a BookingHistory table
 
-                var history = new Booking
+                //    var booking = _context.Booking
+                //.FirstOrDefault(b => b.Service_Request_Id == requestId && b.ProviderId == providerId);
+
+
+                if (status == "Confirmed" || status == "Cancelled")
                 {
-                    Service_Request_Id = servicerequest.Request_id,
-                    Status = status,
-                    ProviderId = HttpContext.Session.GetInt32("pUserId"),
-                    Created_At = DateTime.Now
-                };
-                _context.Booking.Add(history);
+                    // ➕ Add new booking record
+                    var booking = new Booking
+                    {
+                        Service_Request_Id = requestId,
+                        ProviderId = providerId.Value,
+                        Status = status,
+                        Created_At = DateTime.Now
+                    };
 
+                    _context.Booking.Add(booking);
+                }
+                else if (status == "Completed")
+                {
+                    // 🔁 Update existing booking record
+                    var booking = _context.Booking
+                        .FirstOrDefault(b => b.Service_Request_Id == requestId
+                                          && b.ProviderId == providerId);
 
-                _context.SaveChanges(); // Save changes for status update (and history if added)
+                    if (booking != null)
+                    {
+                        booking.Status = "Completed";
+                        booking.Modifiy_Date = DateTime.Now;
+                        _context.Booking.Update(booking);
+                    }
+                }
+
+                // 4️⃣ Save all changes
+                _context.SaveChanges();
 
                 // 3️⃣ Send email to customer notifying status update
                 // Assuming servicerequest is your ServiceRequest object
                 // Get providerId from session
-                int? providerId = HttpContext.Session.GetInt32("pUserId");
-                if (providerId == null)
-                {
-                    return RedirectToAction("Login", "Provider"); // or handle unauthorized
-                }
+                
 
                 // Query to get assigned bookings for this provider
                 var bookingDetails = (from sr in _context.ServiceRequests
@@ -201,6 +225,8 @@ namespace LocalLinker.Controllers
                                   $"Thank you for using our service!";
 
                     SendEmail(bookingDetails.user_email, subject, body);
+                    TempData["ToastMessage"] = $"Email sending for booking {sts} "+bookingDetails.user_email;
+                    TempData["ToastType"] = "success"; // success | error | warning | info
 
                     Console.WriteLine("Sending email to: " + bookingDetails.user_email);
 
@@ -214,7 +240,7 @@ namespace LocalLinker.Controllers
             catch (Exception ex)
             {
                 _dataLog.Log("Provider(UpdateStatus)", ex.Message);
-                return View();
+                return RedirectToAction("AssignedBookings");
             }
         }
         private readonly string _smtpServer = "smtp.gmail.com"; // e.g., smtp.gmail.com
@@ -535,42 +561,44 @@ namespace LocalLinker.Controllers
             return string.Empty;
         }
 
-        public IActionResult ProviderEarningsReport(
-    int providerId,
-    DateTime? fromDate,
-    DateTime? toDate)
+        public IActionResult ProviderEarningsReport(DateTime? fromDate, DateTime? toDate)
         {
-            // Default date range (last 30 days)
-            fromDate ??= DateTime.Now.AddDays(-30);
-            toDate ??= DateTime.Now;
+            int? userId = HttpContext.Session.GetInt32("pUserId");
+
+            if (userId == null)
+                return RedirectToAction("Login");
+            // Default: last 30 days
+            fromDate ??= DateTime.Today.AddDays(-30);
+            toDate ??= DateTime.Today;
 
             var report = (from b in _context.Booking
                           join sr in _context.ServiceRequests
                               on b.Service_Request_Id equals sr.Request_id
                           join u in _context.Users
                               on b.ProviderId equals u.User_id
-                          where b.ProviderId == providerId
-                                && b.Status == "Completed"
+                          where b.Status == "Completed"
                                 && b.Created_At >= fromDate
                                 && b.Created_At <= toDate
+                                && b.ProviderId == userId
                           select new
                           {
                               b.BookingId,
                               b.Created_At,
                               b.Amount,
+                              ProviderName = u.Name,
                               ServiceRequestId = sr.Request_id
-                          }).ToList();
+                          }).ToList<dynamic>();
 
-            ViewBag.ProviderName = _context.Users
-                .Where(x => x.User_id == providerId)
-                .Select(x => x.Name)
-                .FirstOrDefault();
+            ViewBag.FromDate = fromDate.Value.ToString("yyyy-MM-dd");
+            ViewBag.ToDate = toDate.Value.ToString("yyyy-MM-dd");
 
             ViewBag.TotalBookings = report.Count;
-            ViewBag.TotalEarnings = report.Sum(x => x.Amount);
+            ViewBag.TotalEarnings = report.Sum(x => (decimal)(x.Amount ?? 0));
+
 
             return View(report);
         }
+
 
 
         // Auto-login from remember me cookie

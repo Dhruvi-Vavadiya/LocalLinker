@@ -9,12 +9,12 @@ namespace LocalLinker.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Review_id { get; set; }
 
-        [StringLength(50)]
+       
         public int? Service_Request_Id { get; set; }
 
         public int? Rating { get; set; }
 
-        [StringLength(50)]
+        [StringLength(500)]
         public string? Review_Text { get; set; }
 
         public DateTime? Created_At { get; set; }

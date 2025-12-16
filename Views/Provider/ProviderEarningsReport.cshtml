@@ -1,8 +1,89 @@
 ﻿
 @{
     ViewData["Title"] = "ProviderEarningsReport";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_ProviderLayout.cshtml";
 }
 
-<h1>ProviderEarningsReport</h1>
+@model IEnumerable<dynamic>
+
+
+<h2 class="mb-3">Earnings Report</h2>
+
+<!-- Date Filter -->
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-3">
+        <label>From Date</label>
+        <input type="date" name="fromDate" class="form-control"
+               value="@ViewBag.FromDate" />
+    </div>
+    <div class="col-md-3">
+        <label>To Date</label>
+        <input type="date" name="toDate" class="form-control"
+               value="@ViewBag.ToDate" />
+    </div>
+    <div class="col-md-3 align-self-end">
+        <button class="btn btn-primary">
+            <i class="fas fa-filter"></i> Filter
+        </button>
+    </div>
+</form>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h5>Total Completed Bookings</h5>
+                <h3>@ViewBag.TotalBookings</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h5>Total Earnings</h5>
+                <h3>₹ @ViewBag.TotalEarnings</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Earnings Table -->
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead >
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Provider</th>
+                    <th>Date</th>
+                    <th>Amount (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>#@item.BookingId</td>
+                            <td>@item.ProviderName</td>
+                            <td>@Convert.ToDateTime(item.Created_At).ToString("dd-MMM-yyyy")</td>
+                            <td>₹ @item.Amount</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">
+                            No completed bookings found.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 

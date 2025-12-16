@@ -40,11 +40,23 @@
                                 <input type="hidden" name="requestId" value="@booking.Request_id" />
 
                                 <select name="status" class="form-select form-select-sm d-inline w-auto">
-                                    <option value="Pending" selected="@(booking.Status == "Pending")">Pending</option>
+                                    
                                     <option value="Confirmed" selected="@(booking.Status == "Confirmed")">Confirmed</option>
-                                    <option value="Completed" selected="@(booking.Status == "Completed")">Completed</option>
-                                    <option value="Cancelled" selected="@(booking.Status == "Cancelled")">Cancelled</option>
+
+                                    @* Show Completed only if current status is Confirmed *@
+                                    @if (booking.Status == "Confirmed")
+                                    {
+                                        <option value="Completed">Completed</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="Pending" selected="@(booking.Status == "Pending")">Pending</option>
+                                        <option value="Cancelled" selected="@(booking.Status == "Cancelled")">Cancelled</option>
+                                    }
+
+                                    
                                 </select>
+
 
                                 <button type="submit" class="btn btn-sm btn-primary ms-2">
                                     Update
