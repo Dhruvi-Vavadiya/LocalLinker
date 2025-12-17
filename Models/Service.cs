@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LocalLinker.Models
 {
@@ -14,6 +15,8 @@ namespace LocalLinker.Models
         public bool? IsActive { get; set; } = true;
 
         public string? description { get; set; }
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
 
         public ICollection<ServiceProvider>? Providers { get; set; }
     }

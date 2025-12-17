@@ -156,16 +156,36 @@ namespace LocalLinker.Controllers
 
         // POST: Create Service
         [HttpPost]
-        public IActionResult CreateService(Service service)
+        public async Task<IActionResult> CreateService(Service service)
         {
             if (ModelState.IsValid)
             {
+                // Handle image upload if a file is selected
+                if (service.ImageFile != null && service.ImageFile.Length > 0)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(service.ImageFile.FileName);
+                    var extension = Path.GetExtension(service.ImageFile.FileName);
+                    var uniqueFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await service.ImageFile.CopyToAsync(stream);
+                    }
+
+                    service.Image =  uniqueFileName;
+                }
+
+
                 _context.Services.Add(service);
                 _context.SaveChanges();
                 return RedirectToAction("Services");
             }
+
             return View(service);
         }
+
 
         // GET: Edit Service
         [HttpGet]
@@ -289,18 +309,21 @@ namespace LocalLinker.Controllers
                              join s in _context.Services
                                  on sp.Service_id equals s.Service_id
                              join l in _context.Location
-                                 on sp.Location_id equals l.Location_id
+                                 on sp.Location_id equals l.Location_id into locGroup
+                             from l in locGroup.DefaultIfEmpty() // LEFT JOIN
                              where u.UserType == "Provider"
                              select new
                              {
                                  ProviderId = sp.Provider_id,
                                  ProviderName = u.Name,
+                                 ProviderImage = u.Image ?? "default.png",
                                  ServiceName = s.Service_name,
-                                 LocationName = l.City + " " + l.Area,
-                                 sp.Experience_years,
+                                 LocationName = l != null ? l.City + " " + l.Area : "N/A",
+                                 Experience_years = sp.Experience_years ?? 0, // set 0 if null
                                  sp.Description,
                                  sp.IsVerified
                              }).ToList<dynamic>();
+
 
             return View(providers);
         }

@@ -3,7 +3,9 @@ using LocalLinker.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using MySql.Data.MySqlClient;
-using static Org.BouncyCastle.Math.EC.ECCurve;
+using Razorpay;
+using Razorpay.Api;
+//using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace LocalLinker.Controllers
 {
@@ -43,23 +45,23 @@ namespace LocalLinker.Controllers
             ViewBag.staff = staff;
 
             var customerReviews = (from review in _context.Reviews
-                                 join serviceRequest in _context.ServiceRequests
-                                 on review.Service_Request_Id equals serviceRequest.Request_id
-                                 join user in _context.Users
-                                     on serviceRequest.Customer_id equals user.User_id
-                                 where user.Is_Active == true
-                                 select new
-                                 {
-                                     review.Review_id,
-                                     review.Rating,
-                                     review.Review_Text,
-                                     ReviewDate = review.Created_At,
+                                   join serviceRequest in _context.ServiceRequests
+                                   on review.Service_Request_Id equals serviceRequest.Request_id
+                                   join user in _context.Users
+                                       on serviceRequest.Customer_id equals user.User_id
+                                   where user.Is_Active == true
+                                   select new
+                                   {
+                                       review.Review_id,
+                                       review.Rating,
+                                       review.Review_Text,
+                                       ReviewDate = review.Created_At,
 
-                                     CustomerName = user.Name,
-                                     CustomerImage = user.Image ?? "default.png",
+                                       CustomerName = user.Name,
+                                       CustomerImage = user.Image ?? "default.png",
 
-                                    
-                                 }
+
+                                   }
                              ).ToList<dynamic>();
 
 
@@ -81,7 +83,9 @@ namespace LocalLinker.Controllers
             {
                 return RedirectToAction("Login");
             }
-            ViewBag.Services = _context.Services.ToList();
+            ViewBag.Services = _context.Services
+                             .Where(s => s.IsActive == true)
+                             .ToList();
             ViewBag.Location = _context.Location.ToList();
             return View();
         }
@@ -104,6 +108,7 @@ namespace LocalLinker.Controllers
             try
             {
                 int? customerId = HttpContext.Session.GetInt32("UserId");
+                string? UserEmail = HttpContext.Session.GetString("UserEmail");
 
                 if (customerId == null)
                 {
@@ -117,20 +122,86 @@ namespace LocalLinker.Controllers
                 sr.Status = "Pending";
                 sr.Service_id = sr.Service_id;
                 sr.Location_id = sr.Location_id;
-    
+
                 // Set Entry date automatically
                 sr.Entry_Date = DateTime.Now;
 
                 // Save in database
                 _context.ServiceRequests.Add(sr);
-                _context.SaveChanges();
+                _context.SaveChanges(); /////////////////////////////////////////////////uncomment
+
+                // Razorpay order creation
+//                var razorpayKey = _config["Razorpay:Key"];
+//                var razorpaySecret = _config["Razorpay:Secret"];
+
+
+//                RazorpayClient client = new RazorpayClient(razorpayKey, razorpaySecret);
+//                decimal amount = 500; // Example amount ₹500
+//                var options = new Dictionary<string, object>
+//{
+//    { "amount", amount * 100 }, // paise
+//    { "currency", "INR" },
+//    { "receipt", $"REQ_{sr.Request_id}" },
+//    { "payment_capture", 1 }
+//};
+
+//                Order order = client.Order.Create(options);
+
+//                // Save order id in DB (optional but recommended)
+//                //sr.RazorpayOrderId = order["id"].ToString();
+//                _context.SaveChanges();
+
+                ///---------------------------
+
+                string serviceName = _context.Services
+    .Where(s => s.Service_id == sr.Service_id)
+    .Select(s => s.Service_name)
+    .FirstOrDefault() ?? "N/A";
+                string LocationName = _context.Location
+                    .Where(s => s.Location_id == sr.Location_id)
+                    .Select(s => s.City + " " + s.Area)
+                    .FirstOrDefault() ?? "N/A";
 
 
                 //TempData["msg"] = "Booking Created Successfully!";
-                _dataLog.Log("MakeRequest", "one booking request are added suucessfully");
-                TempData["ToastMessage"] = "Booking Created Successfully!";
+                _dataLog.Log("MakeRequest", "Booking request are added suucessfully");
+                TempData["ToastMessage"] = "Booking request are added Successfully!";
                 TempData["ToastType"] = "success"; // success | error | warning | info
                 //send mail
+                string subject = "Service Request Submitted Successfully – LocalLinker";
+
+                string body = $@"
+<h2 style='color:#2c3e50;'>Booking Request Created Successfully</h2>
+
+<p>Dear <b>{UserEmail}</b>,</p>
+
+<p>Your service request has been <b>successfully submitted</b> on LocalLinker.</p>
+
+<hr />
+
+<p><b>Request Details:</b></p>
+<ul>
+    <li><b>Service:</b> {serviceName}</li>
+    <li><b>Location:</b> {LocationName}</li>
+    <li><b>Request Date:</b> {DateTime.Now:dd MMM yyyy hh:mm tt}</li>
+    <li><b>Status:</b> Pending</li>
+</ul>
+
+<p>Our service providers will review your request and contact you soon.</p>
+
+<p>
+    You can track your booking status anytime from your dashboard.
+</p>
+
+<br />
+
+<p>Thank you for choosing <b>LocalLinker</b> 😊</p>
+
+<p style='font-size:12px;color:gray;'>
+    This is an automated email. Please do not reply.
+</p>";
+
+                _dataLog.SendEmail(UserEmail, subject, body);
                 return RedirectToAction("MyBookings");
             }
             catch (Exception ex)
@@ -160,6 +231,7 @@ namespace LocalLinker.Controllers
                               join s in _context.Services
                                   on sr.Service_id equals s.Service_id
                               where u.User_id == customerId
+                              orderby sr.Entry_Date descending
                               select new
                               {
                                   RequestId = sr.Request_id,     // ✅ FIX
@@ -194,14 +266,14 @@ namespace LocalLinker.Controllers
                 TempData["ToastMessage"] = "Booking cancelled successfully!";
                 TempData["ToastType"] = "success"; // success | error | warning | info
 
-              
+
             }
             else
             {
                 TempData["ToastMessage"] = "This booking cannot be cancelled.";
                 TempData["ToastType"] = "error"; // success | error | warning | info
 
-               
+
             }
 
             return RedirectToAction("MyBookings");
@@ -290,40 +362,48 @@ namespace LocalLinker.Controllers
             return RedirectToAction("Login");
         }
 
+        //[HttpGet]
+        //public IActionResult Login()
+        //{
+        //    try
+        //    {
+        //        if (Request.Cookies["UserId"] != null &&
+        //       Request.Cookies["UserType"] != null)
+        //        {
+        //            int userId = Convert.ToInt32(Request.Cookies["UserId"]);
+        //            string userType = Request.Cookies["UserType"];
+
+        //            // Restore session
+        //            HttpContext.Session.SetInt32("UserId", userId);
+        //            HttpContext.Session.SetString("UserType", userType);
+
+        //            if (userType == "Customer")
+        //                return RedirectToAction("MyBookings");
+        //            else if (userType == "Admin")
+        //                return RedirectToAction("Dashboard", "Admin");
+        //        }
+
+        //        TempData["ToastMessage"] = "Welcome to Login Page!";
+        //        TempData["ToastType"] = "success";
+
+        //        return View();
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        _dataLog.Log("Customer(Login)", ex.Message);
+        //        return RedirectToAction("Login");
+        //    }
+        //    // 🔥 Check cookie first
+
+        //}
         [HttpGet]
         public IActionResult Login()
         {
-            try
-            {
-                if (Request.Cookies["UserId"] != null &&
-               Request.Cookies["UserType"] != null)
-                {
-                    int userId = Convert.ToInt32(Request.Cookies["UserId"]);
-                    string userType = Request.Cookies["UserType"];
+            TempData["ToastMessage"] = "Welcome to Login Page!";
+            TempData["ToastType"] = "success"; // success | error | warning | info
 
-                    // Restore session
-                    HttpContext.Session.SetInt32("UserId", userId);
-                    HttpContext.Session.SetString("UserType", userType);
-
-                    if (userType == "Customer")
-                        return RedirectToAction("MyBookings");
-                    else if (userType == "Admin")
-                        return RedirectToAction("Dashboard", "Admin");
-                }
-
-                TempData["ToastMessage"] = "Welcome to Login Page!";
-                TempData["ToastType"] = "success";
-
-                return View();
-            }
-            catch (Exception ex)
-            {
-
-                _dataLog.Log("Customer(Login)", ex.Message);
-                return RedirectToAction("Login");
-            }
-            // 🔥 Check cookie first
-           
+            return View();
         }
 
         [HttpPost]
@@ -370,17 +450,18 @@ namespace LocalLinker.Controllers
                         HttpContext.Session.SetInt32("UserId", user.UserId);
                         HttpContext.Session.SetString("UserName", user.Name);
                         HttpContext.Session.SetString("UserType", user.UserType);
+                        HttpContext.Session.SetString("UserEmail", user.Email);
 
-                        // 🔥 SAVE COOKIE (30 days)
-                        CookieOptions options = new CookieOptions
-                        {
-                            Expires = DateTime.Now.AddDays(30),
-                            HttpOnly = true,
-                            Secure = true
-                        };
+                        //// 🔥 SAVE COOKIE (30 days)
+                        //CookieOptions options = new CookieOptions
+                        //{
+                        //    Expires = DateTime.Now.AddDays(30),
+                        //    HttpOnly = true,
+                        //    Secure = true
+                        //};
 
-                        Response.Cookies.Append("UserId", user.UserId.ToString(), options);
-                        Response.Cookies.Append("UserType", user.UserType, options);
+                        //Response.Cookies.Append("UserId", user.UserId.ToString(), options);
+                        //Response.Cookies.Append("UserType", user.UserType, options);
 
                         return RedirectToAction("MyBookings");
                     }
@@ -390,6 +471,7 @@ namespace LocalLinker.Controllers
                         HttpContext.Session.SetInt32("UserId", user.UserId);
                         HttpContext.Session.SetString("UserName", user.Name);
                         HttpContext.Session.SetString("UserType", user.UserType);
+                        HttpContext.Session.SetString("UserEmail", user.Email);
                         return RedirectToAction("Dashboard", "Admin");
                     }
                     else
@@ -414,7 +496,7 @@ namespace LocalLinker.Controllers
                 _dataLog.Log("Customer(Login)", ex.Message);
                 return RedirectToAction("Login");
             }
-            
+
         }
 
         // Display registration form
@@ -458,7 +540,7 @@ namespace LocalLinker.Controllers
                 }
                 else
                 {
-                    newUser.Image = "default.jpg"; // optional default image
+                    newUser.Image = "default.png"; // optional default image
                 }
 
                 newUser.CreatedAt = DateTime.Now;
@@ -474,10 +556,10 @@ namespace LocalLinker.Controllers
 
                 // redirect based on role
                 if (newUser.UserType == "Customer")
-                    return RedirectToAction("MakeRequest", "Customer");
+                    return RedirectToAction("MyBookings", "Customer");
 
                 if (newUser.UserType == "Provider")
-                    return RedirectToAction("Dashboard", "Provider");
+                    return RedirectToAction("Login", "Provider");
 
                 if (newUser.UserType == "Admin")
                     return RedirectToAction("Dashboard", "Admin");
@@ -494,7 +576,7 @@ namespace LocalLinker.Controllers
                 _dataLog.Log("Customer(Register)", ex.Message);
                 return RedirectToAction("Register");
             }
-            
+
         }
         // GET: Manage Profile
         public IActionResult ManageProfile()
@@ -521,7 +603,7 @@ namespace LocalLinker.Controllers
                 _dataLog.Log("Customer(ManageProfile)", ex.Message);
                 return RedirectToAction("ManageProfile");
             }
-            
+
         }
 
         // POST: Manage Profile Update
@@ -591,7 +673,7 @@ namespace LocalLinker.Controllers
                 _dataLog.Log("Customer(ManageProfile)", ex.Message);
                 return RedirectToAction("ManageProfile");
             }
-          
+
         }
 
 
@@ -599,7 +681,7 @@ namespace LocalLinker.Controllers
         // GET: Customer – All Services Display
         public IActionResult AllService()
         {
-           // Fetch all active services(you can remove.Where if not needed)
+            // Fetch all active services(you can remove.Where if not needed)
             var services = _context.Services
                               .Where(s => s.IsActive == true)
                               .ToList();
@@ -607,6 +689,68 @@ namespace LocalLinker.Controllers
             return View(services);
         }
 
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
 
+
+        [HttpPost]
+        public IActionResult ForgotPassword(users model)
+        {
+            try
+            {
+
+                // Check if user exists
+                var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("Email", "Email does not exist");
+                    //return View(model);
+                    return RedirectToAction("ForgotPassword");
+                }
+
+                // Update password
+                user.Password = model.Password; // ideally, hash the password
+                _context.SaveChanges();
+
+                TempData["Success"] = "Password updated successfully. Please login.";
+                _dataLog.Log("customer(ForgotPassword)", "Password updated successfully. Please login");
+                TempData["ToastMessage"] = "Password updated successfully. Please login";
+                TempData["ToastType"] = "success"; // success | error | warning | info
+                if (user.UserType == "Admin" || user.UserType == "Customer")
+                {
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    return RedirectToAction("Login", "Provider");
+                }
+
+
+
+                //return View(model);
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("customer(ForgotPassword)", ex.Message);
+                TempData["ToastMessage"] = ex.Message;
+                TempData["ToastType"] = "error"; // success | error | warning | info
+                //send mail
+                return RedirectToAction("ForgotPassword");
+            }
+        }
+
+        // AJAX method to check email existence
+        [HttpPost]
+        public JsonResult IsEmailExist(string email)
+        {
+            var exists = _context.Users.Any(u => u.Email == email);
+            return Json(exists); // true if not exists, false if exists
+        }
+
+
+        //================
     }
 }

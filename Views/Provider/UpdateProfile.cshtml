@@ -5,7 +5,7 @@
     ViewData["Title"] = "Update Profile";
     Layout = "~/Views/Shared/_ProviderLayout.cshtml";
      string userImage = Context.Session.GetString("pUserImage");
-   
+    var ser = ViewBag.ServiceImage;
 }
 
 <!-- Custom CSS for Profile Page -->
@@ -304,6 +304,53 @@
 
     
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#City").change(function () {
+
+            var selectedCity = $(this).val();
+            var $area = $("#Location_id");
+
+            console.log("Selected city:", selectedCity);
+
+            $area.empty().append('<option value="">Loading...</option>');
+
+            if (!selectedCity) {
+                $area.empty().append('<option value="">Select Area</option>');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("GetAreasByCity", "Provider")',
+                type: 'GET',
+                data: { city: selectedCity },
+                success: function (data) {
+
+                    console.log("Areas received:", data);
+
+                    $area.empty().append('<option value="">Select Area</option>');
+
+                    if (data.length === 0) {
+                        $area.append('<option value="">No areas found</option>');
+                    }
+
+                    $.each(data, function (i, item) {
+                        $area.append(
+                            '<option value="' + item.location_id + '">' + item.area + '</option>'
+                        );
+                    });
+                },
+                error: function (err) {
+                    console.error("AJAX Error:", err);
+                    $area.empty().append('<option value="">Error loading areas</option>');
+                }
+            });
+        });
+
+    });
+</script>
 
 <div class="page-header">
     <div>
@@ -311,7 +358,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="@Url.Action("Dashboard", "Provider")">Home</a></li>
-                <li class="breadcrumb-item"><a href="@Url.Action("Settings", "Provider")">Settings</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("UpdateProfile", "Provider")">Settings</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Update Profile</li>
             </ol>
         </nav>
@@ -330,7 +377,7 @@
     <!-- Profile Header -->
     <div class="profile-header">
         <div class="profile-avatar">
-            <img src="~/img/@(userImage ?? "default.png")"
+            <img src="~/img/@(ser ?? "default.png")"
                  alt="Profile"
                  class="profile-img " style=" width: 120px;
             height: 120px;
@@ -400,27 +447,42 @@
             
             <div class="form-group">
                 <label class="form-label" for="Experience_years">Years of Experience</label>
-                <select class="form-select" id="Experience_years" name="Experience_years" required
+                <select class="form-select"
+                        id="Experience_years"
+                        name="Experience_years"
                         onchange="toggleCustomExperience(this)">
+
                     <option value="">Select option</option>
-                    <option value="0">0 (Just starting)</option>
-                    <option value="1">1 year</option>
-                    <option value="2">2 years</option>
-                    <option value="3">3 years</option>
-                    <option value="4">4 years</option>
-                    <option value="5">5 years</option>
-                    <option value="6">6 years</option>
-                    <option value="custom">Custom (specify below)</option>
+
+                    <option value="0" selected="@(ViewBag.ExperienceYears == 0)">0 (Just starting)</option>
+                    <option value="1" selected="@(ViewBag.ExperienceYears == 1)">1 year</option>
+                    <option value="2" selected="@(ViewBag.ExperienceYears == 2)">2 years</option>
+                    <option value="3" selected="@(ViewBag.ExperienceYears == 3)">3 years</option>
+                    <option value="4" selected="@(ViewBag.ExperienceYears == 4)">4 years</option>
+                    <option value="5" selected="@(ViewBag.ExperienceYears == 5)">5 years</option>
+                    <option value="6" selected="@(ViewBag.ExperienceYears == 6)">6 years</option>
+
+                    <option value="custom" selected="@(ViewBag.ExperienceYears > 6)">
+                        Custom (specify below)
+                    </option>
                 </select>
-                <div id="customExperienceContainer" style="display: none; margin-top: 10px;">
-                    <input type="number" class="form-control" id="customExperience"
-                           placeholder="Enter exact years (e.g., 4, 12, 18)" min="0" max="50">
+
+                <div id="customExperienceContainer"
+                     style="margin-top:10px; display:@(ViewBag.ExperienceYears > 6 ? "block" : "none")">
+
+                    <input type="number"
+                           class="form-control"
+                           id="customExperience"
+                           name="Experience_years"
+                           value="@(ViewBag.ExperienceYears > 6 ? ViewBag.ExperienceYears : "")"
+                           placeholder="Enter exact years (e.g., 7, 12, 18)"
+                           min="0" max="50">
                 </div>
                 <p class="form-hint">Your professional experience in years</p>
             </div>
         </div>
 
-        <div class="form-group">
+        @* <div class="form-group">
             <label class="form-label" for="Location_id">Service Area</label>
             <select class="form-select" id="Location_id" name="Location_id" required>
                 <option value="">Select your service area</option>
@@ -433,7 +495,25 @@
                 <option value="7">Metropolitan Area</option>
             </select>
             <p class="form-hint">Select the area where you provide services</p>
+        </div> *@
+        <div class="form-group">
+            <label class="form-label required">City</label>
+            <select class="form-select" id="City" >
+                <option value="">Select City</option>
+                @foreach (var city in ViewBag.Cities)
+                {
+                    <option value="@city">@city</option>
+                }
+            </select>
         </div>
+        <div class="form-group">
+            <label class="form-label required">Service Area</label>
+            <select class="form-select" id="Location_id" name="Location_id" >
+                <option value="">Select Area</option>
+            </select>
+            <p class="form-hint">Select the area where you provide services</p>
+        </div>
+
     </div>
 
     <!-- Service Details Section -->
@@ -664,6 +744,25 @@
         } else {
             container.style.display = 'none';
             document.getElementById('customExperience').required = false;
+        }
+    }
+    
+
+</script>
+<script>
+    function toggleCustomExperience(select) {
+        const customDiv = document.getElementById("customExperienceContainer");
+        const customInput = document.getElementById("customExperience");
+
+        if (select.value === "custom") {
+            customDiv.style.display = "block";
+            customInput.required = true;
+            select.removeAttribute("name"); // prevent conflict
+        } else {
+            customDiv.style.display = "none";
+            customInput.required = false;
+            customInput.value = "";
+            select.setAttribute("name", "Experience_years");
         }
     }
 </script>

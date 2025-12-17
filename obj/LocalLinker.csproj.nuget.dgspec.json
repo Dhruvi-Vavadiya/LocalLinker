@@ -91,6 +91,10 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "Razorpay": {
+              "target": "Package",
+              "version": "[3.3.2, )"
+            },
             "itext7": {
               "target": "Package",
               "version": "[9.4.0, )"

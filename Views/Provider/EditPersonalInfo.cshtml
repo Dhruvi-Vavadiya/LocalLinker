@@ -1,0 +1,306 @@
+﻿@model LocalLinker.Models.users
+@{
+    ViewData["Title"] = "Edit Personal Information";
+    Layout = "~/Views/Shared/_ProviderLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0 text-dark">
+                            <i class="bi bi-person-gear me-2"></i>Personal Information
+                        </h4>
+                        <span class="badge bg-light text-dark">
+                            <i class="bi bi-shield-check me-1"></i>Secure
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <form asp-action="EditPersonalInfo" method="post" enctype="multipart/form-data" id="personalInfoForm">
+                        <input type="hidden" asp-for="User_id" />
+
+                        <!-- Profile Image Section -->
+                        <div class="row align-items-center mb-5">
+                            <div class="col-auto">
+                                <div class="position-relative">
+                                    <div class="avatar-upload">
+                                        <div class="avatar-preview">
+                                            <img src="~/img/@(string.IsNullOrEmpty(Model.Image) ? "default.png" : Model.Image)"
+                                                 alt="Profile Image"
+                                                 width="120"
+                                                 height="120"
+                                                 class="rounded-circle" />
+                                        </div>
+                                        <div class="avatar-edit">
+                                            <input type="file"
+                                                   name="ProfileImage"
+                                                   id="imageUpload"
+                                                   accept="image/*"
+                                                   class="d-none" />
+                                            <label for="imageUpload"
+                                                   class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                                   style="width: 36px; height: 36px;"
+                                                   data-bs-toggle="tooltip"
+                                                   title="Change photo">
+                                                <i class="bi bi-camera-fill"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1">Profile Photo</h5>
+                                <p class="text-muted small mb-2">
+                                    Upload a clear photo of yourself. JPG, PNG or GIF (Max 2MB)
+                                </p>
+                                <div class="progress d-none" id="uploadProgress" style="height: 6px;">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Fields -->
+                        <div class="row g-4">
+                            <!-- Full Name -->
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="Name"
+                                           class="form-control"
+                                           required
+                                           placeholder="Full Name"
+                                           id="nameInput" />
+                                    <label for="nameInput">
+                                        <i class="bi bi-person me-1"></i>Full Name
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        Please enter your full name
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Email (Readonly) -->
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="Email"
+                                           class="form-control bg-light"
+                                           readonly
+                                           placeholder="Email Address"
+                                           id="emailInput" />
+                                    <label for="emailInput">
+                                        <i class="bi bi-envelope me-1"></i>Email Address
+                                    </label>
+                                    <small class="text-muted mt-1 d-block">
+                                        <i class="bi bi-info-circle me-1"></i>Email cannot be changed
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Phone Number -->
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="Phone"
+                                           class="form-control"
+                                           placeholder="Phone Number"
+                                           id="phoneInput" />
+                                    <label for="phoneInput">
+                                        <i class="bi bi-phone me-1"></i>Mobile Number
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Additional Fields (Example) -->
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text"
+                                           class="form-control"
+                                           placeholder="Job Title"
+                                           value="Service Provider"
+                                           readonly />
+                                    <label>
+                                        <i class="bi bi-briefcase me-1"></i>Role
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="row mt-5">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end gap-2 border-top pt-4">
+                                    <a href="@Url.Action("Index", "Provider")"
+                                       class="btn btn-outline-secondary px-4">
+                                        <i class="bi bi-arrow-left me-2"></i>Cancel
+                                    </a>
+                                    <button type="submit"
+                                            class="btn btn-primary px-4"
+                                            id="saveBtn">
+                                        <i class="bi bi-check-circle me-2"></i>Save Changes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Info Alert -->
+                <div class="card-footer bg-light border-0">
+                    <div class="alert alert-info mb-0" role="alert">
+                        <div class="d-flex">
+                            <i class="bi bi-info-circle-fill me-3 fs-5"></i>
+                            <div>
+                                <h6 class="alert-heading mb-2">Information Security</h6>
+                                <p class="small mb-0">
+                                    Your personal information is encrypted and stored securely.
+                                    We never share your data with third parties without your consent.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Preview Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Preview Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid rounded" alt="Preview">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="useImage()">Use This Image</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-upload {
+        position: relative;
+        display: inline-block;
+    }
+
+    .avatar-edit {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        z-index: 1;
+    }
+
+    .avatar-preview {
+        border: 3px solid #fff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        overflow: hidden;
+        border-radius: 50%;
+    }
+
+        .avatar-preview img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+        }
+
+    .form-control:focus {
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 0.2rem rgba(108, 99, 255, 0.25);
+    }
+
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        color: #6c63ff;
+    }
+
+    .card {
+        border-radius: 16px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6c63ff 0%, #4a44c6 100%);
+        border: none;
+        padding: 10px 24px;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a52d4 0%, #3a35a6 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+        }
+</style>
+
+@section Scripts {
+    <script>
+        // Image upload preview
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('File size must be less than 2MB');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('modalImage').src = e.target.result;
+
+                    // Show preview modal
+                    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+                    modal.show();
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function useImage() {
+            $('#imageModal').modal('hide');
+        }
+
+        // Form validation
+        document.getElementById('personalInfoForm').addEventListener('submit', function(e) {
+            const nameInput = document.getElementById('nameInput');
+            if (!nameInput.value.trim()) {
+                e.preventDefault();
+                nameInput.classList.add('is-invalid');
+                nameInput.focus();
+            }
+        });
+
+        // Real-time validation
+        document.getElementById('nameInput').addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        // Phone number formatting
+        document.getElementById('phoneInput').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) value = value.substr(0, 10);
+            if (value.length > 6) {
+                value = `(${value.substr(0,3)}) ${value.substr(3,3)}-${value.substr(6)}`;
+            } else if (value.length > 3) {
+                value = `(${value.substr(0,3)}) ${value.substr(3)}`;
+            } else if (value.length > 0) {
+                value = `(${value}`;
+            }
+            e.target.value = value;
+        });
+
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+}

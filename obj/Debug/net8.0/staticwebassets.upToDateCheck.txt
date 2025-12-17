@@ -55,9 +55,12 @@ wwwroot\images\work-7.jpg
 wwwroot\images\work-8.jpg
 wwwroot\img\553443b6-1397-4015-b93a-8f7cfd4d5309.jpeg
 wwwroot\img\8afc9ddf-8d1b-412d-a396-b251de8ee15b.JPG
+wwwroot\img\db568916-35a7-47a1-9d15-bfa80f15b0a4.png
 wwwroot\img\default.png
 wwwroot\img\default_service.jpg
+wwwroot\img\e4820ca9-d6fd-46f5-a363-fa87f3aa91f3.jpg
 wwwroot\img\e5b7d223-57a2-4249-8872-eec25b000aeb.jpg
+wwwroot\img\e61e35cc-12c2-4ca1-ade9-c4d38f4026f5.jpeg
 wwwroot\img\ru2.jpg
 wwwroot\img\work-1.jpg
 wwwroot\img\work-2.jpg
@@ -227,3 +230,4 @@ wwwroot\scss\bootstrap\_type.scss
 wwwroot\scss\bootstrap\_utilities.scss
 wwwroot\scss\bootstrap\_variables.scss
 wwwroot\scss\style.scss
+wwwroot\uploads\e61e35cc-12c2-4ca1-ade9-c4d38f4026f5.jpeg

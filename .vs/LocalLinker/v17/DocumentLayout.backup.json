@@ -3,36 +3,32 @@
   "WorkspaceRootPath": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\controllers\\providercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:controllers\\providercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\provider\\assignedbookings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\provider\\assignedbookings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\models\\errorlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:models\\errorlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\controllers\\customercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:controllers\\customercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\customer\\addreview.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\customer\\addreview.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\models\\reviews.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:models\\reviews.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\customer\\mybookings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\customer\\mybookings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\app_data\\include.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:app_data\\include.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\customer\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\customer\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\controllers\\providercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:controllers\\providercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 1161,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,110 +50,93 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AddReview.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\AddReview.cshtml",
-              "RelativeDocumentMoniker": "Views\\Customer\\AddReview.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\AddReview.cshtml",
-              "RelativeToolTip": "Views\\Customer\\AddReview.cshtml",
-              "ViewState": "AgIAAPsAAAAAAAAAAAAAAA8BAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-16T02:53:09.524Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "AssignedBookings.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\AssignedBookings.cshtml",
-              "RelativeDocumentMoniker": "Views\\Provider\\AssignedBookings.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\AssignedBookings.cshtml",
-              "RelativeToolTip": "Views\\Provider\\AssignedBookings.cshtml",
-              "ViewState": "AgIAAB0AAAAAMzMzMzMbwDUAAACAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-16T02:40:56.101Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ProviderController.cs",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\ProviderController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ProviderController.cs",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\ProviderController.cs",
-              "RelativeToolTip": "Controllers\\ProviderController.cs",
-              "ViewState": "AgIAADQCAADgzMzMzMwtwEICAAA2AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-16T02:32:26.187Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "CustomerController.cs",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\CustomerController.cs",
-              "RelativeDocumentMoniker": "Controllers\\CustomerController.cs",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\CustomerController.cs",
-              "RelativeToolTip": "Controllers\\CustomerController.cs",
-              "ViewState": "AgIAAHAAAAAAzMzMzMz0v34AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-15T16:21:04.56Z",
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-17T16:58:03.64Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "_CustomerLayout.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_CustomerLayout.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_CustomerLayout.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_CustomerLayout.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_CustomerLayout.cshtml",
-              "ViewState": "AgIAAHwAAACAAAAAAAAQwIkAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-15T16:23:10.047Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Reviews.cs",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\Reviews.cs",
-              "RelativeDocumentMoniker": "Models\\Reviews.cs",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\Reviews.cs",
-              "RelativeToolTip": "Models\\Reviews.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAiAAAAAAAAAA==",
+              "Title": "ErrorLog.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\ErrorLog.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorLog.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\ErrorLog.cs",
+              "RelativeToolTip": "Models\\ErrorLog.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-16T03:02:09.782Z",
+              "WhenOpened": "2025-12-17T16:24:01.073Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "MyBookings.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\MyBookings.cshtml",
-              "RelativeDocumentMoniker": "Views\\Customer\\MyBookings.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\MyBookings.cshtml",
-              "RelativeToolTip": "Views\\Customer\\MyBookings.cshtml",
-              "ViewState": "AgIAAMAAAAAAAAAAAAAlwNIAAABQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-16T02:54:40.984Z",
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T16:22:41.56Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\Login.cshtml",
-              "RelativeDocumentMoniker": "Views\\Customer\\Login.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\Login.cshtml",
-              "RelativeToolTip": "Views\\Customer\\Login.cshtml",
-              "ViewState": "AgIAAC0CAAAABAAAAAAYwEQCAAA6AAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "ProviderController.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\ProviderController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProviderController.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\ProviderController.cs",
+              "RelativeToolTip": "Controllers\\ProviderController.cs",
+              "ViewState": "AgIAABwAAAAAMDMzMzPjvywAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T16:19:12.763Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CustomerController.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\CustomerController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CustomerController.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\CustomerController.cs",
+              "RelativeToolTip": "Controllers\\CustomerController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T16:16:11.36Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "_CustomerLayout.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_CustomerLayout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_CustomerLayout.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_CustomerLayout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_CustomerLayout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-15T16:24:02.803Z",
+              "WhenOpened": "2025-12-17T16:37:55.978Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Include.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\App_Data\\Include.cs",
+              "RelativeDocumentMoniker": "App_Data\\Include.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\App_Data\\Include.cs",
+              "RelativeToolTip": "App_Data\\Include.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T16:18:41.823Z",
               "EditorCaption": ""
             }
           ]

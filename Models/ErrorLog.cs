@@ -1,8 +1,9 @@
-﻿using System.Data;
-using LocalLinker.App_Data;
-
+﻿using LocalLinker.App_Data;
 using MySql.Data.MySqlClient;
-using static Org.BouncyCastle.Math.EC.ECCurve;
+using System.Data;
+using System.Net;
+using System.Net.Mail;
+//using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace LocalLinker.Models
 {
@@ -40,8 +41,42 @@ namespace LocalLinker.Models
             _connection.Close();
 
         }
-       
 
+        private readonly string _smtpServer = "smtp.gmail.com"; // e.g., smtp.gmail.com
+        private readonly int _smtpPort = 587; // or 465
+        private readonly string _fromEmail = "dhruvivavadiya2004@gmail.com";
+        private readonly string _password = "dpds jhzj zoyt lpab";
+        public async Task SendEmail(string toEmail, string subject, string body)
+        {
+            try
+            {
+                using (var message = new MailMessage())
+                {
+                    message.From = new MailAddress(_fromEmail);
+                    message.To.Add(toEmail);
+                    message.Subject = subject;
+                    message.Body = body;
+                    message.IsBodyHtml = true;
+
+                    using (var client = new SmtpClient(_smtpServer, _smtpPort))
+                    {
+                        client.Credentials = new NetworkCredential(_fromEmail, _password);
+                        client.EnableSsl = true; // Use SSL if your server requires
+                        client.Timeout = 15000; // ⏱ 15 seconds (IMPORTANT)
+                        await client.SendMailAsync(message);
+
+                        Log("Provider(ErrorLog(SendEmail))", "mail is sended from " + toEmail);
+                    }
+                }
+            }
+            catch (SmtpException ex)
+            {
+                // Log this
+                Log("Provider(ErrorLog(SendEmail))", ex.Message);
+                Console.WriteLine(ex.Message);
+            }
+
+        }
         //void IDataLog.ShowNotification(string message, string type)
         //{
         //    HttpContext.Session.SetInt32("UserId", message);

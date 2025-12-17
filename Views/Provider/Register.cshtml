@@ -1,10 +1,19 @@
 ﻿
 
 @model LocalLinker.Models.users
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
 @{
     ViewData["Title"] = "Provider Dashboard";
     Layout = "";
-    var services = ViewBag.Services as List<LocalLinker.Models.Service>;
+    var services = new List<Service>();
+
+    var servicesJson = Context.Session.GetString("Services");
+
+    if (!string.IsNullOrEmpty(servicesJson))
+    {
+        services = JsonConvert.DeserializeObject<List<Service>>(servicesJson);
+    }
 }
 
 

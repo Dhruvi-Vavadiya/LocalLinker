@@ -121,6 +121,15 @@
     </header>
 
     <main role="main">
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            <div id="liveToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body" id="toastMessageBody"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-progress"></div>
+            </div>
+        </div>
         @RenderBody()
     </main>
 
@@ -182,7 +191,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-5">
+            <div class="row ">
                 <div class="col-md-12 text-center">
                     <p class="copyright">
                         Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
@@ -210,3 +219,27 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var message = '@TempData["ToastMessage"]';
+        var type = '@TempData["ToastType"]' || 'info';
+
+        if (message && message.trim() !== '') {
+            var toastEl = document.getElementById('liveToast');
+            var toastBody = document.getElementById('toastMessageBody');
+            var progressBar = toastEl.querySelector('.toast-progress');
+
+            toastBody.innerText = message;
+            toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+
+            // Reset progress animation for each toast
+            progressBar.style.animation = 'none';
+            progressBar.offsetHeight; // trigger reflow
+            progressBar.style.animation = null;
+
+            // Show toast
+            var toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+            toast.show();
+        }
+    });
+</script>

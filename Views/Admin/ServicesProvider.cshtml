@@ -58,6 +58,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Image</th>
             <th>Provider</th>
             <th>Service</th>
             <th>Location</th>
@@ -69,6 +70,18 @@
         @foreach (var p in Model)
         {
             <tr>
+                <!-- Provider Image -->
+                <td>
+                    @if (!string.IsNullOrEmpty(p.ProviderImage))
+                    {
+                        <img src="~/img/@p.ProviderImage" alt="Provider Image" width="50" height="50" style="border-radius:50%;" />
+                    }
+                    else
+                    {
+                        <img src="~/img/default.png" alt="Default Image" width="50" height="50" style="border-radius:50%;" />
+                    }
+                </td>
+
                 <td>@p.ProviderName</td>
                 <td>@p.ServiceName</td>
                 <td>@p.LocationName</td>
@@ -76,7 +89,6 @@
                 <td>
                     @if (p.IsVerified == true)
                     {
-                        <!-- VERIFIED → UNVERIFY -->
                         <a class="btn btn-sm btn-warning"
                            href="@Url.Action("DeactivateProvider", "Admin", new { id = p.ProviderId })"
                            onclick="return confirm('Deactivate this provider?');">
@@ -85,7 +97,6 @@
                     }
                     else
                     {
-                        <!-- UNVERIFIED → VERIFY -->
                         <a class="btn btn-sm btn-success"
                            href="@Url.Action("ActivateProvider", "Admin", new { id = p.ProviderId })"
                            onclick="return confirm('Activate this provider?');">
@@ -93,12 +104,11 @@
                         </a>
                     }
                 </td>
-
-
             </tr>
         }
     </tbody>
 </table>
+
 
 @section Scripts {
     <script>
