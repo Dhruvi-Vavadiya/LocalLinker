@@ -7,16 +7,28 @@
       "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:controllers\\customercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\controllers\\providercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:controllers\\providercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\customer\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\customer\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\customer\\mybookings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\customer\\mybookings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\customer\\razorpaypayment.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\customer\\razorpaypayment.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\controllers\\providercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:controllers\\providercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\customer\\razorpaypayment.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\customer\\razorpaypayment.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\models\\razorpayviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -47,10 +59,6 @@
       "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\views\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:views\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|d:\\msc_ict\\sem3\\project\\locallinker\\app_data\\include.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DB0C4407-DF4B-4852-9CD8-15ABC735168B}|LocalLinker.csproj|solutionrelative:app_data\\include.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -62,7 +70,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 1161,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -73,16 +81,21 @@
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Payments.cs",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\Payments.cs",
-              "RelativeDocumentMoniker": "Models\\Payments.cs",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\Payments.cs",
-              "RelativeToolTip": "Models\\Payments.cs",
-              "ViewState": "AgIAAAQAAAAAMzMzMzMLwAsAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-17T18:19:19.452Z"
+              "DocumentIndex": 2,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\Login.cshtml",
+              "RelativeDocumentMoniker": "Views\\Customer\\Login.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\Login.cshtml",
+              "RelativeToolTip": "Views\\Customer\\Login.cshtml",
+              "ViewState": "AgIAADsCAAAAAAAAAAAUwEsCAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-18T05:56:18.656Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -92,27 +105,14 @@
               "RelativeDocumentMoniker": "Controllers\\CustomerController.cs",
               "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\CustomerController.cs",
               "RelativeToolTip": "Controllers\\CustomerController.cs",
-              "ViewState": "AgIAAOIAAAAAAAAAAAAcwP0AAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAPQCAAAAAAAAAIAwwAwDAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-17T16:16:11.36Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MyBookings.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\MyBookings.cshtml",
-              "RelativeDocumentMoniker": "Views\\Customer\\MyBookings.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\MyBookings.cshtml",
-              "RelativeToolTip": "Views\\Customer\\MyBookings.cshtml",
-              "ViewState": "AgIAANAAAADAZmZmZmYkwOoAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-17T18:04:22.017Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "AllService.cshtml",
               "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\AllService.cshtml",
               "RelativeDocumentMoniker": "Views\\Customer\\AllService.cshtml",
@@ -124,20 +124,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "ProviderController.cs",
               "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\ProviderController.cs",
               "RelativeDocumentMoniker": "Controllers\\ProviderController.cs",
               "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\ProviderController.cs",
               "RelativeToolTip": "Controllers\\ProviderController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAALYAAAAAAAAAAAAMwMYAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-17T16:19:12.763Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "RazorpayPayment.cshtml",
               "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\RazorpayPayment.cshtml",
               "RelativeDocumentMoniker": "Views\\Customer\\RazorpayPayment.cshtml",
@@ -150,7 +150,58 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MyBookings.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\MyBookings.cshtml",
+              "RelativeDocumentMoniker": "Views\\Customer\\MyBookings.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\MyBookings.cshtml",
+              "RelativeToolTip": "Views\\Customer\\MyBookings.cshtml",
+              "ViewState": "AgIAAEQAAAAANDMzMzMrwHIAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-17T18:04:22.017Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Controllers\\AdminController.cs",
+              "ViewState": "AgIAAGIAAAAANTMzMzMrwHQAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-18T03:39:30.435Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "_CustomerLayout.cshtml",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_CustomerLayout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_CustomerLayout.cshtml",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_CustomerLayout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_CustomerLayout.cshtml",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAAAF4AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-17T16:37:55.978Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Payments.cs",
+              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\Payments.cs",
+              "RelativeDocumentMoniker": "Models\\Payments.cs",
+              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\Payments.cs",
+              "RelativeToolTip": "Models\\Payments.cs",
+              "ViewState": "AgIAAAQAAAAAMzMzMzMLwAsAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T18:19:19.452Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "RazorpayViewModel.cs",
               "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Models\\RazorpayViewModel.cs",
               "RelativeDocumentMoniker": "Models\\RazorpayViewModel.cs",
@@ -162,7 +213,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -174,7 +225,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "MakeRequest.cshtml",
               "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Customer\\MakeRequest.cshtml",
               "RelativeDocumentMoniker": "Views\\Customer\\MakeRequest.cshtml",
@@ -186,7 +237,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 12,
               "Title": "AssignedBookings.cshtml",
               "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Provider\\AssignedBookings.cshtml",
               "RelativeDocumentMoniker": "Views\\Provider\\AssignedBookings.cshtml",
@@ -198,7 +249,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -210,19 +261,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "_CustomerLayout.cshtml",
-              "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_CustomerLayout.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_CustomerLayout.cshtml",
-              "ToolTip": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\Views\\Shared\\_CustomerLayout.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_CustomerLayout.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-17T16:37:55.978Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "Include.cs",
               "DocumentMoniker": "D:\\Msc_ICT\\Sem3\\Project\\LocalLinker\\App_Data\\Include.cs",
               "RelativeDocumentMoniker": "App_Data\\Include.cs",

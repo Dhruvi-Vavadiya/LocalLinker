@@ -583,8 +583,8 @@ namespace LocalLinker.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            TempData["ToastMessage"] = "Welcome to Login Page!";
-            TempData["ToastType"] = "success"; // success | error | warning | info
+            //TempData["ToastMessage"] = "Welcome to Login Page!";
+            //TempData["ToastType"] = "success"; // success | error | warning | info
 
             return View();
         }

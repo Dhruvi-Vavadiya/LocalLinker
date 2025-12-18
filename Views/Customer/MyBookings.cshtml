@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "My Bookings";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
-   
 }
 
 <style>
@@ -159,10 +158,6 @@
 
                                 var bStatus = b.bStatus?.ToString() ?? "";
                                 var bid = b.BookingId;
-
-                                @* var paymentId = b.PaymentId;
-                                var pstatus = b.PaymentStatus?.ToString() ?? ""; *@
-
                                 var providerName = b.ProviderName?.ToString() ?? "N/A";
                                 var serviceName = b.ServiceName?.ToString() ?? "N/A";
                                 @* var createdAt = b.Entry_Date as DateTime?; *@
@@ -223,46 +218,16 @@
                                         }
                                         @if (status.Equals("Confirmed", StringComparison.OrdinalIgnoreCase))
                                         {
-                                            var paymentMap = ViewBag.PaymentMap as Dictionary<int, dynamic>;
-
-                                            bool hasBooking = bid != null;
-                                            bool hasPayment = hasBooking
-                                            && paymentMap != null
-                                            && paymentMap.ContainsKey((int)bid);
-
-                                            string paymentStatus = hasPayment
-                                            ? paymentMap[(int)bid].Payment_Status
-                                            : null;
                                             <a asp-action="AddReview"
                                                asp-route-bookingId="@b.RequestId"
                                                class="btn btn-sm btn-outline-primary action-btn">
                                                 <i class="fas fa-edit"></i> Review
                                             </a>
-                                            @if (hasPayment && paymentStatus == "Completed")
+                                            @if (bid != null && bStatus == "Confirmed")
                                             {
-                                                <span class="badge badge-success">
-                                                    Paid
-                                                </span>
-                                            }
-                                            else if (hasBooking && !hasPayment)
-                                            {
-                                                <a asp-action="AddPayment"
-                                                   asp-route-BookingId="@bid"
-                                                   class="btn btn-sm btn-outline-primary action-btn">
-                                                    <i class="fas fa-edit"></i> Pay Now
+                                                <a asp-action="addPayment" asp-route-BookingId="@bid" class="action-btn btn-sm btn-outline-primary action-btn">
+                                                    <i class="fas fa-edit"></i> Payment
                                                 </a>
-                                            }
-                                            else if (hasBooking && paymentStatus != "Completed")
-                                            {
-                                                <a asp-action="AddPayment"
-                                                   asp-route-BookingId="@bid"
-                                                   class="btn btn-sm btn-outline-primary action-btn">
-                                                    <i class="fas fa-edit"></i> Pay Now
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-muted">No Booking</span>
                                             }
                                            
                                         }
