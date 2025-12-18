@@ -26,47 +26,53 @@ namespace LocalLinker.Controllers
 
         public IActionResult Index()
         {
-            var services = _context.Services
-                             .Where(s => s.IsActive == true)
-                             .ToList();
-            ViewBag.services = services;
+            try
+            {
+                var services = _context.Services
+                                 .Where(s => s.IsActive == true)
+                                 .ToList();
+                ViewBag.services = services;
 
-            var staff = _context.Users
-                .Where(u => u.Is_Active == true && u.UserType == "Admin")
-                .Select(u => new
-                {
-                    u.User_id,
-                    Name = u.Name ?? "",
-                    UserType = u.UserType ?? "",
-                    Image = u.Image ?? "default.png"
-                })
-                .ToList();
+                var staff = _context.Users
+                    .Where(u => u.Is_Active == true && u.UserType == "Admin")
+                    .Select(u => new
+                    {
+                        u.User_id,
+                        Name = u.Name ?? "",
+                        UserType = u.UserType ?? "",
+                        Image = u.Image ?? "default.png"
+                    })
+                    .ToList();
 
-            ViewBag.staff = staff;
+                ViewBag.staff = staff;
 
-            var customerReviews = (from review in _context.Reviews
-                                   join serviceRequest in _context.ServiceRequests
-                                   on review.Service_Request_Id equals serviceRequest.Request_id
-                                   join user in _context.Users
-                                       on serviceRequest.Customer_id equals user.User_id
-                                   where user.Is_Active == true
-                                   select new
-                                   {
-                                       review.Review_id,
-                                       review.Rating,
-                                       review.Review_Text,
-                                       ReviewDate = review.Created_At,
+                var customerReviews = (from review in _context.Reviews
+                                       join serviceRequest in _context.ServiceRequests
+                                       on review.Service_Request_Id equals serviceRequest.Request_id
+                                       join user in _context.Users
+                                           on serviceRequest.Customer_id equals user.User_id
+                                       where user.Is_Active == true
+                                       select new
+                                       {
+                                           review.Review_id,
+                                           review.Rating,
+                                           review.Review_Text,
+                                           ReviewDate = review.Created_At,
 
-                                       CustomerName = user.Name,
-                                       CustomerImage = user.Image ?? "default.png",
-
-
-                                   }
-                             ).ToList<dynamic>();
+                                           CustomerName = user.Name,
+                                           CustomerImage = user.Image ?? "default.png",
 
 
-            ViewBag.customerReviews = customerReviews;
+                                       }
+                                 ).ToList<dynamic>();
 
+
+                ViewBag.customerReviews = customerReviews;
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Customer(index)", ex.Message);
+            }
 
             return View();
         }
@@ -75,18 +81,26 @@ namespace LocalLinker.Controllers
 
         // Display booking form
         [HttpGet]
-        public IActionResult MakeRequest()
+        public IActionResult MakeRequest(int? serviceid)
         {
-            int? customerId = HttpContext.Session.GetInt32("UserId");
-
-            if (customerId == null)
+            try
             {
-                return RedirectToAction("Login");
+                int? customerId = HttpContext.Session.GetInt32("UserId");
+
+                if (customerId == null)
+                {
+                    return RedirectToAction("Login");
+                }
+                ViewBag.Services = _context.Services
+                                 .Where(s => s.IsActive == true)
+                                 .ToList();
+                ViewBag.Location = _context.Location.ToList();
+                ViewBag.SelectedServiceId = serviceid;
             }
-            ViewBag.Services = _context.Services
-                             .Where(s => s.IsActive == true)
-                             .ToList();
-            ViewBag.Location = _context.Location.ToList();
+            catch (Exception ex)
+            {
+                _dataLog.Log("Customer(makerequest)", ex.Message);
+            }
             return View();
         }
 
@@ -130,28 +144,7 @@ namespace LocalLinker.Controllers
                 _context.ServiceRequests.Add(sr);
                 _context.SaveChanges(); /////////////////////////////////////////////////uncomment
 
-                // Razorpay order creation
-//                var razorpayKey = _config["Razorpay:Key"];
-//                var razorpaySecret = _config["Razorpay:Secret"];
 
-
-//                RazorpayClient client = new RazorpayClient(razorpayKey, razorpaySecret);
-//                decimal amount = 500; // Example amount ₹500
-//                var options = new Dictionary<string, object>
-//{
-//    { "amount", amount * 100 }, // paise
-//    { "currency", "INR" },
-//    { "receipt", $"REQ_{sr.Request_id}" },
-//    { "payment_capture", 1 }
-//};
-
-//                Order order = client.Order.Create(options);
-
-//                // Save order id in DB (optional but recommended)
-//                //sr.RazorpayOrderId = order["id"].ToString();
-//                _context.SaveChanges();
-
-                ///---------------------------
 
                 string serviceName = _context.Services
     .Where(s => s.Service_id == sr.Service_id)
@@ -230,16 +223,51 @@ namespace LocalLinker.Controllers
                                   on u.User_id equals sr.Customer_id
                               join s in _context.Services
                                   on sr.Service_id equals s.Service_id
+
+                              // LEFT JOIN Booking
+                              join b in _context.Booking
+                                  on sr.Request_id equals b.Service_Request_Id into bookingGroup
+                              from b in bookingGroup.DefaultIfEmpty()
+
+                                  // join p in _context.Payments
+                                  //   on b.BookingId equals p.Booking_id into paymentGroup
+                                  //from p in paymentGroup.DefaultIfEmpty()
+
                               where u.User_id == customerId
                               orderby sr.Entry_Date descending
                               select new
                               {
                                   RequestId = sr.Request_id,     // ✅ FIX
+                                  BookingId = b != null ? b.BookingId : (int?)null, // ✅ NULL if not exists
+                                  bStatus = b.Status,
                                   Status = sr.Status,            // ✅ FIX
                                   Entry_Date = sr.Entry_Date,
                                   ProviderName = u.Name,
                                   ServiceName = s.Service_name   // ✅ FIX
+                                  //paymentId = p != null ? p.Payment_id : (int?)null,
+                                  //pstatus = p.Payment_Status
                               }).ToList<dynamic>();
+
+                //fetch booking id in result. BookingId = b != null ? b.BookingId : (int?)null, the check paymenttable and set viewbag store paymentid
+                var bookingIds = result
+    .Where(x => x.BookingId != null)
+    .Select(x => (int)x.BookingId)
+    .Distinct()
+    .ToList();
+
+                var payments = _context.Payments
+                    .Where(p => bookingIds.Contains(p.Booking_id))
+                    .Select(p => new
+                    {
+                        p.Booking_id,
+                        p.Payment_id,
+                        p.Payment_Status
+                    })
+                    .ToList();
+                ViewBag.PaymentMap = payments.ToDictionary(
+    x => x.Booking_id,
+    x => new { x.Payment_id, x.Payment_Status }
+);
 
                 return View(result);
             }
@@ -251,32 +279,40 @@ namespace LocalLinker.Controllers
         }
         public IActionResult CancelBooking(int bookingId)
         {
-            var booking = _context.Booking.FirstOrDefault(b => b.BookingId == bookingId);
-
-            if (booking == null)
-                return NotFound();
-
-            // Allow cancellation only in Pending or Confirmed status
-            if (booking.Status == "Pending" || booking.Status == "Confirmed")
+            try
             {
-                booking.Status = "Cancelled";
-                booking.Modifiy_Date = DateTime.Now;
+                var booking = _context.Booking.FirstOrDefault(b => b.BookingId == bookingId);
 
-                _context.SaveChanges();
-                TempData["ToastMessage"] = "Booking cancelled successfully!";
-                TempData["ToastType"] = "success"; // success | error | warning | info
+                if (booking == null)
+                    return NotFound();
+
+                // Allow cancellation only in Pending or Confirmed status
+                if (booking.Status == "Pending" || booking.Status == "Confirmed")
+                {
+                    booking.Status = "Cancelled";
+                    booking.Modifiy_Date = DateTime.Now;
+
+                    _context.SaveChanges();
+                    TempData["ToastMessage"] = "Booking cancelled successfully!";
+                    TempData["ToastType"] = "success"; // success | error | warning | info
 
 
+                }
+                else
+                {
+                    TempData["ToastMessage"] = "This booking cannot be cancelled.";
+                    TempData["ToastType"] = "error"; // success | error | warning | info
+
+
+                }
+
+                return RedirectToAction("MyBookings");
             }
-            else
+            catch (Exception ex)
             {
-                TempData["ToastMessage"] = "This booking cannot be cancelled.";
-                TempData["ToastType"] = "error"; // success | error | warning | info
-
-
+                _dataLog.Log("Customer(cancelbooking)", ex.Message);
             }
-
-            return RedirectToAction("MyBookings");
+            return View();
         }
         public IActionResult CancelRequest(int requestId)
         {
@@ -321,7 +357,154 @@ namespace LocalLinker.Controllers
             }
         }
 
+        //addPayment
 
+
+        public IActionResult addPayment(int BookingId)
+        {
+            try
+            {
+                // 1️⃣ Get logged-in customer
+                int? customerId = HttpContext.Session.GetInt32("UserId");
+            string? userEmail = HttpContext.Session.GetString("UserEmail");
+
+            if (customerId == null)
+                return RedirectToAction("Login");
+
+            // 2️⃣ Fetch Service Request
+            var bk = _context.Booking
+         .Where(x => x.BookingId == BookingId)
+         .Select(x => new
+         {
+             x.BookingId,
+             x.Service_Request_Id,
+             x.Status
+         })
+         .FirstOrDefault();
+
+            if (bk == null)
+                return NotFound();
+
+            var sr = _context.ServiceRequests
+         .Where(x => x.Request_id == bk.Service_Request_Id)
+         .Select(x => new
+         {
+             x.Request_id,
+             x.Status,
+             x.Service_id
+         })
+         .FirstOrDefault();
+
+            // 3️⃣ Prevent duplicate payment
+            if (bk.Status == "Completed")
+            {
+                TempData["ToastMessage"] = "Payment already completed.";
+                TempData["ToastType"] = "info";
+                return RedirectToAction("MyBookings");
+            }
+
+            // 4️⃣ Get service price (example: from Booking or Service table)
+            decimal amount = _context.Services
+                .Where(b => b.Service_id == sr.Service_id)
+                .Select(b => (decimal)b.price)
+                .FirstOrDefault();
+
+            if (amount <= 0)
+                amount = 500; // fallback (optional)
+
+            // 5️⃣ Razorpay order creation
+            var razorpayKey = _config["Razorpay:Key"];
+            var razorpaySecret = _config["Razorpay:Secret"];
+
+            RazorpayClient client = new RazorpayClient(razorpayKey, razorpaySecret);
+
+            var options = new Dictionary<string, object>
+    {
+        { "amount", amount }, // paise
+        { "currency", "INR" },
+        { "receipt", $"REQ_{bk.BookingId}" },
+        { "payment_capture", 1 }
+    };
+
+            Order order = client.Order.Create(options);
+
+            // 6️⃣ Save Razorpay order id
+            var paymet = new Payments
+            {
+                Booking_id = bk.BookingId,
+                User_id = (int)customerId,
+                Razorpay_Order_Id = order["id"].ToString(),
+                Payment_Status = "Pending",
+                //Razorpay_Payment_Id
+                Amount = amount,
+                Created_At = DateTime.Now
+            };
+
+            _context.Payments.Add(paymet);
+
+            _context.SaveChanges();
+
+            // 7️⃣ Open Razorpay checkout page
+            return View("RazorpayPayment", new RazorpayViewModel
+            {
+                Razorpay_Order_Id = paymet.Razorpay_Order_Id,
+                RazorpayKey = razorpayKey,
+                CustomerEmail = userEmail,
+                Payment_Id = paymet.Payment_id,
+                Amount = amount,
+                Booking_id = bk.BookingId
+            });
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Customer(index)", ex.Message);
+            }
+            return View();
+        }
+
+        public IActionResult PaymentSuccess(string paymentId, string orderId, int Bookingid, int PId, int Amount)
+        {
+            try
+            {
+
+                var booking = _context.Booking.FirstOrDefault(x => x.BookingId == Bookingid);
+            if (booking != null)
+            {
+                booking.Status = "Confirmed";
+                //booking.RazorpayPaymentId = paymentId;
+                booking.Amount = Amount;
+                _context.SaveChanges();
+            }
+            var servicerequest = _context.ServiceRequests.FirstOrDefault(x => x.Request_id == booking.Service_Request_Id);
+            if (servicerequest != null)
+            {
+                servicerequest.Status = "Confirmed";
+                //booking.RazorpayPaymentId = paymentId;
+                _context.SaveChanges();
+            }
+
+            var paymentupdate = _context.Payments.FirstOrDefault(x => x.Payment_id == PId);
+            if (paymentupdate != null)
+            {
+                paymentupdate.Razorpay_Payment_Id = paymentId;
+                paymentupdate.Payment_Status = "Completed";
+                paymentupdate.Modified_At = DateTime.Now;
+                _context.SaveChanges();
+            }
+
+
+
+            TempData["ToastMessage"] = "Payment Successful!";
+            TempData["ToastType"] = "success";
+
+            return RedirectToAction("MyBookings");
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Customer(PaymentSuccess)", ex.Message);
+            }
+            return View();
+        }
 
         // Add Review (5 star)
         [HttpGet]
@@ -746,8 +929,15 @@ namespace LocalLinker.Controllers
         [HttpPost]
         public JsonResult IsEmailExist(string email)
         {
+            try { 
             var exists = _context.Users.Any(u => u.Email == email);
             return Json(exists); // true if not exists, false if exists
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Customer(index)", ex.Message);
+            }
+            return Json(null);
         }
 
 

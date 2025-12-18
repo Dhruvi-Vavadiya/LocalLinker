@@ -1,0 +1,34 @@
+﻿@model RazorpayViewModel
+@{
+    ViewData["Title"] = "razorpaypayment";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+    var options = {
+        "key": "@Model.RazorpayKey",
+        "amount": "@(Model.Amount * 100)",
+        "currency": "INR",
+        "name": "LocalLinker",
+        "description": "Service Booking Payment",
+        "order_id": "@Model.Razorpay_Order_Id",
+        "handler": function (response) {
+            window.location.href = "/Customer/PaymentSuccess"
+                + "?paymentId=" + response.razorpay_payment_id
+                + "&orderId=" + response.razorpay_order_id
+                + "&PId=@Model.Payment_Id"
+                + "&Amount=@Model.Amount"
+                + "&Bookingid=@Model.Booking_id";
+        },
+        "prefill": {
+            "email": "@Model.CustomerEmail"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+</script>

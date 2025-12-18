@@ -17,6 +17,7 @@
                     <th>Customer Name</th>
                     <th>Service Name</th>
                     <th>Location</th>
+                    <th>Price</th>
                     <th>Status</th>
                     <th>Created At</th>
                     @* <th>Modify Date</th> *@
@@ -31,6 +32,7 @@
                         <td>@booking.CustomerName</td>
                         <td>@booking.ServiceName</td>
                         <td>@booking.LocationName</td>
+                        <td>@booking.servicePrice</td>
                         <td>@booking.Status</td>
                         <td>@booking.EntryDate.ToString("dd-MM-yyyy")</td>
                         @* <td>@booking.ModifyDate?.ToString("dd-MM-yyyy")</td> *@
@@ -38,6 +40,7 @@
                         <td>
                             <form asp-action="UpdateStatus" asp-controller="Provider" method="post">
                                 <input type="hidden" name="requestId" value="@booking.Request_id" />
+                                <input type="hidden" name="sprice" value="@booking.servicePrice" />
 
                                 <select name="status" class="form-select form-select-sm d-inline w-auto">
                                     

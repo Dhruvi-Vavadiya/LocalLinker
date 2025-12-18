@@ -441,8 +441,10 @@
                             </div>
 
                             <!-- Action Button -->
-                            <a href="/Service/Details/@s.Service_id" class="details-btn">
-                                View Details <i class="fas fa-arrow-right"></i>
+                            <a asp-controller="Customer"
+                               asp-action="MakeRequest"
+                               asp-route-serviceid="@s.Service_id" class="details-btn">
+                               Book service <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
                     </div>

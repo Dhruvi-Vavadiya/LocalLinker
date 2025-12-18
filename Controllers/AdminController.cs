@@ -17,6 +17,7 @@ namespace LocalLinker.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _config;
+        private readonly IDataLog _dataLog;
 
         MySqlConnection _conn;
         MySqlCommand _cmd = new MySqlCommand();
@@ -24,55 +25,63 @@ namespace LocalLinker.Controllers
 
         private readonly ApplicationDbContext _context;
 
-        public AdminController(ILogger<HomeController> logger, IConfiguration config, ApplicationDbContext context)
+        public AdminController(ILogger<HomeController> logger, IConfiguration config, ApplicationDbContext context, IDataLog dataLog)
         {
             _logger = logger;
             _config = config;
             _context = context;
+            _dataLog = dataLog;
         }
         public IActionResult Dashboard()
         {
-            if (HttpContext.Session.GetString("UserType") == "Admin")
+            try
             {
-                ViewBag.TotalUsers = _context.Users.Count();
-                ViewBag.TotalProviders = _context.Users.Count(u => u.UserType == "Provider");
-                ViewBag.TotalBookings = _context.Booking.Count();
-                ViewBag.PendingBookings = _context.Booking.Count(b => b.Status == "Pending");
+                if (HttpContext.Session.GetString("UserType") == "Admin")
+                {
+                    ViewBag.TotalUsers = _context.Users.Count();
+                    ViewBag.TotalProviders = _context.Users.Count(u => u.UserType == "Provider");
+                    ViewBag.TotalBookings = _context.Booking.Count();
+                    ViewBag.PendingBookings = _context.Booking.Count(b => b.Status == "Pending");
 
-                var report = (from sp in _context.ServiceProviders
-                              join u in _context.Users
-                                  on sp.User_id equals u.User_id
-                              join b in _context.Booking
-                                  on sp.Provider_id equals b.ProviderId into bookingGroup
-                              select new
-                              {
-                                  ProviderId = sp.Provider_id,
-                                  ProviderName = u.Name,
+                    var report = (from sp in _context.ServiceProviders
+                                  join u in _context.Users
+                                      on sp.User_id equals u.User_id
+                                  join b in _context.Booking
+                                      on sp.Provider_id equals b.ProviderId into bookingGroup
+                                  select new
+                                  {
+                                      ProviderId = sp.Provider_id,
+                                      ProviderName = u.Name,
 
-                                  TotalBookings = bookingGroup.Count(),
-                                  CompletedBookings = bookingGroup.Count(x => x.Status == "Completed"),
-                                  PendingBookings = bookingGroup.Count(x => x.Status != "Completed"),
+                                      TotalBookings = bookingGroup.Count(),
+                                      CompletedBookings = bookingGroup.Count(x => x.Status == "Completed"),
+                                      PendingBookings = bookingGroup.Count(x => x.Status != "Completed"),
 
-                                  TotalEarnings = bookingGroup
-                                      .Where(x => x.Status == "Completed")
-                                      .Sum(x => (decimal?)x.Amount) ?? 0
-                              }).ToList();
+                                      TotalEarnings = bookingGroup
+                                          .Where(x => x.Status == "Completed")
+                                          .Sum(x => (decimal?)x.Amount) ?? 0
+                                  }).ToList();
 
-                // Pie chart data
-                ViewBag.ProviderNames = report.Select(x => x.ProviderName).ToList();
-                ViewBag.CompletedBookings = report.Select(x => x.CompletedBookings).ToList();
-                ViewBag.PendingBookingss = report.Select(x => x.PendingBookings).ToList();
-                ViewBag.Earnings = report.Select(x => x.TotalEarnings).ToList();
-                return View();
+                    // Pie chart data
+                    ViewBag.ProviderNames = report.Select(x => x.ProviderName).ToList();
+                    ViewBag.CompletedBookings = report.Select(x => x.CompletedBookings).ToList();
+                    ViewBag.PendingBookingss = report.Select(x => x.PendingBookings).ToList();
+                    ViewBag.Earnings = report.Select(x => x.TotalEarnings).ToList();
+                    return View();
+                }
+                else
+                {
+                    TempData["ToastMessage"] = "First you login with valid usertype Admin";
+                    TempData["ToastType"] = "warning"; // success | error | warning | info
+                    return RedirectToAction("Login", "Customer");
+                    //return View();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                TempData["ToastMessage"] = "First you login with valid usertype Admin";
-                TempData["ToastType"] = "warning"; // success | error | warning | info
-                return RedirectToAction("Login", "Customer");
-                //return View();
+                _dataLog.Log("Admin(Dashboard)", ex.Message);
             }
-
+            return View();
         }
         public IActionResult Logout()
         {
@@ -83,7 +92,9 @@ namespace LocalLinker.Controllers
         // List All Bookings
         public IActionResult Bookings()
         {
-            var bookings = (from b in _context.Booking
+            try
+            {
+                var bookings = (from b in _context.Booking
                             join sp in _context.ServiceProviders on b.ProviderId equals sp.Provider_id
                             join u in _context.Users on sp.User_id equals u.User_id
                             join sr in _context.ServiceRequests on b.Service_Request_Id equals sr.Request_id
@@ -98,18 +109,32 @@ namespace LocalLinker.Controllers
                             }).ToList<dynamic>();
 
             return View(bookings);
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(Bookings)", ex.Message);
+            }
+            return View();
         }
 
 
         // Reports - generate simple booking count report
         public IActionResult Reports()
         {
-            var report = _context.Booking
+            try
+            {
+                var report = _context.Booking
                 .GroupBy(b => b.Status)
                 .Select(g => new { Status = g.Key, Count = g.Count() })
                 .ToList();
 
             return View(report);
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(reports)", ex.Message);
+            }
+            return View();
         }
         // =======================
         // MANAGE SERVICES SECTION
@@ -124,6 +149,7 @@ namespace LocalLinker.Controllers
 
         public IActionResult DeactivateService(int id)
         {
+            try { 
             var service = _context.Services.Find(id);
             if (service == null)
                 return NotFound();
@@ -132,11 +158,19 @@ namespace LocalLinker.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Services");
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(DeactivateService)", ex.Message);
+            }
+            return View();
         }
 
         public IActionResult ActivateService(int id)
         {
-            var service = _context.Services.Find(id);
+            try
+            {
+                var service = _context.Services.Find(id);
             if (service == null)
                 return NotFound();
 
@@ -144,6 +178,12 @@ namespace LocalLinker.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Services");
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(ActivateService)", ex.Message);
+            }
+            return View();
         }
 
 
@@ -158,7 +198,9 @@ namespace LocalLinker.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateService(Service service)
         {
-            if (ModelState.IsValid)
+            try
+            {
+                if (ModelState.IsValid)
             {
                 // Handle image upload if a file is selected
                 if (service.ImageFile != null && service.ImageFile.Length > 0)
@@ -184,6 +226,12 @@ namespace LocalLinker.Controllers
             }
 
             return View(service);
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(CreateService)", ex.Message);
+            }
+            return View();
         }
 
 
@@ -225,7 +273,9 @@ namespace LocalLinker.Controllers
         // All suer
         public ActionResult Index()
         {
-            _conn = _inc.db_locallinker(_config);
+            try
+            {
+                _conn = _inc.db_locallinker(_config);
             _cmd.Connection = _conn;
             _conn.Open();
             _cmd.CommandText = "SELECT * FROM users WHERE UserType !='Admin'";
@@ -245,6 +295,12 @@ namespace LocalLinker.Controllers
             }
 
             return View(lst);
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(index)", ex.Message);
+            }
+            return View();
         }
         [HttpPost]
         public IActionResult UpdateStatus(int id, bool isActive)
@@ -265,16 +321,19 @@ namespace LocalLinker.Controllers
 
                 return Ok();
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                _dataLog.Log("Admin(updatestatus)", ex.Message);
             }
+            return View();
         }
 
 
         public IActionResult Servicesrequest()
         {
-            var requests = (from sr in _context.ServiceRequests
+            try
+            {
+                var requests = (from sr in _context.ServiceRequests
                             join s in _context.Services
                                 on sr.Service_id equals s.Service_id into serviceJoin
                             from s in serviceJoin.DefaultIfEmpty()
@@ -299,11 +358,19 @@ namespace LocalLinker.Controllers
                             }).ToList<dynamic>();
 
             return View(requests);
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(Servicesrequest)", ex.Message);
+            }
+            return View();
         }
 
         public IActionResult ServicesProvider()
         {
-            var providers = (from sp in _context.ServiceProviders
+            try
+            {
+                var providers = (from sp in _context.ServiceProviders
                              join u in _context.Users
                                  on sp.User_id equals u.User_id
                              join s in _context.Services
@@ -326,10 +393,18 @@ namespace LocalLinker.Controllers
 
 
             return View(providers);
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(ServicesProvider)", ex.Message);
+            }
+            return View();
         }
         public IActionResult ActivateProvider(int id)
         {
-            var provider = _context.ServiceProviders
+            try
+            {
+                var provider = _context.ServiceProviders
                                    .FirstOrDefault(x => x.Provider_id == id);
 
             if (provider == null)
@@ -340,11 +415,19 @@ namespace LocalLinker.Controllers
 
             TempData["Success"] = "Provider activated successfully";
             return RedirectToAction("ServicesProvider");
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(ActiveProvider)", ex.Message);
+            }
+            return View();
         }
 
         public IActionResult DeactivateProvider(int id)
         {
-            var provider = _context.ServiceProviders
+            try
+            {
+                var provider = _context.ServiceProviders
                                    .FirstOrDefault(x => x.Provider_id == id);
 
             if (provider == null)
@@ -355,6 +438,12 @@ namespace LocalLinker.Controllers
 
             TempData["Success"] = "Provider deactivated successfully";
             return RedirectToAction("ServicesProvider");
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(deactiveprovdider)", ex.Message);
+            }
+            return View();
         }
 
 
@@ -423,7 +512,9 @@ namespace LocalLinker.Controllers
 
         public IActionResult ProviderPerformance()
         {
-            var report = (from sp in _context.ServiceProviders
+            try
+            {
+                var report = (from sp in _context.ServiceProviders
                           join u in _context.Users
                               on sp.User_id equals u.User_id
                           join b in _context.Booking
@@ -448,6 +539,11 @@ namespace LocalLinker.Controllers
                           }).ToList();
 
             ViewBag.Report = report;
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(ProviderPerformance)", ex.Message);
+            }
             return View();
         }
 
@@ -491,7 +587,9 @@ namespace LocalLinker.Controllers
         //}
         public IActionResult ExportProviderPerformanceExcel()
         {
-            var data = (from sp in _context.ServiceProviders
+            try
+            {
+                var data = (from sp in _context.ServiceProviders
                         join u in _context.Users
                             on sp.User_id equals u.User_id
                         select new
@@ -526,6 +624,13 @@ namespace LocalLinker.Controllers
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 "ProviderPerformance.xlsx"
             );
+
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Admin(ExportProviderPerformanceExcel)", ex.Message);
+            }
+            return View();
         }
         public IActionResult Locations()
         {

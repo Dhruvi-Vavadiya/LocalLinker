@@ -49,7 +49,12 @@
                                 <option value="">-- Choose a Service --</option>
                                 @foreach (var s in ViewBag.Services)
                                 {
-                                    <option value="@s.Service_id">@s.Service_name</option>
+                                    var isSelected = ViewBag.SelectedServiceId != null &&
+                                    (int)ViewBag.SelectedServiceId == s.Service_id;
+
+                                    <option value="@s.Service_id" selected="@(isSelected ? "selected" : null)">
+                                        @s.Service_name
+                                    </option>
                                 }
                             </select>
                         </div>

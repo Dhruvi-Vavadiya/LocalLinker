@@ -45,24 +45,24 @@ namespace LocalLinker.Controllers
                 var totalBookings = _context.Booking.Count(b => b.ProviderId == providerId);
                 //var completed = _context.Booking.Count(b => b.ProviderId == providerId && b.Status == "Completed");
                 var completed = (from b in _context.Booking
-       join sr in _context.ServiceRequests
-           on b.Service_Request_Id equals sr.Request_id
-       where b.ProviderId == providerId
-             && b.Status == "Completed"
-       select b).Count();
-                //var pending = _context.Booking.Count(b => b.ProviderId == providerId && b.Status == "Pending");
-                var pending = (from b in _context.Booking
                                  join sr in _context.ServiceRequests
                                      on b.Service_Request_Id equals sr.Request_id
                                  where b.ProviderId == providerId
-                                       && b.Status == "Pending"
-                               select b).Count();
-                var Cancelled = (from b in _context.Booking
+                                       && b.Status == "Completed"
+                                 select b).Count();
+                //var pending = _context.Booking.Count(b => b.ProviderId == providerId && b.Status == "Pending");
+                var pending = (from b in _context.Booking
                                join sr in _context.ServiceRequests
                                    on b.Service_Request_Id equals sr.Request_id
                                where b.ProviderId == providerId
-                                     && b.Status == "Cancelled"
+                                     && b.Status == "Pending"
                                select b).Count();
+                var Cancelled = (from b in _context.Booking
+                                 join sr in _context.ServiceRequests
+                                     on b.Service_Request_Id equals sr.Request_id
+                                 where b.ProviderId == providerId
+                                       && b.Status == "Cancelled"
+                                 select b).Count();
 
                 ViewBag.TotalBookings = totalBookings;
                 ViewBag.Completed = completed;
@@ -96,6 +96,7 @@ namespace LocalLinker.Controllers
                                     sr.Request_id,
                                     CustomerName = u.Name,
                                     ServiceName = s.Service_name,
+                                    servicePrice = s.price,
                                     LocationName = l.Area, // Or City if you want
                                     sr.Status,
                                     sr.Description,
@@ -146,7 +147,7 @@ namespace LocalLinker.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateStatus(int requestId, string status)
+        public IActionResult UpdateStatus(int requestId, string status, int sprice)
         {
             try
             {
@@ -174,44 +175,6 @@ namespace LocalLinker.Controllers
 
                 //    var booking = _context.Booking
                 //.FirstOrDefault(b => b.Service_Request_Id == requestId && b.ProviderId == providerId);
-
-
-                if (status == "Confirmed" || status == "Cancelled")
-                {
-                    // ➕ Add new booking record
-                    var booking = new Booking
-                    {
-                        Service_Request_Id = requestId,
-                        ProviderId = providerId.Value,
-                        Status = status,
-                        Created_At = DateTime.Now
-                    };
-
-                    _context.Booking.Add(booking);
-                }
-                else if (status == "Completed")
-                {
-                    // 🔁 Update existing booking record
-                    var booking = _context.Booking
-                        .FirstOrDefault(b => b.Service_Request_Id == requestId
-                                          && b.ProviderId == providerId);
-
-                    if (booking != null)
-                    {
-                        booking.Status = "Completed";
-                        booking.Modifiy_Date = DateTime.Now;
-                        _context.Booking.Update(booking);
-                    }
-                }
-
-                // 4️⃣ Save all changes
-                _context.SaveChanges();
-
-                // 3️⃣ Send email to customer notifying status update
-                // Assuming servicerequest is your ServiceRequest object
-                // Get providerId from session
-
-
                 // Query to get assigned bookings for this provider
                 var bookingDetails = (from sr in _context.ServiceRequests
                                       join s in _context.Services
@@ -232,7 +195,8 @@ namespace LocalLinker.Controllers
                                           username = u.Name,
                                           user_email = u.Email
                                       }).FirstOrDefault();
-
+                string subject = "";
+                string body = "";
                 string sts = "";
                 if (status == "Confirmed")
                 {
@@ -242,13 +206,124 @@ namespace LocalLinker.Controllers
                 {
                     sts = "Completed";
                 }
+                if (status == "Confirmed")
+                {
+                    // ➕ Add new booking record
+                    var booking = new Booking
+                    {
+                        Service_Request_Id = requestId,
+                        ProviderId = providerId.Value,
+                        Status = status,
+                        Created_At = DateTime.Now
+                    };
+
+                    _context.Booking.Add(booking);
+                    subject = $"Payment Request for Booking #{bookingDetails.ServiceRequestId}";
+
+                    body = $@"
+Hello {bookingDetails.username},<br/><br/>
+
+Your booking for <b>{bookingDetails.ServiceName}</b> at 
+<b>{bookingDetails.LocationName}</b> has been <b>{sts}</b>.<br/><br/>
+
+<b>Service Charges:</b> ₹{sprice}<br/><br/>
+
+Please complete the payment to proceed with the service.<br/><br/>
+
+Thank you for choosing <b>LocalLinker</b> 😊<br/><br/>
+
+Regards,<br/>
+<b>LocalLinker Team</b>
+";
+                }
+                else if (status == "Completed")
+                {
+                    // 🔁 Update existing booking record
+                    var booking = _context.Booking
+                        .FirstOrDefault(b => b.Service_Request_Id == requestId
+                                          && b.ProviderId == providerId);
+
+                    if (booking != null)
+                    {
+                        booking.Status = "Completed";
+                        booking.Modifiy_Date = DateTime.Now;
+                        _context.Booking.Update(booking);
+                    }
+                    var servicerequ = _context.ServiceRequests.FirstOrDefault(sr => sr.Request_id == booking.Service_Request_Id);
+                    if (servicerequ != null)
+                    {
+                        servicerequ.Status = "Completed";
+                        servicerequ.Modifiy_Date = DateTime.Now;
+                        _context.ServiceRequests.Update(servicerequ);
+                    }
+                    subject = $"Payment Completed – Booking #{bookingDetails.ServiceRequestId}";
+
+                    body = $@"
+Hello {bookingDetails.username},<br/><br/>
+
+Your service <b>{bookingDetails.ServiceName}</b> at 
+<b>{bookingDetails.LocationName}</b> has been <b>successfully completed</b>.<br/><br/>
+
+<b>Amount Paid:</b> ₹{sprice}<br/>
+<b>Status:</b> Paid ✔️<br/><br/>
+
+We hope you had a great experience! 🌟<br/><br/>
+
+Thank you for trusting <b>LocalLinker</b>.<br/><br/>
+
+Regards,<br/>
+<b>LocalLinker Team</b>
+";
+                }
+                else if (status == "Cancelled")
+                {
+                    var booking = new Booking
+                    {
+                        Service_Request_Id = requestId,
+                        ProviderId = providerId.Value,
+                        Status = status,
+                        Created_At = DateTime.Now
+                    };
+
+                    _context.Booking.Add(booking);
+                    subject = $"Booking Cancelled – Booking #{bookingDetails.ServiceRequestId}";
+
+                    body = $@"
+Hello {bookingDetails.username},<br/><br/>
+
+We regret to inform you that your booking for 
+<b>{bookingDetails.ServiceName}</b> at 
+<b>{bookingDetails.LocationName}</b> has been <b>cancelled</b>.<br/><br/>
+
+<b>Service Charges:</b> ₹{sprice}<br/>
+<b>Status:</b> Cancelled ❌<br/><br/>
+
+If any amount was paid, it will be refunded as per our refund policy.<br/><br/>
+
+If you have any questions or wish to create a new request, please feel free to do so.<br/><br/>
+
+Thank you for your understanding.<br/><br/>
+
+Regards,<br/>
+<b>LocalLinker Team</b>
+";
+                }
+
+                // 4️⃣ Save all changes
+                _context.SaveChanges();
+
+                // 3️⃣ Send email to customer notifying status update
+                // Assuming servicerequest is your ServiceRequest object
+                // Get providerId from session
+
+
+
+
+
 
                 if (bookingDetails != null)
                 {
-                    string subject = $"Your Booking #{bookingDetails.ServiceRequestId} is {sts}";
-                    string body = $"Hello {bookingDetails.username},<br/><br/>" +
-                                  $"Your booking for {bookingDetails.ServiceName} at {bookingDetails.LocationName} is now <b>{sts}</b>.<br/><br/>" +
-                                  $"Thank you for using our service!";
+
 
                     SendEmail(bookingDetails.user_email, subject, body);
                     TempData["ToastMessage"] = $"Email sending for booking {sts} " + bookingDetails.user_email;
@@ -443,15 +518,23 @@ namespace LocalLinker.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ForgotPassword(users model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View(model);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
 
-            // In a real application, you would send an email with a password reset link
-            // For now, we'll just show a success message
-            TempData["SuccessMessage"] = "If an account with that email exists, we've sent password reset instructions.";
-            return RedirectToAction("Login");
+                // In a real application, you would send an email with a password reset link
+                // For now, we'll just show a success message
+                TempData["SuccessMessage"] = "If an account with that email exists, we've sent password reset instructions.";
+                return RedirectToAction("Login");
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Provider(forgotpassword)", ex.Message);
+            }
+            return View(model);
         }
 
 
@@ -459,51 +542,59 @@ namespace LocalLinker.Controllers
         [HttpGet]
         public ActionResult UpdateProfile()
         {
-            // 1️⃣ Get UserId from Session
-            int? userId = HttpContext.Session.GetInt32("pUserId");
-            int? serviceId = HttpContext.Session.GetInt32("pserviceId");
-
-            if (userId == null)
-                return RedirectToAction("Login");
-
-            // 2️⃣ Find Provider using UserId
-            var provider = _context.ServiceProviders
-                .FirstOrDefault(p => p.User_id == userId);
-
-            if (provider == null)
-                return NotFound("Provider not found");
-
-            // 3️⃣ Load all services (for dropdown)
-            var services = _context.Services
-                .Select(s => new { s.Service_id, s.Service_name, s.Image })
-                .ToList();
-
-            ViewBag.Services = services;
-
-            // 4️⃣ Send selected service to view
-            ViewBag.ProviderId = provider.Provider_id;
-            ViewBag.SelectedService = provider.Service_id;
-            ViewBag.ExperienceYears = provider.Experience_years;
-
-            ViewBag.Cities = _context.Location
-                   .Select(l => l.City)
-                   .Distinct()
-                   .ToList();
-            var serviceimage = _context.Services
-                        .Where(s => s.Service_id == serviceId.Value)
-                        .Select(s => s.Image)
-                        .FirstOrDefault();
-            if (serviceimage != null)
+            try
             {
-                // service contains the image path or URL
-                ViewBag.ServiceImage = serviceimage;
-            }
-            else
-            {
-                ViewBag.ServiceImage = "default.png"; // fallback image
-            }
+                // 1️⃣ Get UserId from Session
+                int? userId = HttpContext.Session.GetInt32("pUserId");
+                int? serviceId = HttpContext.Session.GetInt32("pserviceId");
 
-            return View(provider);
+                if (userId == null)
+                    return RedirectToAction("Login");
+
+                // 2️⃣ Find Provider using UserId
+                var provider = _context.ServiceProviders
+                    .FirstOrDefault(p => p.User_id == userId);
+
+                if (provider == null)
+                    return NotFound("Provider not found");
+
+                // 3️⃣ Load all services (for dropdown)
+                var services = _context.Services
+                    .Select(s => new { s.Service_id, s.Service_name, s.Image })
+                    .ToList();
+
+                ViewBag.Services = services;
+
+                // 4️⃣ Send selected service to view
+                ViewBag.ProviderId = provider.Provider_id;
+                ViewBag.SelectedService = provider.Service_id;
+                ViewBag.ExperienceYears = provider.Experience_years;
+
+                ViewBag.Cities = _context.Location
+                       .Select(l => l.City)
+                       .Distinct()
+                       .ToList();
+                var serviceimage = _context.Services
+                            .Where(s => s.Service_id == serviceId.Value)
+                            .Select(s => s.Image)
+                            .FirstOrDefault();
+                if (serviceimage != null)
+                {
+                    // service contains the image path or URL
+                    ViewBag.ServiceImage = serviceimage;
+                }
+                else
+                {
+                    ViewBag.ServiceImage = "default.png"; // fallback image
+                }
+
+                return View(provider);
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Provider(updateprofile)", ex.Message);
+            }
+            return View();
         }
         [HttpGet]
         public JsonResult GetAreasByCity(string city)
@@ -550,7 +641,9 @@ namespace LocalLinker.Controllers
                 _cmd.ExecuteNonQuery();
 
                 return RedirectToAction("Dashboard", new { providerId = model.Provider_id });
-            }catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 _dataLog.Log("Provider(updateprofile)", ex.Message);
                 TempData["ErrorMessage"] = "An error occurred during update profile. Please try again.";
                 return View(model);
@@ -560,27 +653,34 @@ namespace LocalLinker.Controllers
         // GET: /Account/Register
         public IActionResult Register()
         {
-            List<Service> services = new List<Service>();
-
-
-            _conn = _inc.db_locallinker(_config);
-            _cmd.Connection = _conn;
-            _conn.Open();
-            _cmd.CommandText = "SELECT Service_name FROM services";
-            MySqlDataReader dr = _cmd.ExecuteReader();
-
-            while (dr.Read())
+            try
             {
-                var ser = new LocalLinker.Models.Service
-                {
-                    Service_name = dr["Service_name"].ToString()
-                };
-                services.Add(ser);
-            }
-            HttpContext.Session.SetString("Services", JsonConvert.SerializeObject(services));
-            //ViewBag.Services = services;
-            return View(new users());
+                List<Service> services = new List<Service>();
 
+
+                _conn = _inc.db_locallinker(_config);
+                _cmd.Connection = _conn;
+                _conn.Open();
+                _cmd.CommandText = "SELECT Service_name FROM services";
+                MySqlDataReader dr = _cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    var ser = new LocalLinker.Models.Service
+                    {
+                        Service_name = dr["Service_name"].ToString()
+                    };
+                    services.Add(ser);
+                }
+                HttpContext.Session.SetString("Services", JsonConvert.SerializeObject(services));
+                //ViewBag.Services = services;
+                return View(new users());
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Provider(register)", ex.Message);
+            }
+            return View();
 
             //return View(services);
         }
@@ -672,91 +772,115 @@ namespace LocalLinker.Controllers
 
         public IActionResult ProviderEarningsReport(DateTime? fromDate, DateTime? toDate)
         {
-            int? userId = HttpContext.Session.GetInt32("pUserId");
+            try
+            {
+                int? userId = HttpContext.Session.GetInt32("pUserId");
 
-            if (userId == null)
-                return RedirectToAction("Login");
-            // Default: last 30 days
-            fromDate ??= DateTime.Today.AddDays(-30);
-            toDate ??= DateTime.Today;
+                if (userId == null)
+                    return RedirectToAction("Login");
+                // Default: last 30 days
+                fromDate ??= DateTime.Today.AddDays(-30);
+                toDate ??= DateTime.Today;
 
-            var report = (from b in _context.Booking
-                          join sr in _context.ServiceRequests
-                              on b.Service_Request_Id equals sr.Request_id
-                          join u in _context.Users
-                              on b.ProviderId equals u.User_id
-                          where b.Status == "Completed"
-                                && b.Created_At >= fromDate
-                                && b.Created_At <= toDate
-                                && b.ProviderId == userId
-                          select new
-                          {
-                              b.BookingId,
-                              b.Created_At,
-                              b.Amount,
-                              ProviderName = u.Name,
-                              ServiceRequestId = sr.Request_id
-                          }).ToList<dynamic>();
+                var report = (from b in _context.Booking
+                              join sr in _context.ServiceRequests
+                                  on b.Service_Request_Id equals sr.Request_id
+                              join u in _context.Users
+                                  on b.ProviderId equals u.User_id
+                              where b.Status == "Completed"
+                                    && b.Created_At >= fromDate
+                                    && b.Created_At <= toDate
+                                    && b.ProviderId == userId
+                              select new
+                              {
+                                  b.BookingId,
+                                  b.Created_At,
+                                  b.Amount,
+                                  ProviderName = u.Name,
+                                  ServiceRequestId = sr.Request_id
+                              }).ToList<dynamic>();
 
-            ViewBag.FromDate = fromDate.Value.ToString("yyyy-MM-dd");
-            ViewBag.ToDate = toDate.Value.ToString("yyyy-MM-dd");
+                ViewBag.FromDate = fromDate.Value.ToString("yyyy-MM-dd");
+                ViewBag.ToDate = toDate.Value.ToString("yyyy-MM-dd");
 
-            ViewBag.TotalBookings = report.Count;
-            ViewBag.TotalEarnings = report.Sum(x => (decimal)(x.Amount ?? 0));
+                ViewBag.TotalBookings = report.Count;
+                ViewBag.TotalEarnings = report.Sum(x => (decimal)(x.Amount ?? 0));
 
 
-            return View(report);
+                return View(report);
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Provider(ProviderEarningsReport)", ex.Message);
+            }
+            return View();
         }
 
         public IActionResult EditPersonalInfo()
         {
-            int userId = Convert.ToInt32(HttpContext.Session.GetInt32("pUserId"));
-
-            var user = _context.Users.FirstOrDefault(u => u.User_id == userId);
-            if (user != null && string.IsNullOrEmpty(user.Image))
+            try
             {
-                user.Image = "default.png";
+                int userId = Convert.ToInt32(HttpContext.Session.GetInt32("pUserId"));
+
+                var user = _context.Users.FirstOrDefault(u => u.User_id == userId);
+                if (user != null && string.IsNullOrEmpty(user.Image))
+                {
+                    user.Image = "default.png";
+                }
+                return View(user);
             }
-            return View(user);
+            catch (Exception ex)
+            {
+                _dataLog.Log("Provider(editpersonalinfo)", ex.Message);
+            }
+            return View();
         }
 
         [HttpPost]
         public IActionResult EditPersonalInfo(users model, IFormFile ProfileImage)
         {
-            var user = _context.Users.FirstOrDefault(u => u.User_id == model.User_id);
-
-            if (user != null)
+            try
             {
-                user.Name = model.Name;
-                user.Phone = model.Phone;
+                var user = _context.Users.FirstOrDefault(u => u.User_id == model.User_id);
 
-                // Image upload
-                if (ProfileImage != null && ProfileImage.Length > 0)
+                if (user != null)
                 {
-                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img");
-                    if (!Directory.Exists(uploadsFolder))
-                        Directory.CreateDirectory(uploadsFolder);
+                    user.Name = model.Name;
+                    user.Phone = model.Phone;
 
-                    string fileName = Guid.NewGuid() + Path.GetExtension(ProfileImage.FileName);
-                    string filePath = Path.Combine(uploadsFolder, fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    // Image upload
+                    if (ProfileImage != null && ProfileImage.Length > 0)
                     {
-                        ProfileImage.CopyTo(stream);
+                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img");
+                        if (!Directory.Exists(uploadsFolder))
+                            Directory.CreateDirectory(uploadsFolder);
+
+                        string fileName = Guid.NewGuid() + Path.GetExtension(ProfileImage.FileName);
+                        string filePath = Path.Combine(uploadsFolder, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            ProfileImage.CopyTo(stream);
+                        }
+
+                        user.Image = fileName; // save filename in DB
                     }
-
-                    user.Image = fileName; // save filename in DB
+                    //HttpContext.Session.SetInt32("pUserId", user.UserId);
+                    //HttpContext.Session.SetString("pUserEmail", provider.Email);
+                    HttpContext.Session.SetString("pUserName", user.Name);
+                    //HttpContext.Session.SetString("pUserRole", provider.UserType);
+                    HttpContext.Session.SetString("pUserPhone", user.Phone);
+                    HttpContext.Session.SetString("pUserImage", user.Image);
+                    _context.SaveChanges();
                 }
-                //HttpContext.Session.SetInt32("pUserId", user.UserId);
-                //HttpContext.Session.SetString("pUserEmail", provider.Email);
-                HttpContext.Session.SetString("pUserName", user.Name);
-                //HttpContext.Session.SetString("pUserRole", provider.UserType);
-                HttpContext.Session.SetString("pUserPhone", user.Phone);
-                HttpContext.Session.SetString("pUserImage", user.Image);
-                _context.SaveChanges();
-            }
 
-            return RedirectToAction("EditPersonalInfo");
+                return RedirectToAction("EditPersonalInfo");
+            }
+            catch (Exception ex)
+            {
+                _dataLog.Log("Provider(editprosonalinfo)", ex.Message);
+            }
+            return View();
         }
 
 
