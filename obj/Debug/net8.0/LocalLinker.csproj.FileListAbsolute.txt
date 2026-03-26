@@ -34,7 +34,6 @@ D:\Msc_ICT\Sem3\Project\LocalLinker\bin\Debug\net8.0\itext.io.dll
 D:\Msc_ICT\Sem3\Project\LocalLinker\bin\Debug\net8.0\itext.kernel.dll
 D:\Msc_ICT\Sem3\Project\LocalLinker\bin\Debug\net8.0\itext.layout.dll
 D:\Msc_ICT\Sem3\Project\LocalLinker\bin\Debug\net8.0\itext.pdfa.dll
-D:\Msc_ICT\Sem3\Project\LocalLinker\bin\Debug\net8.0\itext.pdfua.dll
 D:\Msc_ICT\Sem3\Project\LocalLinker\bin\Debug\net8.0\itext.sign.dll
 D:\Msc_ICT\Sem3\Project\LocalLinker\bin\Debug\net8.0\itext.styledxmlparser.dll
 D:\Msc_ICT\Sem3\Project\LocalLinker\bin\Debug\net8.0\itext.svg.dll
@@ -318,3 +317,4 @@ D:\Msc_ICT\Sem3\Project\LocalLinker\obj\Debug\net8.0\refint\LocalLinker.dll
 D:\Msc_ICT\Sem3\Project\LocalLinker\obj\Debug\net8.0\LocalLinker.pdb
 D:\Msc_ICT\Sem3\Project\LocalLinker\obj\Debug\net8.0\LocalLinker.genruntimeconfig.cache
 D:\Msc_ICT\Sem3\Project\LocalLinker\obj\Debug\net8.0\ref\LocalLinker.dll
+D:\Msc_ICT\Sem3\Project\LocalLinker\obj\Debug\net8.0\swae.build.ex.cache

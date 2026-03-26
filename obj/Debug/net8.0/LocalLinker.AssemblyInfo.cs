@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LocalLinker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ca980f9bc285d072c9c376a0ad143bea21482902")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d511d09a765b758b4ad02e85890fbf0687a896e8")]
 [assembly: System.Reflection.AssemblyProductAttribute("LocalLinker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LocalLinker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

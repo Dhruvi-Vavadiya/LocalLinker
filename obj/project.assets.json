@@ -745,7 +745,7 @@
           }
         }
       },
-      "itext/9.4.0": {
+      "itext7/8.0.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.DotNet.PlatformAbstractions": "1.1.0",
@@ -757,13 +757,12 @@
           "System.Runtime.Loader": "4.3.0",
           "System.Runtime.Serialization.Formatters": "4.3.0",
           "System.Security.Cryptography.Csp": "4.3.0",
-          "System.Security.Cryptography.Xml": "6.0.2",
           "System.Text.Encoding.CodePages": "4.3.0",
           "System.Text.RegularExpressions": "4.3.1",
           "System.Threading.Thread": "4.3.0",
           "System.Threading.ThreadPool": "4.3.0",
           "System.Xml.XmlDocument": "4.3.0",
-          "itext.commons": "9.4.0"
+          "itext7.commons": "8.0.0"
         },
         "compile": {
           "lib/netstandard2.0/itext.barcodes.dll": {
@@ -785,9 +784,6 @@
             "related": ".xml"
           },
           "lib/netstandard2.0/itext.pdfa.dll": {
-            "related": ".xml"
-          },
-          "lib/netstandard2.0/itext.pdfua.dll": {
             "related": ".xml"
           },
           "lib/netstandard2.0/itext.sign.dll": {
@@ -822,9 +818,6 @@
           "lib/netstandard2.0/itext.pdfa.dll": {
             "related": ".xml"
           },
-          "lib/netstandard2.0/itext.pdfua.dll": {
-            "related": ".xml"
-          },
           "lib/netstandard2.0/itext.sign.dll": {
             "related": ".xml"
           },
@@ -836,11 +829,11 @@
           }
         }
       },
-      "itext.commons/9.4.0": {
+      "itext7.commons/8.0.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging": "5.0.0",
-          "System.Text.Json": "9.0.4"
+          "Newtonsoft.Json": "13.0.1"
         },
         "compile": {
           "lib/netstandard2.0/itext.commons.dll": {
@@ -851,12 +844,6 @@
           "lib/netstandard2.0/itext.commons.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "itext7/9.4.0": {
-        "type": "package",
-        "dependencies": {
-          "itext": "9.4.0"
         }
       },
       "K4os.Compression.LZ4/1.3.8": {
@@ -3764,8 +3751,11 @@
           }
         }
       },
-      "System.Security.Cryptography.Pkcs/6.0.5": {
+      "System.Security.Cryptography.Pkcs/6.0.4": {
         "type": "package",
+        "dependencies": {
+          "System.Formats.Asn1": "6.0.0"
+        },
         "compile": {
           "lib/net6.0/System.Security.Cryptography.Pkcs.dll": {
             "related": ".xml"
@@ -3818,25 +3808,6 @@
         },
         "build": {
           "buildTransitive/net6.0/_._": {}
-        }
-      },
-      "System.Security.Cryptography.Xml/6.0.2": {
-        "type": "package",
-        "dependencies": {
-          "System.Security.Cryptography.Pkcs": "6.0.5"
-        },
-        "compile": {
-          "lib/net6.0/System.Security.Cryptography.Xml.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/System.Security.Cryptography.Xml.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
       "System.Security.Permissions/8.0.0": {
@@ -5091,23 +5062,18 @@
         "logo.png"
       ]
     },
-    "itext/9.4.0": {
-      "sha512": "K+Pc9UGu+sIsjzJLIrQK+hU4kIYHbkRmC1nWmcWnY4AR8v4xAsIveuXsZqvuwy2SxsU/tBCP39uVa4eSVW+57A==",
+    "itext7/8.0.0": {
+      "sha512": "HWdCvclpwMXKA2slBzgxKOdCHOUch9+wq0mj5ec3AL46ZDU4j2XbojVB4Zy9j1yecDJdLJeMeD39f7ZPmZ9j5Q==",
       "type": "package",
-      "path": "itext/9.4.0",
+      "path": "itext7/8.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "ITSC-avatar.png",
         "LICENSE.md",
-        "NOTICE_barcodes.txt",
-        "NOTICE_io.txt",
-        "NOTICE_kernel.txt",
-        "NOTICE_layout.txt",
-        "NOTICE_styledxmlparser.txt",
         "gnu-agpl-v3.0.md",
-        "itext.9.4.0.nupkg.sha512",
-        "itext.nuspec",
+        "itext7.8.0.0.nupkg.sha512",
+        "itext7.nuspec",
         "lib/net461/itext.barcodes.dll",
         "lib/net461/itext.barcodes.xml",
         "lib/net461/itext.bouncy-castle-connector.dll",
@@ -5122,8 +5088,6 @@
         "lib/net461/itext.layout.xml",
         "lib/net461/itext.pdfa.dll",
         "lib/net461/itext.pdfa.xml",
-        "lib/net461/itext.pdfua.dll",
-        "lib/net461/itext.pdfua.xml",
         "lib/net461/itext.sign.dll",
         "lib/net461/itext.sign.xml",
         "lib/net461/itext.styledxmlparser.dll",
@@ -5144,8 +5108,6 @@
         "lib/netstandard2.0/itext.layout.xml",
         "lib/netstandard2.0/itext.pdfa.dll",
         "lib/netstandard2.0/itext.pdfa.xml",
-        "lib/netstandard2.0/itext.pdfua.dll",
-        "lib/netstandard2.0/itext.pdfua.xml",
         "lib/netstandard2.0/itext.sign.dll",
         "lib/netstandard2.0/itext.sign.xml",
         "lib/netstandard2.0/itext.styledxmlparser.dll",
@@ -5154,34 +5116,20 @@
         "lib/netstandard2.0/itext.svg.xml"
       ]
     },
-    "itext.commons/9.4.0": {
-      "sha512": "h/5s1eKtCr6BIHL38bYSr82qrdts2R/RI6r/V+yWpQR1wXjzwjWkAe8WtHgBcY4t97xj1+T3j5PXfzCiBdAuUg==",
+    "itext7.commons/8.0.0": {
+      "sha512": "YPraDCzJKy+xX79WkHd0FevrTtbRmHyuhF0oS9c7s12Qe+3xlCnWqaPMGQ4batr3aarDU8E4Tquj4idcuJqrWg==",
       "type": "package",
-      "path": "itext.commons/9.4.0",
+      "path": "itext7.commons/8.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "ITSC-avatar.png",
-        "itext.commons.9.4.0.nupkg.sha512",
-        "itext.commons.nuspec",
+        "itext7.commons.8.0.0.nupkg.sha512",
+        "itext7.commons.nuspec",
         "lib/net461/itext.commons.dll",
         "lib/net461/itext.commons.xml",
         "lib/netstandard2.0/itext.commons.dll",
         "lib/netstandard2.0/itext.commons.xml"
-      ]
-    },
-    "itext7/9.4.0": {
-      "sha512": "G2pFGO+WTXZZy9hx/lrhpuBX8OQZtyboUqb+5169RtnK6ChX9hkvFwLKrDvwgL/H5Hz6A0QiXycQU6opz1WdfQ==",
-      "type": "package",
-      "path": "itext7/9.4.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "ITSC-avatar.png",
-        "LICENSE.md",
-        "gnu-agpl-v3.0.md",
-        "itext7.9.4.0.nupkg.sha512",
-        "itext7.nuspec"
       ]
     },
     "K4os.Compression.LZ4/1.3.8": {
@@ -10925,10 +10873,10 @@
         "system.security.cryptography.encoding.nuspec"
       ]
     },
-    "System.Security.Cryptography.Pkcs/6.0.5": {
-      "sha512": "eWlSq9kImkq+nDaFH/NnxVtzvZB6gRyFW/SLSMrqsR34hyoBx9++NuBrZbBqeE1UXNkl42EyGhuOxuboZCMByg==",
+    "System.Security.Cryptography.Pkcs/6.0.4": {
+      "sha512": "LGbXi1oUJ9QgCNGXRO9ndzBL/GZgANcsURpMhNR8uO+rca47SZmciS3RSQUvlQRwK3QHZSHNOXzoMUASKA+Anw==",
       "type": "package",
-      "path": "system.security.cryptography.pkcs/6.0.5",
+      "path": "system.security.cryptography.pkcs/6.0.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -10957,7 +10905,7 @@
         "runtimes/win/lib/netstandard2.0/System.Security.Cryptography.Pkcs.xml",
         "runtimes/win/lib/netstandard2.1/System.Security.Cryptography.Pkcs.dll",
         "runtimes/win/lib/netstandard2.1/System.Security.Cryptography.Pkcs.xml",
-        "system.security.cryptography.pkcs.6.0.5.nupkg.sha512",
+        "system.security.cryptography.pkcs.6.0.4.nupkg.sha512",
         "system.security.cryptography.pkcs.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -11024,31 +10972,6 @@
         "lib/xamarinwatchos10/_._",
         "system.security.cryptography.protecteddata.8.0.0.nupkg.sha512",
         "system.security.cryptography.protecteddata.nuspec",
-        "useSharedDesignerContext.txt"
-      ]
-    },
-    "System.Security.Cryptography.Xml/6.0.2": {
-      "sha512": "8K1hhUWBhVIq0RJxa2M3pUpgcRIDhqwFUq0v44D9vnAsW0yRVLeJiSmDXtsPZOMyqo9uxnzLKWwhsux0NW0thQ==",
-      "type": "package",
-      "path": "system.security.cryptography.xml/6.0.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/netcoreapp2.0/System.Security.Cryptography.Xml.targets",
-        "buildTransitive/netcoreapp3.1/_._",
-        "lib/net461/System.Security.Cryptography.Xml.dll",
-        "lib/net461/System.Security.Cryptography.Xml.xml",
-        "lib/net6.0/System.Security.Cryptography.Xml.dll",
-        "lib/net6.0/System.Security.Cryptography.Xml.xml",
-        "lib/netstandard2.0/System.Security.Cryptography.Xml.dll",
-        "lib/netstandard2.0/System.Security.Cryptography.Xml.xml",
-        "runtimes/win/lib/net461/System.Security.Cryptography.Xml.dll",
-        "runtimes/win/lib/net461/System.Security.Cryptography.Xml.xml",
-        "system.security.cryptography.xml.6.0.2.nupkg.sha512",
-        "system.security.cryptography.xml.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
@@ -11988,7 +11911,7 @@
       "MySql.Data >= 9.4.0",
       "Pomelo.EntityFrameworkCore.MySql >= 9.0.0",
       "Razorpay >= 3.3.2",
-      "itext7 >= 9.4.0"
+      "itext7 >= 8.0.0"
     ]
   },
   "packageFolders": {
@@ -12036,7 +11959,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -12088,7 +12011,7 @@
           },
           "itext7": {
             "target": "Package",
-            "version": "[9.4.0, )"
+            "version": "[8.0.0, )"
           }
         },
         "imports": [
@@ -12110,7 +12033,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
